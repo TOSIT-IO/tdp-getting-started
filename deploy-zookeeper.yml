@@ -9,8 +9,6 @@
       - zk-server-03.local
 
 - hosts: zk
-  # vars:
-  #   domain: local
   become: yes
   tasks:
     - import_role:
