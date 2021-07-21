@@ -1,0 +1,6 @@
+pythonenv/
+.vagrant/
+collections/
+*.log
+files/
+control-node-bootstrap.sh

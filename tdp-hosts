@@ -1,0 +1,4 @@
+[zk]
+zk-server-01 ansible_host=192.168.34.10 ansible_connection=ssh ansible_user=vagrant access_fqdn=zk-server-01.local
+zk-server-02 ansible_host=192.168.34.11 ansible_connection=ssh ansible_user=vagrant access_fqdn=zk-server-02.local
+zk-server-03 ansible_host=192.168.34.12 ansible_connection=ssh ansible_user=vagrant access_fqdn=zk-server-03.local

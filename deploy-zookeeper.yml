@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Create zookeeper VMs
+    shell: "vagrant up {{item}}"
+    with_items:
+      - zk-server-01.local
+      - zk-server-02.local
+      - zk-server-03.local
+
+- hosts: zk
+  # vars:
+  #   domain: local
+  become: yes
+  tasks:
+    - import_role:
+        name: tosit.tdp.zookeeper
