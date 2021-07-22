@@ -1,7 +1,10 @@
 cluster={
-"zk-server-01.local"=>{:ip=>"192.168.34.10",:cpus=>2,:mem=>2048},
-"zk-server-02.local"=>{:ip=>"192.168.34.11",:cpus=>2,:mem=>2048},
-"zk-server-03.local"=>{:ip=>"192.168.34.12",:cpus=>2,:mem=>2048},
+"worker-01.local"=>{:ip=>"192.168.34.10",:cpus=>2,:mem=>2048},
+"worker-02.local"=>{:ip=>"192.168.34.11",:cpus=>2,:mem=>2048},
+"worker-03.local"=>{:ip=>"192.168.34.12",:cpus=>2,:mem=>2048},
+"master-01.local"=>{:ip=>"192.168.34.13",:cpus=>2,:mem=>2048},
+"master-02.local"=>{:ip=>"192.168.34.14",:cpus=>2,:mem=>2048},
+"master-03.local"=>{:ip=>"192.168.34.15",:cpus=>2,:mem=>2048},
 }
 
 Vagrant.configure("2") do |config|

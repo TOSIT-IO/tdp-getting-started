@@ -1,12 +1,13 @@
 ---
 - hosts: localhost
   tasks:
-  - name: Create zookeeper VMs
-    shell: "vagrant up {{item}}"
-    with_items:
-      - zk-server-01.local
-      - zk-server-02.local
-      - zk-server-03.local
+  - name: Check zookeeper binary exists
+    stat:
+      path: files/zookeeper-3.4.6.tar.gz
+    register: zk_exists
+  - name: Download zookeeper binary to files if missing
+    shell: wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz -P files
+    when: zk_exists.stat.exists == False
 
 - hosts: zk
   become: yes
