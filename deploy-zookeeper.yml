@@ -11,6 +11,10 @@
 
 - hosts: zk
   become: yes
+  vars:
+    realm: REALM.NAME.COM
+    kadmin_principal: vagrant
+    kadmin_password: vagrant
   tasks:
     - import_role:
         name: tosit.tdp.zookeeper
