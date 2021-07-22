@@ -1,0 +1,39 @@
+---
+- hosts: localhost
+  tasks:
+
+  - name: Create directories
+    file:
+      path: "{{ item }}"
+      state: directory
+    with_items:
+    - logs
+    - files
+
+  - name: Create log file
+    copy:
+      content: ""
+      dest: logs/tdp-getting-started.log
+      force: no
+
+  - name: Spawn Virtual Machines
+    shell: "vagrant up"
+
+  - name: Clone ansible KDC role
+    ansible.builtin.git:
+      repo: https://github.com/AlberTajuelo/ansible-kerberos-server.git
+      dest: roles/ansible-kerberos-server
+
+  - name: Clone TDP ansible roles
+    ansible.builtin.git:
+      repo: https://github.com/TOSIT-FR/ansible-tdp-roles.git
+      dest: collections/ansible_collections/tosit/tdp
+
+  - name: Generate ssh keys (skip )
+    shell: ssh-keygen -t rsa  -b 2048 -f files/tdp-getting-started-rsa -P "" -C "tdp-getting-started" || true
+
+  - name: Set ssh key permission to 600
+    shell: "chmod 600 {{item}}"
+    with_items: 
+      - files/tdp-getting-started-rsa
+      - files/tdp-getting-started-rsa.pub
