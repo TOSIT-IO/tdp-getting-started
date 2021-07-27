@@ -1,7 +1,7 @@
 [zk]
-worker-01 ansible_host=192.168.34.10 ansible_connection=ssh ansible_user=vagrant access_fqdn=worker-01.local
-worker-02 ansible_host=192.168.34.11 ansible_connection=ssh ansible_user=vagrant access_fqdn=worker-02.local
-worker-03 ansible_host=192.168.34.12 ansible_connection=ssh ansible_user=vagrant access_fqdn=worker-03.local
+worker-01 ansible_host=192.168.34.10 ansible_connection=ssh ansible_user=vagrant domain=local
+worker-02 ansible_host=192.168.34.11 ansible_connection=ssh ansible_user=vagrant domain=local
+worker-03 ansible_host=192.168.34.12 ansible_connection=ssh ansible_user=vagrant domain=local
 
 [kdc]
-master-01 ansible_host=192.168.34.13 ansible_connection=ssh ansible_user=vagrant access_fqdn=master-01.local
+master-01 ansible_host=192.168.34.13 ansible_connection=ssh ansible_user=vagrant domain=local

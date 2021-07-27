@@ -13,9 +13,9 @@ Launch various virtual TDP big data infrastructures in less than 10 commands.
 - Provision VMs and gerenate/clone necessary structure and dependencies:
     `ansible-playbook launch_infrastructure.yml`
 
-- Deploy a KDC server
+- Deploy a KDC and install configured kerberous clients on the VMs
 
-    `ansible-playbook deploy-KDC.yml`
+    `ansible-playbook kerborize-cluster.yml`
 
 - Deploy a three node Apache Zookeeper Quorum
 

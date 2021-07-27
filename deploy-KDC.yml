@@ -1,6 +1,0 @@
----
-- hosts: kdc
-  become: yes
-  tasks:
-    - import_role:
-        name: roles/ansible-kerberos-server

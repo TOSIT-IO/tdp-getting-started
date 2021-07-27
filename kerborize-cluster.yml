@@ -1,0 +1,26 @@
+---
+- hosts: kdc
+  become: yes
+  vars:
+    realm_name: TDP.REAL.OPENSOURCE
+    kdc_port: 88
+    master_db_pass: krb5-master-pass
+    kadmin_user: admin/admin
+    kadmin_pass: admin
+  tasks:
+    - import_role:
+        name: roles/ansible-kerberos-server
+  tags:
+    - kdc
+    - kadmin
+
+- hosts: zk
+  become: yes
+  vars:
+    realm_name: TDP.REAL.OPENSOURCE
+    kdc_server: master-01
+    kadmind_server: master-01
+  tasks:
+    - import_role:
+        name: roles/ansible-kerberos-client
+  tags: kerberos-client
