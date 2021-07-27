@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
         config.vm.box = "centos/7"
         override.vm.network "private_network", ip: "#{info[:ip]}" # Directory sync fails without this
         vb.name = hostname
+        config.vm.hostname = hostname
         vb.customize ["modifyvm", :id, "--memory", info[:mem], "--cpus", info[:cpus], "--hwvirtex", "on"]
       end # end provider
 
