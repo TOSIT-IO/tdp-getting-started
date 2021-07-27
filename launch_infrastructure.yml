@@ -21,8 +21,15 @@
 
   - name: Clone ansible KDC role
     ansible.builtin.git:
-      repo: https://github.com/AlberTajuelo/ansible-kerberos-server.git
+      repo: https://github.com/DanielJohnHarty/ansible-kerberos-server.git
       dest: roles/ansible-kerberos-server
+      force: yes
+
+  - name: Clone ansible kerberos client role
+    ansible.builtin.git:
+      repo: https://github.com/DanielJohnHarty/ansible-kerberos-client.git
+      dest: roles/ansible-kerberos-client
+      force: yes
 
   - name: Clone TDP ansible roles
     ansible.builtin.git:

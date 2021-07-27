@@ -4,3 +4,5 @@ collections/
 *.log
 files/
 control-node-bootstrap.sh
+roles/ansible-deploy-kerberos-client/
+roles/ansible-deploy-kerberos-server/
