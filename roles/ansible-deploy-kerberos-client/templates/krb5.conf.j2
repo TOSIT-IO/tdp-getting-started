@@ -1,0 +1,26 @@
+# Configuration snippets may be placed in this directory as well
+includedir /etc/krb5.conf.d/
+
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ default_realm = {{ realm_name|upper() }}
+ dns_lookup_realm = false
+ dns_lookup_kdc = false
+ ticket_lifetime = 24h
+ forwardable = true
+ rdns = false
+
+[realms]
+ {{ realm_name| upper() }} = {
+  kdc =  {{ kdc_server }} 
+  admin_server = {{ kadmind_server }} 
+ }
+
+[domain_realm]
+ .{{ realm_name|lower() }} = {{ realm_name|upper() }}
+  {{ realm_name|lower() }} = {{ realm_name|upper() }}
+  .local = {{ realm_name|upper() }}

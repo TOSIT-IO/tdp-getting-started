@@ -1,0 +1,24 @@
+---
+- name: Install kerberos client software
+  become: true
+  yum:
+    state: present
+    name: 
+      - krb5-workstation
+      - pam_krb5
+
+- name: "Check if {{kdc_conf_path}} exists"
+  stat:
+    path: "{{kdc_conf_path}}"
+  register: krb5_conf_exists
+
+- name: "Create {{kdc_conf_path}} if missing"
+  file: "{{kdc_conf_path}}"
+  when: krb5_conf_exists.stat.exists == false
+
+- name: Copy KDC configuration file
+  template:
+    src: krb5.conf.j2
+    dest: "{{ kdc_conf_path }}"
+    backup: yes
+    force: yes
