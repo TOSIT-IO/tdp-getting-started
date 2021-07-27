@@ -16,9 +16,6 @@
       dest: logs/tdp-getting-started.log
       force: no
 
-  - name: Spawn Virtual Machines
-    shell: "vagrant up"
-
   - name: Clone ansible KDC role
     ansible.builtin.git:
       repo: https://github.com/DanielJohnHarty/ansible-kerberos-server.git
@@ -52,8 +49,5 @@
     tags:
       - ssh-key-gen
 
-  - name: Set ssh key permission to 600
-    shell: "chmod 600 {{item}}"
-    with_items: 
-      - files/tdp-getting-started-rsa
-      - files/tdp-getting-started-rsa.pub
+  - name: Spawn Virtual Machines
+    shell: "vagrant up"
