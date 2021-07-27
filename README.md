@@ -19,8 +19,7 @@ Launch various virtual TDP big data infrastructures in less than 10 commands.
 
 - Deploy a three node Apache Zookeeper Quorum
 
-    `ansible-playbook deploy-zookeeper.yml -K`
-
+    `ansible-playbook deploy-zookeeper.yml`
 
 ##  Control-node environment [for reference - not necessaeily system requirements]
 
@@ -29,4 +28,3 @@ Launch various virtual TDP big data infrastructures in less than 10 commands.
 - ansible core version 2.11.2
 - VirtualBox version 6.1
 - Python 3.8.10
-

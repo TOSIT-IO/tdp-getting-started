@@ -12,9 +12,9 @@
 - hosts: zk
   become: yes
   vars:
-    realm: REALM.NAME.COM
-    kadmin_principal: vagrant
-    kadmin_password: vagrant
+    - realm: TDP.REAL.OPENSOURCE
+    - kadmin_principal: admin/admin
+    - kadmin_password: admin
   tasks:
     - import_role:
         name: tosit.tdp.zookeeper
