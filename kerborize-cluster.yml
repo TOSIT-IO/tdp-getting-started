@@ -14,7 +14,7 @@
     - kdc
     - kadmin
 
-- hosts: zk
+- hosts: all
   become: yes
   vars:
     realm_name: TDP.REAL.OPENSOURCE

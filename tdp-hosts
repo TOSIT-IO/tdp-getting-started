@@ -1,3 +1,11 @@
+[all]
+worker-01 ansible_host=192.168.34.10 ansible_connection=ssh ansible_user=vagrant domain=local
+worker-02 ansible_host=192.168.34.11 ansible_connection=ssh ansible_user=vagrant domain=local
+worker-03 ansible_host=192.168.34.12 ansible_connection=ssh ansible_user=vagrant domain=local
+master-01 ansible_host=192.168.34.13 ansible_connection=ssh ansible_user=vagrant domain=local
+master-02 ansible_host=192.168.34.14 ansible_connection=ssh ansible_user=vagrant domain=local
+master-03 ansible_host=192.168.34.15 ansible_connection=ssh ansible_user=vagrant domain=local
+
 [zk]
 worker-01 ansible_host=192.168.34.10 ansible_connection=ssh ansible_user=vagrant domain=local
 worker-02 ansible_host=192.168.34.11 ansible_connection=ssh ansible_user=vagrant domain=local
