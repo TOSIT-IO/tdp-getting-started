@@ -20,16 +20,6 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--memory", info[:mem], "--cpus", info[:cpus], "--hwvirtex", "on"]
       end # end provider
 
-      # Private key SSH auth config
-      config.vm.provision "shell", inline: <<-SHELL
-      cat /vagrant/files/tdp-getting-started-rsa.pub >> /home/vagrant/.ssh/authorized_keys
-      SHELL
-      
-      config.vm.provision "shell", inline: <<-EOC
-      sudo sed -i -e "\\#PasswordAuthentication yes# s#PasswordAuthentication yes#PasswordAuthentication no#g" /etc/ssh/sshd_config
-      sudo systemctl restart sshd.service
-      EOC
-
       # Install core VM components
       config.vm.provision "normalize", type: "ansible_local" do |ansible|
         ansible.playbook = "provision/shared-provisioning-base.yml"
