@@ -1,0 +1,15 @@
+---
+- hosts: ca
+  become: yes
+  vars:
+    - certs_fqdns: 
+      - edge-01
+      - master-01
+      - master-02
+      - master-03
+      - worker-01
+      - worker-02
+      - worker-03
+  tasks:
+    - import_role:
+        name: roles/ansible-ca

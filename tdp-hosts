@@ -17,3 +17,6 @@ worker-03 ansible_host=192.168.35.12 ansible_connection=ssh ansible_user=vagrant
 
 [kdc]
 master-01 ansible_host=192.168.35.13 ansible_connection=ssh ansible_user=vagrant domain=local
+
+[ca]
+master-02 ansible_host=192.168.35.14 ansible_connection=ssh ansible_user=vagrant domain=local

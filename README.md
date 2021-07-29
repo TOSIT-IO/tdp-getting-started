@@ -21,6 +21,10 @@ Launch various virtual TDP big data infrastructures in less than 10 commands.
 
     `ansible-playbook deploy-zookeeper.yml`
 
+- Create a certificate authority a download generated certs to files
+
+    `ansible-playbook deploy-ca.yml`
+
 ##  Control-node environment [for reference - not necessaeily system requirements]
 
 - Ubuntu 20.04.2 LTS 64-bit
