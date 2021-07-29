@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
 
   cluster.each_with_index do |(hostname, info), index|
 
-    config.vm.define hostname do |cfg|
+    config.vm.define hostname, autostart: true do |cfg|
       cfg.vm.provider :virtualbox do |vb, override|
         config.vm.box = "centos/7"
         override.vm.network "private_network", ip: "#{info[:ip]}" # Directory sync fails without this
