@@ -9,6 +9,10 @@
         name: root
         password: '{{ "vagrant" | password_hash("sha512", "salt123") }}'
   
+    - name: Update /etc/hosts with cluster info from /vagrant/tdp-hosts
+      shell: grep -v '^\[' /vagrant/tdp-hosts | awk -F'[/= ]' '{print $3" "$1" "$9}' | sort -u >> /etc/hosts
+      become_user: root
+
     - name: Upgrade all packages
       yum:
         name: '*'
