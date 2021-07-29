@@ -10,11 +10,17 @@
     - logs
     - files
 
-  - name: Create log file
+  - name: Create ansible log file
     copy:
       content: ""
       dest: logs/tdp-getting-started.log
-      force: no
+      force: yes
+
+  - name: Create vagrant log file
+    copy:
+      content: ""
+      dest: logs/vagrant.log
+      force: yes
 
   - name: Clone ansible KDC role
     ansible.builtin.git:
@@ -49,5 +55,5 @@
     tags:
       - ssh-key-gen
 
-  - name: Spawn Virtual Machines
-    shell: "vagrant up"
+  - name: Spawn Virtual Machines Logging Information
+    shell: "vagrant up  2>&1 | tee -a logs/vagrant.log "
