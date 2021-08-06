@@ -1,0 +1,76 @@
+---
+- hosts: localhost
+  tasks:
+
+  - name: Create directories
+    file:
+      path: "{{ item }}"
+      state: directory
+    with_items:
+    - logs
+    - files
+
+  - name: Create ansible log file
+    copy:
+      content: ""
+      dest: logs/tdp.log
+      force: yes
+
+  - name: Create vagrant log file
+    copy:
+      content: ""
+      dest: logs/vagrant.log
+      force: yes
+
+  # - name: Clone ansible KDC role
+  #   ansible.builtin.git:
+  #     repo: https://github.com/DanielJohnHarty/ansible-kerberos-server.git
+  #     dest: roles/ansible-kerberos-server
+  #     force: yes
+
+  # - name: Clone ansible kerberos client role
+  #   ansible.builtin.git:
+  #     repo: https://github.com/DanielJohnHarty/ansible-kerberos-client.git
+  #     dest: roles/ansible-kerberos-client
+  #     force: no
+
+  # - name: Clone TDP ansible roles
+  #   ansible.builtin.git:
+  #     repo: https://github.com/TOSIT-FR/ansible-tdp-roles.git
+  #     dest: collections/ansible_collections/tosit/tdp
+  #     force: no
+
+  # - name: Clone ansible-ca role
+  #   ansible.builtin.git:
+  #     repo: https://github.com/DanielJohnHarty/ansible-create-ca.git
+  #     dest: roles/ansible-ca
+  #     force: no
+
+  - name: Check ssh key exists
+    stat:
+      path: files/tdp-rsa
+    register: ssh_key_exists
+    tags:
+      - ssh-key-gen
+
+  - name: Generate ssh keys if missing
+    shell: | 
+      ssh-keygen -t rsa  -b 2048 -f files/tdp-rsa -P "" -C "tdp"
+      chmod 600 files/tdp-rsa
+      chmod 600 files/tdp-rsa.pub
+    when: ssh_key_exists.stat.exists == false
+    tags:
+      - ssh-key-gen
+
+  - name: Spawn Virtual Machines Logging Information
+    shell: "vagrant up  2>&1 | tee -a logs/vagrant.log "
+
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: "Set 0.0.0.0 localhost"
+      shell: sed -i '1s/.*/0.0.0.0 {{inventory_hostname}} {{ansible_fqdn}}/' /etc/hosts
+
+    - name: Add cluster IPs to /etc/hosts 
+      shell: cat /vagrant/tdp-hosts |awk 'length($0) > 20' | awk -F'[/= ]' '{print $3" "$1" "$1}' >> /etc/hosts

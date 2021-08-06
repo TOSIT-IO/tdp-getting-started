@@ -1,0 +1,115 @@
+---
+- hosts: zk
+  become: yes
+  tasks:
+    - name: Stop zookeeper
+      shell: /opt/tdp/zookeeper/bin/zkServer.sh stop
+      failed_when: no
+      tags: zk
+    - name: Remove zookeeper
+      shell: rm -rf /opt/tdp/zookeeper
+      failed_when: no
+      tags: zk
+    - name: Remove install dir
+      shell: rm -rf /opt/tdp/zookeeper-3.4.6
+      failed_when: no
+      tags: zk
+    - name: Remove zookeeper log
+      shell: rm /var/log/zookeeper/zookeeper.log
+      failed_when: no
+      tags: zk
+    - name: Remove zookeeper keytab
+      shell: rm /etc/security/keytabs/zookeeper.service.keytab
+      failed_when: no
+      tags: zk
+
+- hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
+  become: yes
+  tasks:
+    - name: Remove Hadoop conf
+      shell: rm -rf /etc/hadoop
+      failed_when: no
+      tags: hdfs
+    - name: Remove Hadoop install dir
+      shell: rm -rf /opt/tdp/hadoop
+      failed_when: no
+      tags: hdfs
+    - name: Remove Hadoop dir
+      shell: rm -rf /opt/tdp/hadoop-3.1.1-TDP-0.1.0-SNAPSHOT
+      failed_when: no
+      tags: hdfs
+    - name: Remove Hadoop conf
+      shell: rm -rf /etc/hadoop
+      failed_when: no
+      tags: hdfs
+    - name: Remove pid
+      shell: rm -rf /var/run/hadoop
+      failed_when: no
+      tags: hdfs
+    - name: Remove lib/hdfs
+      shell: rm -rf  /var/lib/hdfs
+      failed_when: no
+      tags: hdfs
+    - name: Remove keytabs
+      shell: "rm -f  /etc/security/keytabs/{{item}} || echo '{{item}} not found'"
+      failed_when: no
+      with_items:
+        - jn.service.keytab
+        - nn.service.keytab
+        - rm.service.keytab
+        - spnego.service.keytab
+      tags: hdfs
+
+    - name: Stop services
+      service:
+        name: "{{item}}"
+        state: stopped
+      failed_when: no
+      with_items:
+        - hadoop-hdfs-journalnode.service
+        - hadoop-hdfs-namenode.service
+        - hadoop-hdfs-datanode.service
+      tags: hdfs
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Rm kerberos
+      shell: rm -rf /var/kerberos && rm -rf /etc/security/keytabs/
+      failed_when: no
+      tags: kb
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: delete certs
+      shell: "rm -f /etc/ssl/certs/{{item}}"
+      failed_when: no
+      with_items:
+        - root.pem
+        - edge-01.pem
+        - edge-02.pem
+        - master-01.pem
+        - master-02.pem
+        - master-03.pem
+        - worker-01.pem
+        - worker-02.pem
+        - worker-03.pem
+        - edge-01.key
+        - edge-02.key
+        - master-01.key
+        - master-02.key
+        - master-03.key
+        - worker-01.key
+        - worker-02.key
+        - worker-03.key
+      tags: ca
+
+- hosts: localhost
+  tasks:
+    - name: delete local certs
+      file:
+        path: files/certs/
+        state: absent
+      failed_when: no
+      tags: ca

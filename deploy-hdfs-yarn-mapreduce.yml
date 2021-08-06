@@ -1,0 +1,23 @@
+---
+- name: "Deploy Hadoop"
+  become: yes
+  vars:
+  - realm: TDP
+  - kadmin_principal: admin/admin
+  - kadmin_password: admin
+  hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
+  gather_facts: true
+  tasks:
+    - import_role:
+        name: tosit.tdp.hadoop
+      tags: install
+
+- name: "Hadoop cluster bootstrap"
+  hosts: localhost
+  vars:
+    - realm: TDP
+  tasks:
+    - import_role:
+        name: tosit.tdp.hadoop
+        tasks_from: post_install.yml
+      tags: post-install

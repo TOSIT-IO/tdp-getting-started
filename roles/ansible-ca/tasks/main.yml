@@ -1,5 +1,0 @@
----
-- include_tasks: create-ca.yaml
-
-- include_tasks: create-cert.yaml
-  with_items: "{{ certs_fqdns }}"

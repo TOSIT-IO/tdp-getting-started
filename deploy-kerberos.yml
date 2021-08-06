@@ -2,7 +2,7 @@
 - hosts: kdc
   become: yes
   vars:
-    realm_name: TDP.REAL.OPENSOURCE
+    realm_name: TDP
     kdc_port: 88
     master_db_pass: krb5-master-pass
     kadmin_user: admin/admin
@@ -14,10 +14,20 @@
     - kdc
     - kadmin
 
+- hosts: kdc
+  tasks:
+    - name: Fetch krb5.conf to files dir from kdc
+      fetch:
+        src: /etc/krb5.conf
+        dest: files/
+        flat: yes
+      tags:
+        - fetch-krb5.conf
+
 - hosts: all
   become: yes
   vars:
-    realm_name: TDP.REAL.OPENSOURCE
+    realm_name: TDP
     kdc_server: master-01
     kadmind_server: master-01
   tasks:

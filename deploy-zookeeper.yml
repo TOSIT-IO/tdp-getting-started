@@ -12,9 +12,16 @@
 - hosts: zk
   become: yes
   vars:
-    - realm: TDP.REAL.OPENSOURCE
+    - realm: TDP
     - kadmin_principal: admin/admin
     - kadmin_password: admin
+    - suffix: :2888:3888
+    - zk_ips: "{{groups['zk'] | map('extract', hostvars, ['ansible_host']) | list}}"
+    - zk_servers: "{{ zk_ips | product([suffix]) | map('join') | list }}"
   tasks:
     - import_role:
         name: tosit.tdp.zookeeper
+  
+    # - name: print zkerrber
+    #   debug:
+    #     msg: "{{zk_servers}}"

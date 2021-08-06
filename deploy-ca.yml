@@ -2,14 +2,47 @@
 - hosts: ca
   become: yes
   vars:
+    - ca_name: tdp
     - certs_fqdns: 
       - edge-01
-      - master-01
-      - master-02
-      - master-03
+      - edge-02
       - worker-01
       - worker-02
       - worker-03
+      - master-01
+      - master-02
+      - master-03
   tasks:
     - import_role:
         name: roles/ansible-ca
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Check /etc/ssl/certs dir exists
+      stat:
+        path: /etc/ssl/certs
+      register: certs_dir
+    - name: Create certs dir if missing
+      file: 
+        path: /etc/ssl/certs
+        state: directory
+      when: not certs_dir.stat.exists 
+    - name: Distribute certs and keys to nodes
+      copy:
+        src: files/certs/{{ansible_fqdn}}.{{item}}
+        dest: /etc/ssl/certs/{{ansible_fqdn}}.{{item}}
+        force: yes
+      with_items:
+        - key
+        - pem
+      tags:
+        - dist-certs
+  
+    - name: Distribute certs and keys to nodes
+      copy:
+        src: files/certs/root.pem
+        dest: /etc/ssl/certs/root.pem
+        force: yes
+      tags:
+        - dist-certs

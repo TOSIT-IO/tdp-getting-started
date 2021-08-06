@@ -8,18 +8,9 @@
       user:
         name: root
         password: '{{ "vagrant" | password_hash("sha512", "salt123") }}'
-  
-    - name: Update /etc/hosts with cluster info from /vagrant/tdp-hosts
-      shell: grep -v '^\[' /vagrant/tdp-hosts | awk -F'[/= ]' '{print $3" "$1" "$9}' | sort -u >> /etc/hosts
-      become_user: root
 
     - name: Add Generated Public Key to Authorized Keys
-      shell: cat /vagrant/files/tdp-getting-started-rsa.pub >> /home/vagrant/.ssh/authorized_keys
-
-    - name: Upgrade all packages
-      yum:
-        name: '*'
-        state: latest
+      shell: cat /vagrant/files/tdp-rsa.pub >> /home/vagrant/.ssh/authorized_keys
 
     - name: Install core stack
       yum:
@@ -29,4 +20,16 @@
         - wget
         - curl
         - unzip
+        - nc
         state: present
+
+    - name: Set JAVA_HOME
+      copy:
+        content: JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
+        dest: /etc/environment
+
+    - name: Restart network
+      service:
+        name: network
+        state: restarted
+        args: eth0

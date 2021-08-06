@@ -1,22 +1,55 @@
+
 [all]
-worker-01 ansible_host=192.168.35.10 ansible_connection=ssh ansible_user=vagrant domain=local
-worker-02 ansible_host=192.168.35.11 ansible_connection=ssh ansible_user=vagrant domain=local
-worker-03 ansible_host=192.168.35.12 ansible_connection=ssh ansible_user=vagrant domain=local
-master-01 ansible_host=192.168.35.13 ansible_connection=ssh ansible_user=vagrant domain=local
-master-02 ansible_host=192.168.35.14 ansible_connection=ssh ansible_user=vagrant domain=local
-master-03 ansible_host=192.168.35.15 ansible_connection=ssh ansible_user=vagrant domain=local
-edge-01 ansible_host=192.168.35.16 ansible_connection=ssh ansible_user=vagrant domain=local
+worker-01 ansible_host=192.168.32.10 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=worker-01 access_fqdn=worker-01
+worker-02 ansible_host=192.168.32.11 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=worker-02 access_fqdn=worker-02
+worker-03 ansible_host=192.168.32.12 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=worker-03 access_fqdn=worker-03
+master-01 ansible_host=192.168.32.13 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=master-01 access_fqdn=master-01
+master-02 ansible_host=192.168.32.14 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=master-02 access_fqdn=master-02
+master-03 ansible_host=192.168.32.15 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=master-03 access_fqdn=master-03
+edge-01 ansible_host=192.168.32.16 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=edge-01 access_fqdn=edge-01
+edge-02 ansible_host=192.168.32.17 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=edge-02 access_fqdn=edge-02
 
 [edge]
-edge-01 ansible_host=192.168.35.16 ansible_connection=ssh ansible_user=vagrant domain=local
+edge-01
+edge-02
 
 [zk]
-worker-01 ansible_host=192.168.35.10 ansible_connection=ssh ansible_user=vagrant domain=local
-worker-02 ansible_host=192.168.35.11 ansible_connection=ssh ansible_user=vagrant domain=local
-worker-03 ansible_host=192.168.35.12 ansible_connection=ssh ansible_user=vagrant domain=local
+master-01
+master-02
+master-03
 
 [kdc]
-master-01 ansible_host=192.168.35.13 ansible_connection=ssh ansible_user=vagrant domain=local
+master-01
 
 [ca]
-master-02 ansible_host=192.168.35.14 ansible_connection=ssh ansible_user=vagrant domain=local
+master-02
+
+[hdfs_nn]
+master-01
+master-02
+
+[hdfs_jn]
+master-01
+master-02
+master-03
+
+[hdfs_dn]
+worker-01
+worker-02
+worker-03
+
+[yarn_rm]
+master-01
+master-02
+
+[yarn_nm]
+worker-01
+worker-02
+worker-03
+
+[yarn_ats]
+master-02
+
+[hadoop_client]
+edge-01
+edge-02
