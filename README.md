@@ -52,7 +52,7 @@ Deploys Apache ZooKeeper to the the `[zk]` group and starts a 3 node quorum.
 Run `echo stat | nc localhost 2181` from any node in the `[zk]` group to see it's zookeeper status.
 
 ```
-ansible-playbook deploy-hdfs-yarn-mapreduce.yml -K
+ansible-playbook deploy-hdfs-yarn-mapreduce.yml
 ```
 
 Launches a high availability hdfs distributed filesystem. Verify that it's working with the following steps:
