@@ -68,7 +68,7 @@ ansible-playbook deploy-zookeeper.yml
 Launches a high availability hdfs distributed filesystem. 
 
 ```
-ansible-playbook deploy-hdfs-yarn-mapreduce.yml
+ansible-playbook deploy-hdfs-yarn-mapreduce.yml -K
 ```
 
 **Verify the hdfs implementation with the following steps:**
