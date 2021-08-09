@@ -21,7 +21,3 @@
   tasks:
     - import_role:
         name: tosit.tdp.zookeeper
-  
-    # - name: print zkerrber
-    #   debug:
-    #     msg: "{{zk_servers}}"
