@@ -3,35 +3,41 @@
   become: yes
   vars:
     - ca_name: tdp
-    - certs_fqdns: 
-      - edge-01
-      - edge-02
-      - worker-01
-      - worker-02
-      - worker-03
-      - master-01
-      - master-02
-      - master-03
+    - certs_fqdns: "{{groups['all'] | map('extract', hostvars, ['inventory_hostname']) | list}}"
+    - ca_cert_filename: root.pem
+    - ca_key_filename: ca_key.pem
   tasks:
     - import_role:
         name: roles/ansible-ca
 
 - hosts: all
   become: yes
+  vars:
+    - ca_cert_filename: root.pem
   tasks:
     - name: Check /etc/ssl/certs dir exists
       stat:
         path: /etc/ssl/certs
       register: certs_dir
+
     - name: Create certs dir if missing
       file: 
         path: /etc/ssl/certs
         state: directory
-      when: not certs_dir.stat.exists 
+      when: not certs_dir.stat.exists
+
+    - name: Distribute CA to nodes
+      copy:
+        src: "files/certs/{{ca_cert_filename}}"
+        dest: "/etc/ssl/certs/{{ca_cert_filename}}"
+        force: yes
+      tags:
+        - dist-certs
+
     - name: Distribute certs and keys to nodes
       copy:
-        src: files/certs/{{ansible_fqdn}}.{{item}}
-        dest: /etc/ssl/certs/{{ansible_fqdn}}.{{item}}
+        src: files/certs/{{inventory_hostname}}.{{item}}
+        dest: /etc/ssl/certs/{{inventory_hostname}}.{{item}}
         force: yes
       with_items:
         - key
@@ -39,10 +45,3 @@
       tags:
         - dist-certs
   
-    - name: Distribute certs and keys to nodes
-      copy:
-        src: files/certs/root.pem
-        dest: /etc/ssl/certs/root.pem
-        force: yes
-      tags:
-        - dist-certs
