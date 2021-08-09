@@ -13,6 +13,7 @@
       tags: install
 
 - name: "Hadoop cluster bootstrap"
+  become: yes
   hosts: localhost
   vars:
     - realm: TDP
