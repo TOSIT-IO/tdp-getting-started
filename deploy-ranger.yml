@@ -1,0 +1,59 @@
+- hosts: postgresql
+  become: yes
+  vars:
+    # postgresql_hba_entries:
+    #   - {type: local, database: all, user: postgres, auth_method: peer}
+    #   - {type: local, database: all, user: all, auth_method: peer}
+    #   - {type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: "{{ postgresql_auth_method }}"}
+    #   - {type: host, database: all, user: all, address: '*', auth_method: "{{ postgresql_auth_method }}"}
+    #   - {type: host, database: all, user: all, address: '::1/128', auth_method: "{{ postgresql_auth_method }}"}
+    # postgresql_users:
+    #   - postgresql_user: postgres
+    #   - postgresql_group: dba
+    postgresql_databases:
+      - name: ranger
+  tasks:
+    - import_role:
+        name: roles/ansible-role-postgresql
+      ignore_errors: true
+      tags: pg
+
+    - name: Give postgres db user a password
+      become_user: postgres
+      shell: psql -c "ALTER ROLE postgres WITH PASSWORD 'postgres';"
+      tags: pgpw
+
+    # - name: Check if postgres user already exists
+    #   become_user: postgres
+    #   shell: psql -c "SELECT 1 FROM pg_roles WHERE rolname='postgres'"
+    #   register: pg_usr_qry
+    #   tags: cu
+
+    # - name: check result
+    #   debug:
+    #     msg: pg_usr_qry
+    #   tags: cu
+
+    - name: Create ranger database if it doesn't exist already
+      become_user: postgres
+      shell: if [[ -z `psql -Atqc '\list ranger' postgres` ]]; then createdb ranger; fi
+      #shell: psql -c "CREATE DATABASE ranger OWNER postgres;"
+      # when: "'(1 row)' not in pg_usr_qry.stdout_lines"
+      tags: pgpw2
+
+    - name: Open listen addresses
+      become_user: postgres
+      shell: sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'"/ /var/lib/pgsql/data/postgresql.conf
+      tags: oip
+
+    - name: Add masters to postgres pg_hba.conf
+      become_user: postgres
+      shell: cat /etc/hosts | grep master- | \
+             awk '{print "host all all " $1"/32    md5"}' >> /var/lib/pgsql/data/pg_hba.conf
+
+    - name: Restart postgresql service
+      become: yes
+      ansible.builtin.service:
+        name: postgresql
+        state: restarted
+

@@ -46,6 +46,12 @@
       dest: roles/ansible-ca
       force: no
 
+  - name: Clone postgres role
+    ansible.builtin.git:
+      repo: https://github.com/geerlingguy/ansible-role-postgresql.git
+      dest: roles/ansible-role-postgresql
+      force: yes
+
   - name: Check ssh key exists
     stat:
       path: files/tdp-rsa

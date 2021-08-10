@@ -53,3 +53,5 @@ master-02
 [hadoop_client]
 edge-01
 edge-02
+[postgresql]
+master-02
