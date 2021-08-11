@@ -36,6 +36,8 @@
         name: postgresql
         state: absent 
       tags: pg
+    - name: remove /var/lib/pgsql
+      shell: rm -rf /var/lib/pgsql
 
 - hosts: hdfs_nn,postgresql,ranger_admin,yarn_rm
   become: yes
