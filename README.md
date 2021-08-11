@@ -6,8 +6,8 @@ Launch various virtual TDP big data infrastructures in less than 10 commands
 ```bash
 ansible-playbook deploy-infrastructure.yml \
 deploy-kerberos.yml \
-deploy-ca.yml \
-deploy-zookeeper.yml \
+deploy-ca.yml
+ansible-playbook deploy-zookeeper.yml \
 deploy-hdfs-yarn-mapreduce.yml \
 deploy-ranger.yml -K
 ```
