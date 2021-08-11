@@ -5,6 +5,9 @@
   - realm: TDP
   - kadmin_principal: admin/admin
   - kadmin_password: admin
+  - ranger_hdfs_install_properties:
+    POLICY_MGR_URL: "https://{{ hostvars[groups['ranger_admin'][0]]['ansible_host'] }}:6182"
+    REPOSITORY_NAME: hdfs-tdp
   hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
   gather_facts: true
   tasks:

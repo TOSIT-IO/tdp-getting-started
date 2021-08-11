@@ -23,6 +23,27 @@
       failed_when: no
       tags: zk
 
+- hosts: postgresql
+  become: yes
+  tasks:
+    - name: Stop postgres
+      service:
+        name: postgresql
+        state: stopped 
+      tags: pg
+    - name: Uninstall postgres
+      yum:
+        name: postgresql
+        state: absent 
+      tags: pg
+
+- hosts: hdfs_nn,postgresql,ranger_admin,yarn_rm
+  become: yes
+  tasks:
+    - name: Remove ranger
+      shell: rm -rf /opt/tdp/ranger/ 11 rm -rf /opt/tdp/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-admin/ 
+      tags: rg
+
 - hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
   become: yes
   tasks:

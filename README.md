@@ -2,6 +2,15 @@
 
 Launch various virtual TDP big data infrastructures in less than 10 commands
 
+# TL;DR
+```bash
+ansible-playbook deploy-infrastructure.yml \
+deploy-kerberos.yml \
+deploy-ca.yml \
+deploy-zookeeper.yml \
+deploy-hdfs-yarn-mapreduce.yml \
+deploy-ranger.yml -K
+```
 ### Requirements
 - ansible >= 2.9.6
 - vagrant >= 2.29
@@ -107,4 +116,15 @@ echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /
 kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01@TDP
 # Check contents of new file
 /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /edge-01/testFile
+```
+
+**Ranger**
+
+Creates a suitably configured postgres database to the `[postgresql]` ansible group, then deploys Ranger to the `[ranger_admin]` ansible group.
+
+*Note that any changes to the `[ranger_admin]` hosts should be also be reflected in the `[hadoop client group`]*
+  
+
+```
+ansible-playbook deploy-ranger.yml
 ```
