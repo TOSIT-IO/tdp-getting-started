@@ -54,9 +54,16 @@ master-02
 edge-01
 edge-02
 master-02
+master-03
 
 [postgresql]
 master-02
 
 [ranger_admin]
 master-02
+
+[spark_client]
+master-03
+
+[spark_hs]
+master-03

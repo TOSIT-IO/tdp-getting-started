@@ -119,3 +119,13 @@ Creates a suitably configured postgres database to the `[postgresql]` ansible gr
 ```
 ansible-playbook deploy-ranger.yml
 ```
+
+**Spark**
+add beeline to above???
+
+
+```
+ansible-playbook deploy-spark.yml
+```
+[To do - Spark-shell code blocks and spark submit test]
+

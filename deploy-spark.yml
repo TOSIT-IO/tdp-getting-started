@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Check spark binary exists
+      stat:
+        path: files/spark-2.3.5-TDP-0.1.0-SNAPSHOT-bin-tdp.tgz
+      register: spark_exists
+      failed_when: spark_exists.stat.exists == False
+
+- hosts: spark_client, spark_hs
+  become: yes
+  collections:
+    - tosit.tdp
+  roles:
+    - role: spark
+      vars:
+        realm: TDP
+        kadmin_principal: admin/admin
+        kadmin_password: admin
+        spark_defaults:
+          spark.eventLog.dir: hdfs://mycluster/spark-logs
+          spark.history.fs.logDirectory: hdfs://mycluster/spark-logs
+          spark-yarn-historyServer: "{{ hostvars[groups['spark_hs'][0]]['ansible_host'] }}.lxd:18081"
+
+- hosts: "{{ groups['hdfs_nn'][0] }}"
+  vars:
+    hadoop_root_dir: /opt/tdp
+    hadoop_root_conf_dir: /etc/hadoop
+    realm: TDP
+  become: yes
+  tasks:
+    - name: Create & set ownership of spark logs hdfs dir
+      command: "{{ item }}"
+      with_items:
+        - kinit -kt /etc/security/keytabs/nn.service.keytab nn/{{ groups['hdfs_nn'][0] | tosit.tdp.access_fqdn(hostvars) }}@{{ realm }}
+        - "{{ hadoop_root_dir }}/hadoop/bin/hdfs --config {{ hadoop_root_conf_dir }}/conf.nn dfs -mkdir /spark-logs"
+        - "{{ hadoop_root_dir }}/hadoop/bin/hdfs --config {{ hadoop_root_conf_dir }}/conf.nn dfs -chown spark:hadoop /spark-logs"
+        - "{{ hadoop_root_dir }}/hadoop/bin/hdfs --config {{ hadoop_root_conf_dir }}/conf.nn dfs -chmod 777 /spark-logs"
+
+- hosts: "{{ groups['spark_hs'][0] }}"
+  tasks:
+    - name: Start spark-history-server
+      become: yes
+      service:
+        name: spark-history-server
+        state: started
