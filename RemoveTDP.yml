@@ -128,3 +128,31 @@
         state: absent
       failed_when: no
       tags: ca
+
+- hosts: spark_hs,spark_client
+  become: yes
+  tasks:
+    - name: Stop history server
+      service:
+        name: spark-history-server
+        state: stopped
+      failed_when: no
+      tags: sp
+    - name: Remove Spark config files
+      become: yes
+      shell: rm -rf /etc/spark
+      failed_when: no
+      tags: sp
+    - name: Remove Spark install files
+      become: yes
+      shell: rm -rf /opt/tdp/spark
+      failed_when: no
+      tags: sp
+    - name: Remove pid
+      shell: rm -rf /var/run/spark
+      failed_when: no
+      tags: sp
+    - name: Remove keytabs
+      shell: "rm -f  /etc/security/keytabs/spark"
+      failed_when: no
+      tags: sp
