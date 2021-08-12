@@ -23,6 +23,21 @@
       failed_when: no
       tags: zk
 
+- hosts: postgresql
+  become: yes
+  tasks:
+    - name: Stop postgres
+      service:
+        name: postgresql
+        state: stopped 
+      tags: pg
+    - name: Uninstall postgres
+      yum:
+        name: postgresql
+        state: absent 
+      tags: pg
+    - name: remove /var/lib/pgsql
+      shell: rm -rf /var/lib/pgsql
 - hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
   become: yes
   tasks:
