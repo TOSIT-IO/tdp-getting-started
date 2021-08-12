@@ -108,3 +108,14 @@ kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01@TDP
 # Check contents of new file
 /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /edge-01/testFile
 ```
+
+**Ranger**
+
+Creates a suitably configured postgres database to the `[postgresql]` ansible group, then deploys Ranger to the `[ranger_admin]` ansible group.
+
+*Note that any changes to the `[ranger_admin]` hosts should be also be reflected in the `[hadoop client group`]*
+  
+
+```
+ansible-playbook deploy-ranger.yml
+```
