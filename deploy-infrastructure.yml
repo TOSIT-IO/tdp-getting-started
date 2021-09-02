@@ -38,7 +38,7 @@
 
   - name: Clone TDP ansible roles
     ansible.builtin.git:
-      repo: https://github.com/TOSIT-FR/ansible-tdp-roles.git
+      repo: git@github.com:TOSIT-FR/ansible-tdp-roles.git
       dest: collections/ansible_collections/tosit/tdp
       force: no
     failed_when: no
