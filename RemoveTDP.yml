@@ -29,7 +29,8 @@
     - name: Stop postgres
       service:
         name: postgresql
-        state: stopped 
+        state: stopped
+      ignore_errors: yes
       tags: pg
     - name: Uninstall postgres
       yum:
@@ -38,13 +39,42 @@
       tags: pg
     - name: remove /var/lib/pgsql
       shell: rm -rf /var/lib/pgsql
+      tags: pg
 
 - hosts: hdfs_nn,postgresql,ranger_admin,yarn_rm
   become: yes
   tasks:
+    - name: Stop ranger-admin service
+      service:
+        name: ranger-admin
+        state: stopped
+      register: stop_daemon
+      failed_when: |
+        stop_daemon is failed and
+        stop_daemon.stderr is defined and
+        'Could not find the requested service' not in stop_daemon.stderr
+      tags: rg
     - name: Remove ranger
       shell: rm -rf /opt/tdp/ranger/ 11 rm -rf /opt/tdp/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-admin/ 
       tags: rg
+    - name: Remove logs
+      shell: rm -rf /var/log/ranger
+      failed_when: no
+      tags: rg
+
+- hosts: postgresql
+  become: yes
+  tasks:
+    - name: Drop ranger db
+      become_user: postgres
+      shell: psql -c "DROP DATABASE ranger;"
+      register: drop_ranger_db
+      tags: rg
+      failed_when: |
+        drop_ranger_db is failed and 
+        'does not exist' not in drop_ranger_db.stderr
+
+
 
 - hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
   become: yes
@@ -63,6 +93,10 @@
       tags: hdfs
     - name: Remove Hadoop conf
       shell: rm -rf /etc/hadoop
+      failed_when: no
+      tags: hdfs
+    - name: Remove logs
+      shell: rm -rf /var/log/hadoop
       failed_when: no
       tags: hdfs
     - name: Remove pid
@@ -102,6 +136,13 @@
       failed_when: no
       tags: kb
 
+- hosts: localhost
+  tasks:
+    - name: Rm local krb5.conf file
+      shell: rm files/krb5.conf
+      failed_when: no
+      tags: kb
+
 - hosts: all
   become: yes
   tasks:
@@ -111,7 +152,6 @@
       with_items:
         - root.pem
         - edge-01.pem
-        - edge-02.pem
         - master-01.pem
         - master-02.pem
         - master-03.pem
@@ -119,13 +159,26 @@
         - worker-02.pem
         - worker-03.pem
         - edge-01.key
-        - edge-02.key
         - master-01.key
         - master-02.key
         - master-03.key
         - worker-01.key
         - worker-02.key
         - worker-03.key
+        - edge-01.tdp.pem
+        - master-01.tdp.pem
+        - master-02.tdp.pem
+        - master-03.tdp.pem
+        - worker-01.tdp.pem
+        - worker-02.tdp.pem
+        - worker-03.tdp.pem
+        - edge-01.tdp.key
+        - master-01.tdp.key
+        - master-02.tdp.key
+        - master-03.tdp.key
+        - worker-01.tdp.key
+        - worker-02.tdp.key
+        - worker-03.tdp.key
       tags: ca
 
 - hosts: localhost
@@ -136,3 +189,80 @@
         state: absent
       failed_when: no
       tags: ca
+
+- hosts: hive_s2:hadoop_client
+  become: yes
+  tasks:
+    - name: Stop hive server2 daemon
+      service:
+        name: hive-server2
+        state: stopped
+      register: hs2_stopped
+      failed_when: |
+        hs2_stopped is failed and 
+        hs2_stopped.stderr is defined and 
+        'does not exist' not in hs2_stopped.stderr
+      tags: hive
+    - name: Remove hive conf
+      shell: rm -rf /etc/hive
+      failed_when: no
+      tags: hive
+    - name: Remove hive install dir
+      shell: rm -rf /opt/tdp/hive
+      failed_when: no
+      tags: hive
+    - name: Remove hive config dir
+      shell: rm -rf /etc/hive
+      failed_when: no
+      tags: hive
+    - name: Remove hive dir
+      shell: rm -rf /opt/tdp/apache-hive-3.1.3-TDP-0.1.0-SNAPSHOT-bin
+      failed_when: no
+      tags: hive
+    - name: Remove pid
+      shell: rm -rf /var/run/hive
+      failed_when: no
+      tags: hive
+    - name: Remove logs
+      shell: rm -rf /var/log/hive
+      failed_when: no
+      tags: hive
+    - name: Remove keytabs
+      shell: "rm -f  /etc/security/keytabs/hive.service.keytab"
+      failed_when: no
+      tags: hive
+
+- hosts: hdfs_nn[0]
+  become: yes
+  vars:
+    realm: TDP
+    hadoop_conf_dir: /etc/hadoop/conf.nn
+  tasks:
+    - name: rm hdfs dirs for hive
+      become: yes
+      command: "{{ item }}"
+      register: command_result
+      failed_when: no
+      with_items:
+        - kinit -kt /etc/security/keytabs/nn.service.keytab nn/{{ groups['hdfs_nn'][0] | tosit.tdp.access_fqdn(hostvars) }}@{{ realm }}
+        - /opt/tdp/hadoop/bin/hdfs --config {{ hadoop_conf_dir }} dfs -rm -r /warehouse
+        - /opt/tdp/hadoop/bin/hdfs --config {{ hadoop_conf_dir }} dfs -rm -r /ranger/audit/hiveServer2
+        - /opt/tdp/hadoop/bin/hdfs --config {{ hadoop_conf_dir }} dfs -rm -r /tdp/tez
+      tags: hive
+
+- hosts: postgresql
+  become: yes
+  tasks:
+
+    - name: Drop hive database
+      become_user: postgres
+      shell: psql -c "DROP DATABASE hive;"
+      tags: hive
+      failed_when: no
+
+    - name:  Drop hive user
+      become_user: postgres
+      shell: psql -tc "SELECT 1 FROM pg_user WHERE usename = 'hive'" | grep -q 1 ||  psql -c "DROP USER hive;"
+      tags: hive
+      failed_when: no
+

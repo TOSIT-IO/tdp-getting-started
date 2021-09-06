@@ -12,12 +12,17 @@
 - hosts: zk
   become: yes
   vars:
-    - realm: TDP
+    - realm: REALM.TDP
     - kadmin_principal: admin/admin
     - kadmin_password: admin
-    - suffix: :2888:3888
-    - zk_ips: "{{groups['zk'] | map('extract', hostvars, ['ansible_host']) | list}}"
-    - zk_servers: "{{ zk_ips | product([suffix]) | map('join') | list }}"
-  tasks:
+  tasks: 
     - import_role:
         name: tosit.tdp.zookeeper
+
+- hosts: zk
+  tasks:
+  - name: Verify zookeeper is serving requests
+    shell: echo stat | nc localhost 2181
+    register: __result
+    failed_when: "{{'This ZooKeeper instance is not currently serving requests' in __result.stdout}}"
+    tags: zk
