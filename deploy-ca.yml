@@ -3,7 +3,7 @@
   become: yes
   vars:
     - ca_name: tdp
-    - certs_fqdns: "{{groups['all'] | map('extract', hostvars, ['inventory_hostname']) | list}}"
+    - certs_fqdns: "{{ groups['all'] |  map('tosit.tdp.access_fqdn', hostvars) | list }}"
     - ca_cert_filename: root.pem
     - ca_key_filename: ca_key.pem
   tasks:
@@ -36,8 +36,8 @@
 
     - name: Distribute certs and keys to nodes
       copy:
-        src: files/certs/{{inventory_hostname}}.{{item}}
-        dest: /etc/ssl/certs/{{inventory_hostname}}.{{item}}
+        src: files/certs/{{ansible_fqdn}}.{{item}}
+        dest: /etc/ssl/certs/{{ansible_fqdn}}.{{item}}
         force: yes
       with_items:
         - key
