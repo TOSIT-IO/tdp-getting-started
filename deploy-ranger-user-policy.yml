@@ -10,6 +10,7 @@
     ranger_password: RangerAdmin123
     ranger_username: admin
     ranger_user: tdp-user
+    ranger_user_password: tdp-user_123
   tasks:
     - name: "Ranger: get user list"
       uri:
@@ -36,7 +37,7 @@
             "firstName": "{{ ranger_user }}",
             "loginId": "{{ ranger_user }}",
             "description": "ranger user",
-            "password": "{{ ranger_user }}_123",
+            "password": "{{ ranger_user_password }}",
             "status": 1,
             "isVisible": 1,
             "userRoleList": ["ROLE_USER"],
