@@ -1,0 +1,16 @@
+---
+- hosts: hive_s2[0]
+  collections:
+    - tosit.tdp
+  vars:
+    realm: REALM.TDP
+    test_database: tdp_test_db
+    hive_truststore_password: Truststore123!
+    hive_zookeeper_quorum: "{{ groups['zk'] |  map('tosit.tdp.access_fqdn', hostvars) |  map('regex_replace', '^(.*)$', '\\1:2181') | join(',') | trim}}"
+  environment:
+    JAVA_HOME: "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-0.el7_9.x86_64/jre/"
+    HADOOP_HOME: "/opt/tdp/hadoop"
+  tasks:
+    - import_role:
+        name: hive-tests
+

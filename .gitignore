@@ -4,6 +4,10 @@ collections/
 *.log
 files/
 control-node-bootstrap.sh
-roles/ansible-deploy-kerberos-client/
-roles/ansible-deploy-kerberos-server/
+roles/ansible-kerberos-client/
+roles/ansible-kerberos-server/
+roles/ansible-role-postgresql/
 roles/ansible-ca/
+roles/ansible-deploy-beeline-client/
+notes
+test.yml

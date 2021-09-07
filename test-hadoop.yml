@@ -1,0 +1,9 @@
+---
+- hosts: edge
+  collections:
+    - tosit.tdp
+  vars:
+    realm: REALM.TDP
+  tasks:
+    - import_role:
+        name: hadoop-tests
