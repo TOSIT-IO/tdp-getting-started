@@ -182,6 +182,7 @@ The following code snippets:
   - As there is no ranger user sync configured in this cluster, add the tdp-user manually in the ranger UI at `https://master-02.tdp:6182/index.html` with `admin` and `RangerAdmin123` user and password (assuming default settings used). 
       - Go to *RangerUI > Settings > users/Groups/Roles > Add New User* and create tdp-user
       - Go to  *RangerUI > Service Manager > hive-tdp Policies* and create a policy to allow tdp-user full permissions to database tdp_user_db
+      - Go to  *RangerUI > Service Manager > hdfs-tdp Policies* and create a policy to allow tdp-user full read, write and execute permissions in  `/user/tdp-user` hdfs dir
       - Go to  *RangerUI > Service Manager > hdfs-tdp Policies* and create a policy to hive user read, write and execute permissions in  `/user` hdfs dir
 
 From the beeline client, execute the following code blocks to interact with Hive:
