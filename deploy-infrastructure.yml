@@ -71,6 +71,11 @@
     tags:
       - ssh-key-gen
 
+  - name: Install pip packages
+    pip:
+      name:
+        - jmespath
+
   - name: Spawn Virtual Machines Logging Information
     shell: "vagrant up  2>&1 | tee -a logs/vagrant.log"
 
