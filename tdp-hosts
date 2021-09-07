@@ -1,17 +1,15 @@
 
 [all]
-worker-01 ansible_host=192.168.32.10 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=worker-01 access_fqdn=worker-01
-worker-02 ansible_host=192.168.32.11 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=worker-02 access_fqdn=worker-02
-worker-03 ansible_host=192.168.32.12 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=worker-03 access_fqdn=worker-03
-master-01 ansible_host=192.168.32.13 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=master-01 access_fqdn=master-01
-master-02 ansible_host=192.168.32.14 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=master-02 access_fqdn=master-02
-master-03 ansible_host=192.168.32.15 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=master-03 access_fqdn=master-03
-edge-01 ansible_host=192.168.32.16 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=edge-01 access_fqdn=edge-01
-edge-02 ansible_host=192.168.32.17 ansible_connection=ssh ansible_user=vagrant ansible_fqdn=edge-02 access_fqdn=edge-02
+worker-01 ansible_host=192.168.32.10 ansible_connection=ssh ansible_user=vagrant domain=tdp
+worker-02 ansible_host=192.168.32.11 ansible_connection=ssh ansible_user=vagrant domain=tdp
+worker-03 ansible_host=192.168.32.12 ansible_connection=ssh ansible_user=vagrant domain=tdp
+master-01 ansible_host=192.168.32.13 ansible_connection=ssh ansible_user=vagrant domain=tdp
+master-02 ansible_host=192.168.32.14 ansible_connection=ssh ansible_user=vagrant domain=tdp
+master-03 ansible_host=192.168.32.15 ansible_connection=ssh ansible_user=vagrant domain=tdp
+edge-01 ansible_host=192.168.32.16 ansible_connection=ssh ansible_user=vagrant domain=tdp
 
 [edge]
 edge-01
-edge-02
 
 [zk]
 master-01
@@ -50,10 +48,15 @@ worker-03
 [yarn_ats]
 master-02
 
+[hive_s2]
+master-02
+master-03
+
+
 [hadoop_client]
 edge-01
-edge-02
 master-02
+master-03
 
 [postgresql]
 master-02
