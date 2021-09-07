@@ -6,4 +6,4 @@
     realm: REALM.TDP
   tasks:
     - import_role:
-        name: hdfs-tests
+        name: hadoop-tests
