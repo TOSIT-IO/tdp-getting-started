@@ -4,7 +4,7 @@ Launch various virtual TDP big data infrastructures in less than 10 commands
 
 # TL;DR
 ```bash
-ansible-playbook deploy-infrastructure.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-users.yml deploy-hdfs-yarn-mapreduce.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml -K
+ansible-playbook deploy-infrastructure.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-users.yml deploy-hdfs-yarn-mapreduce.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-spark.yml -K
 ```
 ### Requirements
 - ansible >= 2.9.6
@@ -210,4 +210,17 @@ INSERT INTO TABLE table1 VALUES (1, 'one'), (2, 'two');
 
 # Examine the database table
 SELECT * FROM table1;
+```
+**Spark**
+
+Deploys spark installations to the `[spark_hs]` and the `[spark_client]` ansible group. 
+
+```
+ansible-playbook deploy-spark.yml
+```
+*Execute the following command from any node in the `[spark_client]` ansible group to spark-submit an example jar from the spark installation:*
+
+```bash
+export SPARK_CONF_DIR=/etc/spark/conf
+/opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode cluster /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```

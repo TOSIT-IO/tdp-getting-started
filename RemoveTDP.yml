@@ -1,4 +1,40 @@
 ---
+
+- hosts: all
+  become: yes
+  vars:
+    realm: REALM.TDP
+    kadmin_principal: admin/admin
+    kadmin_password: admin
+    user: spark
+    hadoop_group: hadoop
+  tasks:
+    - name: Remove User
+      user:
+       name: '{{user}}'
+       state: absent
+       remove: yes
+      tags: spark
+    - name: Delete symbollic link to existing user installation
+      file:
+        path: "/opt/tdp/{{user}}"
+        state: absent
+      tags: spark
+    - name: Delete user principal remotes
+      shell: 'kadmin  -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "delete_principal -force {{user}}/{{ansible_fqdn}}"'
+      tags: spark
+    - name: Remove user keytab on remotes if it exists
+      file:
+        path: "/etc/security/keytabs/{{user}}.service.keytab"
+        state: absent
+      register: r
+      tags: spark
+    - name: Check user no longer exists
+      shell: " cat /etc/passwd | grep {{user}} | wc -l"
+      register: r
+      failed_when: r.stdout != '0'
+      tags: spark
+
 - hosts: zk
   become: yes
   tasks:

@@ -63,3 +63,9 @@ master-02
 
 [ranger_admin]
 master-02
+
+[spark_hs]
+master-01
+
+[spark_client]
+edge-01
