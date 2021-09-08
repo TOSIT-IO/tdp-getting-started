@@ -1,9 +1,5 @@
 ---
 - hosts: localhost
-  vars:
-  - realm: REALM.TDP
-  - kadmin_principal: admin/admin
-  - kadmin_password: admin
   tasks:
     - name: Check ranger binary exists
       stat:
@@ -32,31 +28,10 @@
   tasks:
     - import_role: 
         name: tosit.tdp.ranger
-      vars:
-        ranger_jdbc_connector_package: postgresql-jdbc
-        realm: REALM.TDP
-        kadmin_principal: admin/admin
-        kadmin_password: admin
-        install_properties:
-          #setup_mode: postgres
-          db_host: "{{groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
-          db_user: rangeradmin
-          db_password: rangeradmin
-          DB_FLAVOR: postgres
-          db_name: ranger
-          audit_store: db # deprecated but keeps the setup.sh script from requesting a solr endpoint
-          SQL_CONNECTOR_JAR: /usr/share/java/postgresql-jdbc.jar
-          db_root_user: postgres
-          db_root_password: postgres
       tags: rapb
 
 - hosts: hdfs_nn
   become: yes
-  vars:
-    - realm: REALM.TDP
-    - kadmin_principal: admin/admin
-    - kadmin_password: admin
-    - ranger_admin_password: RangerAdmin123
   tasks:
     - import_role:
         name: tosit.tdp.hadoop
@@ -65,11 +40,6 @@
 
 - hosts: yarn_rm
   become: yes
-  vars:
-    - realm: REALM.TDP
-    - kadmin_principal: admin/admin
-    - kadmin_password: admin
-    - ranger_admin_password: RangerAdmin123
   tasks:
     - import_role:
         name: tosit.tdp.hadoop

@@ -1,0 +1,20 @@
+---
+ranger_jdbc_connector_package: postgresql-jdbc
+install_properties:
+  #setup_mode: postgres
+  db_host: "{{groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
+  db_user: rangeradmin
+  db_password: rangeradmin
+  DB_FLAVOR: postgres
+  db_name: ranger
+  audit_store: db # deprecated but keeps the setup.sh script from requesting a solr endpoint
+  SQL_CONNECTOR_JAR: /usr/share/java/postgresql-jdbc.jar
+  db_root_user: postgres
+  db_root_password: postgres
+
+# Deploy ranger policies
+hive_database: tdp_test_db
+hive_user: hive
+ranger_username: admin
+ranger_user: "{{ users | first }}"
+ranger_user_password: "{{ ranger_user }}_123"

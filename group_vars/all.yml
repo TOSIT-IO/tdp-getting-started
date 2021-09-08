@@ -1,0 +1,62 @@
+---
+# TDP
+realm: REALM.TDP
+
+# Ranger
+ranger_admin_password: RangerAdmin123
+
+# Kerberos
+kadmin_principal: admin/admin
+kadmin_password: admin
+kadmind_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}"
+kdc_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }} "
+
+# Rename for ansible-kerberos-client and ansible-kerberos-server
+realm_name: "{{ realm }}"
+master_db_pass: krb5-master-pass
+kadmin_user: "{{ kadmin_principal }}"
+kadmin_pass: "{{ kadmin_password }}"
+kdc_port: 88
+
+
+
+# CA
+ca_cert_filename: root.pem
+
+POLICY_MGR_URL: "https://{{ groups['ranger_admin'][0] | tosit.tdp.access_fqdn(hostvars) }}:6182"
+
+# hdfs
+ranger_hdfs_install_properties:
+  POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
+  REPOSITORY_NAME: hdfs-tdp
+
+# hive
+ranger_hive_install_properties:
+  POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
+  REPOSITORY_NAME: hive-tdp
+
+# Spark
+spark_defaults:
+  spark.eventLog.dir: hdfs://mycluster/spark-logs
+  spark.history.fs.logDirectory: hdfs://mycluster/spark-logs
+  spark-yarn-historyServer: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}:18081"
+hadoop_root_dir: /opt/tdp
+hadoop_root_conf_dir: /etc/hadoop
+
+# yarn
+ranger_yarn_install_properties:
+  POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
+  REPOSITORY_NAME: yarn-tdp
+
+yarn_site:
+  # To enable Kerberos on the ATS UI
+  yarn.timeline-service.http-authentication.type: kerberos
+  yarn.timeline-service.http-authentication.kerberos.principal: HTTP/_HOST@{{ realm }}
+  yarn.timeline-service.http-authentication.kerberos.keytab: /etc/security/keytabs/spnego.service.keytab
+
+# Zookeeper
+hadoop_ha_zookeeper_quorum: "{{groups['zk'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '^(.*)$', '\\1:2181') | join(',') }}"
+
+# User management
+users:
+  - tdp-user

@@ -1,24 +1,14 @@
 ---
 - hosts: ranger_admin[0]
   become: yes
-  vars:
-    hdfs_ranger_repository_name: hdfs-tdp
-    hive_database: tdp_test_db
-    hive_ranger_repository_name: hive-tdp
-    hive_user: hive
-    ranger_host: "{{ groups['ranger_admin'] |  map('tosit.tdp.access_fqdn', hostvars) | first }}"
-    ranger_password: RangerAdmin123
-    ranger_username: admin
-    ranger_user: tdp-user
-    ranger_user_password: tdp-user_123
   tasks:
     - name: "Ranger: get user list"
       uri:
-        url: https://{{ ranger_host }}:6182/service/users
+        url: "{{ ranger_hdfs_install_properties.POLICY_MGR_URL }}/service/users"
         headers:
           Accept: application/json
         url_username: "{{ ranger_username }}"
-        url_password: "{{ ranger_password }}"
+        url_password: "{{ ranger_admin_password }}"
         force_basic_auth: yes
         return_content: yes
       register: jsoncontent
@@ -44,13 +34,13 @@
             "userSource": 0,
           }
       uri:
-        url: https://{{ ranger_host }}:6182/service/xusers/secure/users
+        url: "{{ ranger_hdfs_install_properties.POLICY_MGR_URL }}/service/xusers/secure/users"
         headers:
           Accept: application/json
         body: "{{ create_user | to_json }}"
         body_format: json
         url_username: "{{ ranger_username }}"
-        url_password: "{{ ranger_password }}"
+        url_password: "{{ ranger_admin_password }}"
         force_basic_auth: yes
         method: POST
         return_content: yes
@@ -64,11 +54,11 @@
 
     - name: "Ranger: get policy list"
       uri:
-        url: https://{{ ranger_host }}:6182/service/public/v2/api/policy
+        url: "{{ ranger_hdfs_install_properties.POLICY_MGR_URL }}/service/public/v2/api/policy"
         headers:
           Accept: application/json
         url_username: "{{ ranger_username }}"
-        url_password: "{{ ranger_password }}"
+        url_password: "{{ ranger_admin_password }}"
         force_basic_auth: yes
         return_content: yes
       register: jsoncontent
@@ -87,7 +77,7 @@
         hdfs_policy:
           {
             "name": "hive-user-hdfs-policy",
-            "service": "{{ hdfs_ranger_repository_name }}",
+            "service": "{{ ranger_hdfs_install_properties.REPOSITORY_NAME }}",
             "repositoryType": "hdfs",
             "description": "Hive Client Check",
             "isEnabled": true,
@@ -118,13 +108,13 @@
               ],
           }
       uri:
-        url: https://{{ ranger_host }}:6182/service/public/v2/api/policy
+        url: "{{ ranger_hdfs_install_properties.POLICY_MGR_URL }}/service/public/v2/api/policy"
         headers:
           Accept: application/json
         body: "{{ hdfs_policy | to_json }}"
         body_format: json
         url_username: "{{ ranger_username }}"
-        url_password: "{{ ranger_password }}"
+        url_password: "{{ ranger_admin_password }}"
         force_basic_auth: yes
         method: POST
       when: hdfs_policy_id == []
@@ -134,7 +124,7 @@
         hive_policy:
           {
             "name": "tdp-user-hive-policy",
-            "service": "{{ hive_ranger_repository_name }}",
+            "service": "{{ ranger_hive_install_properties.REPOSITORY_NAME }}",
             "repositoryType": "hive",
             "description": "Hive Client Check",
             "isEnabled": true,
@@ -170,13 +160,13 @@
               ],
           }
       uri:
-        url: https://{{ ranger_host }}:6182/service/public/v2/api/policy
+        url: "{{ ranger_hive_install_properties.POLICY_MGR_URL }}/service/public/v2/api/policy"
         headers:
           Accept: application/json
         body: "{{ hive_policy | to_json }}"
         body_format: json
         url_username: "{{ ranger_username }}"
-        url_password: "{{ ranger_password }}"
+        url_password: "{{ ranger_admin_password }}"
         force_basic_auth: yes
         method: POST
       when: hive_policy_id == []

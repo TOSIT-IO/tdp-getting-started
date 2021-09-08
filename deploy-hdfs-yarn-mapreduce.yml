@@ -2,9 +2,6 @@
 - name: "Deploy Hadoop"
   become: yes
   vars:
-    - realm: REALM.TDP
-    - kadmin_principal: admin/admin
-    - kadmin_password: admin
     # - hdfs_site:
     #     dfs.namenode.shared.edits.dir: |
     #       qjournal://{{ groups['hdfs_jn'] | 
@@ -20,12 +17,6 @@
     #     POLICY_MGR_URL: "https://{{ hostvars[groups['ranger_admin'][0]]['ansible_host'] }}:6182"
     #     REPOSITORY_NAME: yarn-tdp
 
-    - yarn_site:
-        # To enable Kerberos on the ATS UI
-        yarn.timeline-service.http-authentication.type: kerberos
-        yarn.timeline-service.http-authentication.kerberos.principal: HTTP/_HOST@{{ realm }}
-        yarn.timeline-service.http-authentication.kerberos.keytab: /etc/security/keytabs/spnego.service.keytab
-
   hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
   gather_facts: true
   tasks:
@@ -36,9 +27,6 @@
 - name: "Hadoop cluster bootstrap"
   become: yes
   hosts: localhost
-  vars:
-    - realm: REALM.TDP
-    - hadoop_ha_zookeeper_quorum: "{{groups['zk'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '^(.*)$', '\\1:2181') | join(',') }}"
   tasks:
     - import_role:
         name: tosit.tdp.hadoop
