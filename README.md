@@ -1,11 +1,14 @@
 # Getting Started with TDP
 
-Launch various virtual TDP big data infrastructures in less than 10 commands
+Launch a fully featured virtual TDP Hadoop cluster with a single command *or* customise the infrastructure and components of your cluster with 1 command per component (e.g. `ansible-playbook deploy_<item>.yml`).
+
+Each of the below section includes the command to exectue to deploy a component or dependency of the cluster, along with some high level code blocks for you to quickly verify that it is working as intended.
 
 # TL;DR
 ```bash
 ansible-playbook deploy-infrastructure.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-users.yml deploy-hdfs-yarn-mapreduce.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-spark.yml -K
 ```
+
 ### Requirements
 - ansible >= 2.9.6
 - vagrant >= 2.29
