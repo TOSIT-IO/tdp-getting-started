@@ -4,6 +4,7 @@
     - tosit.tdp
   vars:
     realm: REALM.TDP
+    test_user: tdp-user
   tasks:
     - import_role:
         name: hadoop-tests
