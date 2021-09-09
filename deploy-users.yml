@@ -1,3 +1,4 @@
+---
 - hosts: all
   become: yes
   tasks:
@@ -24,3 +25,22 @@
       chdir: /home/{{item}}/.ssh/
       creates: /home/{{item}}/.ssh/{{item}}.principal.keytab
     with_items: "{{users}}"
+
+- hosts: hdfs_nn[0]
+  become: yes
+  tasks:
+  - name: Kinit for hdfs
+    become: yes
+    become_user: "{{ hdfs_user }}"
+    command: "kinit -kt /etc/security/keytabs/nn.service.keytab nn/{{ groups['hdfs_nn'][0] | tosit.tdp.access_fqdn(hostvars) }}@{{ realm }}"
+  - name: Create user hdfs folders
+    become: yes
+    become_user: "{{ hdfs_user }}"
+    tosit.tdp.hdfs_file:
+      hdfs_conf: "{{ hadoop_conf_dir }}"
+      path: "/user/{{ item }}"
+      state: directory
+      owner: "{{ item }}"
+      group: "{{ item }}"
+      mode: "755"
+    loop: "{{ users }}"
