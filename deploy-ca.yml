@@ -1,19 +1,12 @@
 ---
 - hosts: ca
   become: yes
-  vars:
-    - ca_name: tdp
-    - certs_fqdns: "{{ groups['all'] |  map('tosit.tdp.access_fqdn', hostvars) | list }}"
-    - ca_cert_filename: root.pem
-    - ca_key_filename: ca_key.pem
   tasks:
     - import_role:
         name: roles/ansible-ca
 
 - hosts: all
   become: yes
-  vars:
-    - ca_cert_filename: root.pem
   tasks:
     - name: Check /etc/ssl/certs dir exists
       stat:

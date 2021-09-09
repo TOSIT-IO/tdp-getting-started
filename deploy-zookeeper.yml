@@ -11,10 +11,6 @@
 
 - hosts: zk
   become: yes
-  vars:
-    - realm: REALM.TDP
-    - kadmin_principal: admin/admin
-    - kadmin_password: admin
   tasks: 
     - import_role:
         name: tosit.tdp.zookeeper

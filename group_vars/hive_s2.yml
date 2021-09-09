@@ -1,0 +1,12 @@
+---
+hive_jdbc_connector_package: postgresql-jdbc
+hive_ms_db_url: "jdbc:postgresql://{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
+db_type: postgres
+hive_site:
+  javax.jdo.option.ConnectionURL: "{{ hive_ms_db_url }}/{{ hive_ms_db_name }}"
+  javax.jdo.option.ConnectionDriverName: org.postgresql.Driver
+  datanucleus.autoCreateSchema: false
+  hive.zookeeper.quorum: "{{ groups['zk'] |  map('tosit.tdp.access_fqdn', hostvars) |  map('regex_replace', '^(.*)$', '\\1:2181') | join(',') | trim}}"
+  javax.jdo.option.ConnectionUserName: hive
+  javax.jdo.option.ConnectionPassword: hive
+  hive.server2.enable.doAs: no

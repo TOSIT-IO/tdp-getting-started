@@ -1,7 +1,4 @@
 - hosts: all
-  vars:
-    users:
-      - tdp-user
   become: yes
   tasks:
   - name: Add unix users
@@ -19,10 +16,6 @@
 
   - name: Generate user principals and keytabs
     become: yes
-    vars:
-    - realm: REALM.TDP
-    - kadmin_principal: admin/admin
-    - kadmin_password: admin
     shell: |
       kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "addprinc -randkey {{item}}/{{ ansible_fqdn }}@{{realm}}"
       kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "xst -k {{item}}.principal.keytab {{item}}/{{ ansible_fqdn }}@{{realm}}"

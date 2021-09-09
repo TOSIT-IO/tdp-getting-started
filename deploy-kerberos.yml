@@ -1,14 +1,6 @@
 ---
 - hosts: kdc
   become: yes
-  vars:
-    realm_name: REALM.TDP
-    kdc_port: 88
-    master_db_pass: krb5-master-pass
-    kadmin_user: admin/admin
-    kadmin_pass: admin
-    kdc_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }} "
-    kadmind_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}"
   tasks:
     - import_role:
         name: roles/ansible-kerberos-server
@@ -23,10 +15,6 @@
 
 - hosts: all
   become: yes
-  vars:
-    realm_name: REALM.TDP
-    kdc_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }} "
-    kadmind_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}"
   tasks:
     - import_role:
         name: roles/ansible-kerberos-client
