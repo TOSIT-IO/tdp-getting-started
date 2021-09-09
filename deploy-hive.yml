@@ -25,28 +25,9 @@
   tasks:
     - import_role: 
         name: tosit.tdp.hive
-      vars:
-        realm: REALM.TDP
-        kadmin_principal: admin/admin
-        kadmin_password: admin
-        ranger_admin_password: RangerAdmin123
-        hive_jdbc_connector_package: postgresql-jdbc
-        hive_ms_db_url: "jdbc:postgresql://{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
-        db_type: postgres
-        hive_site:
-          javax.jdo.option.ConnectionURL: "{{ hive_ms_db_url }}/{{ hive_ms_db_name }}"
-          javax.jdo.option.ConnectionDriverName: org.postgresql.Driver
-          datanucleus.autoCreateSchema: false
-          hive.zookeeper.quorum: "{{ groups['zk'] |  map('tosit.tdp.access_fqdn', hostvars) |  map('regex_replace', '^(.*)$', '\\1:2181') | join(',') | trim}}"
-          javax.jdo.option.ConnectionUserName: hive
-          javax.jdo.option.ConnectionPassword: hive
-          hive.server2.enable.doAs: False
 
 - hosts: "{{ groups['hdfs_nn'][0] }}"
   become: yes
-  vars:
-    tez_release: tez-0.9.1-TDP-0.1.0-SNAPSHOT
-    tez_dist_file: "{{ tez_release }}.tar.gz"
   tasks:
     - name: "Upload {{ tez_dist_file }}"
       copy:
@@ -56,9 +37,6 @@
 
 - hosts: hdfs_nn[0]
   become: yes
-  vars:
-    realm: REALM.TDP
-    hadoop_conf_dir: '/etc/hadoop/conf.nn'
   tasks:
     - import_role:
         name: tosit.tdp.hive
@@ -74,10 +52,6 @@
       password: '{{ "hive123" | password_hash("sha512", "salt123") }}'
   - name: Generate hive user principal and keytab on all yarn nodemanagers and resource managers
     become: yes
-    vars:
-    - realm: REALM.TDP
-    - kadmin_principal: admin/admin
-    - kadmin_password: admin
     shell: |
       kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "addprinc -randkey hive/{{ ansible_fqdn }}@{{realm}}"
       kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "xst -k hive.service.keytab hive/{{ ansible_fqdn }}@{{realm}}"
