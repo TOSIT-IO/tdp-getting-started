@@ -12,11 +12,14 @@
     - name: Add Generated Public Key to Authorized Keys
       shell: cat /vagrant/files/tdp-rsa.pub >> /home/vagrant/.ssh/authorized_keys
 
+    - name: Force machine hostname to resolve to 192 address
+      lineinfile:
+        path: /etc/hosts
+        regexp: "{{ ansible_hostname }}"
+        state: absent
+
     - name: Add cluster IPs to /etc/hosts 
       shell: cat /vagrant/tdp-hosts |awk 'length($0) > 20' | awk -F'[/= ]' '{print $3" "$1"."$9" "$1}'  >> /etc/hosts
-
-    - name: Force machine hostname to resolve to 192 address
-      shell: sed -i '1d' /etc/hosts
 
     - name: Install core stack
       yum:
