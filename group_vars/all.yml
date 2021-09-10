@@ -26,6 +26,7 @@ ca_cert_filename: root.pem
 POLICY_MGR_URL: "https://{{ groups['ranger_admin'][0] | tosit.tdp.access_fqdn(hostvars) }}:6182"
 
 # hdfs
+hdfs_user: hdfs
 ranger_hdfs_install_properties:
   POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
   REPOSITORY_NAME: hdfs-tdp
