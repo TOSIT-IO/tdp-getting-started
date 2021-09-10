@@ -6,7 +6,7 @@ Each of the below section includes the command to exectue to deploy a component 
 
 # TL;DR
 ```bash
-ansible-playbook deploy-infrastructure.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-users.yml deploy-hdfs-yarn-mapreduce.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-spark.yml -K
+ansible-playbook deploy-infrastructure.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-hdfs-yarn-mapreduce.yml deploy-users.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
 ```
 
 ### Requirements
@@ -224,6 +224,8 @@ ansible-playbook deploy-spark.yml
 *Execute the following command from any node in the `[spark_client]` ansible group to spark-submit an example jar from the spark installation:*
 
 ```bash
+su tdp-user
+kinit -kt /home/tdp-user/.ssh/tdp-user.principal.keytab tdp-user/edge-01.tdp@REALM.TDP
 export SPARK_CONF_DIR=/etc/spark/conf
 /opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode cluster /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```
