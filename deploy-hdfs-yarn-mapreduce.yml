@@ -1,22 +1,6 @@
 ---
 - name: "Deploy Hadoop"
   become: yes
-  vars:
-    # - hdfs_site:
-    #     dfs.namenode.shared.edits.dir: |
-    #       qjournal://{{ groups['hdfs_jn'] | 
-    #       map('tosit.tdp.access_fqdn', hostvars) |
-    #       map('regex_replace', '^(.*)$', '\1:8485') |
-    #       list |
-    #       join(';') |
-    #       replace( ansible_fqdn, '0.0.0.0')}}/mycluster
-    # - ranger_hdfs_install_properties:
-    #     POLICY_MGR_URL: "https://{{ hostvars[groups['ranger_admin'][0]]['ansible_host'] }}:6182"
-    #     REPOSITORY_NAME: hdfs-tdp
-    # - ranger_yarn_install_properties:
-    #     POLICY_MGR_URL: "https://{{ hostvars[groups['ranger_admin'][0]]['ansible_host'] }}:6182"
-    #     REPOSITORY_NAME: yarn-tdp
-
   hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
   gather_facts: true
   tasks:
