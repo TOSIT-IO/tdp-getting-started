@@ -11,3 +11,4 @@ roles/ansible-ca/
 roles/ansible-deploy-beeline-client/
 notes
 test.yml
+.vscode/tasks.json
