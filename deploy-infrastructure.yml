@@ -27,24 +27,28 @@
       repo: git@github.com:DanielJohnHarty/ansible-kerberos-server.git
       dest: roles/ansible-kerberos-server
       accept_hostkey: yes
+      force: yes
 
   - name: Clone ansible kerberos client role
     ansible.builtin.git:
       repo: git@github.com:DanielJohnHarty/ansible-kerberos-client.git
       dest: roles/ansible-kerberos-client
       accept_hostkey: yes
+      force: yes
 
   - name: Clone TDP ansible roles
     ansible.builtin.git:
       repo: git@github.com:TOSIT-FR/ansible-tdp-roles.git
       dest: collections/ansible_collections/tosit/tdp
       accept_hostkey: yes
+      force: yes
 
   - name: Clone ansible-ca role
     ansible.builtin.git:
       repo: git@github.com:DanielJohnHarty/ansible-create-ca.git
       dest: roles/ansible-ca
       accept_hostkey: yes
+      force: yes
 
   - name: Clone postgres role
     ansible.builtin.git:
@@ -52,6 +56,7 @@
       dest: roles/ansible-role-postgresql
       accept_hostkey: yes
       force: no
+      force: yes
 
   - name: Check ssh key exists
     stat:
