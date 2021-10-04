@@ -49,14 +49,17 @@
       dest: roles/ansible-ca
       accept_hostkey: yes
       force: yes
+    tags: ca
 
   - name: Clone postgres role
+    # Functional as of commit id 07e5687bb4d481ad57c0efbaeaace96e52eb57b6
     ansible.builtin.git:
       repo: git@github.com:geerlingguy/ansible-role-postgresql.git
       dest: roles/ansible-role-postgresql
+      version: master
       accept_hostkey: yes
-      force: no
       force: yes
+    tags: pg
 
   - name: Check ssh key exists
     stat:
