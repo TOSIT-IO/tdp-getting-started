@@ -1,14 +1,7 @@
 pythonenv/
 .vagrant/
-collections/
 *.log
 files/
-control-node-bootstrap.sh
-roles/ansible-kerberos-client/
-roles/ansible-kerberos-server/
-roles/ansible-role-postgresql/
-roles/ansible-ca/
-roles/ansible-deploy-beeline-client/
-notes
 test.yml
 .vscode/tasks.json
+*/tosit/tdp/
