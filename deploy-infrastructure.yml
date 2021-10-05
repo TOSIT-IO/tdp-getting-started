@@ -2,26 +2,29 @@
 - hosts: localhost
   tasks:
 
-  - name: Create directories
-    file:
-      path: "{{ item }}"
-      state: directory
-    with_items:
-    - logs
-    - files
-    - ansible_roles
+  # - name: Create directories
+  #   file:
+  #     path: "{{ item }}"
+  #     state: directory
+  #   with_items:
+  #   - logs
+  #   - files
+  #   - ansible_roles
 
-  - name: Create ansible log file
-    copy:
-      content: ""
-      dest: logs/tdp.log
-      force: yes
+  # - name: Create ansible log file
+  #   copy:
+  #     content: ""
+  #     dest: logs/tdp.log
+  #     force: yes
 
-  - name: Create vagrant log file
-    copy:
-      content: ""
-      dest: logs/vagrant.log
-      force: yes
+  # - name: Create vagrant log file
+  #   copy:
+  #     content: ""
+  #     dest: logs/vagrant.log
+  #     force: yes
+
+  - name: Run setup.sh
+    command: sh setup.sh
 
   - name: Clone ansible KDC role
     ansible.builtin.git:

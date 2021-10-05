@@ -1,0 +1,35 @@
+---
+- name: Check /etc/ssl/certs dir exists
+  stat:
+    path: /etc/ssl/certs
+  register: certs_dir
+
+- name: Create certs dir if missing
+  file: 
+    path: /etc/ssl/certs
+    state: directory
+  when: not certs_dir.stat.exists
+
+- name: Distribute CA to nodes
+  copy:
+    src: "files/certs/{{ca_cert_filename}}"
+    dest: "/etc/ssl/certs/{{ca_cert_filename}}"
+    force: yes
+    backup: yes
+  tags:
+    - dist-certs
+
+- name: Distribute certs and keys to nodes
+  copy:
+    src: files/certs/{{ansible_fqdn}}.{{item}}
+    dest: /etc/ssl/certs/{{ansible_fqdn}}.{{item}}
+    force: yes
+    backup: yes
+  with_items:
+    - key
+    - pem
+  tags:
+    - dist-certs
+
+# Todo
+# - Only copy files to remote if they are different

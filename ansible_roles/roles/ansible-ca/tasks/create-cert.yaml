@@ -1,0 +1,40 @@
+---
+- name: Check if certificates dir already exists
+  stat:
+    path: '{{ cert_dir }}'
+  register: dir
+
+- name: Create Certificate Authority dir {{ cert_dir }}
+  file:
+    path: '{{ cert_dir }}'
+    state: directory
+  when: not dir.stat.exists
+
+- name: Check if private key already exists for {{ item }}
+  stat:
+    path: '{{ cert_dir }}/{{ item }}.{{key_suffix}}'
+  register: key_file
+
+- name: Create private key and CSR for {{ item }}
+  shell:
+    chdir: '{{ ca_home_dir }}'
+    cmd: openssl req -sha256 -nodes -newkey rsa:2048 -keyout {{ cert_dir }}/{{ item }}.{{key_suffix}} -out {{ cert_dir }}/{{ item }}.csr -subj "/C={{ country_name }}/ST={{ state_or_province_name }}/L={{ locality_name }}/O={{ organization_name }}/CN={{ item }}/emailAddress={{ email_address }}" -batch    
+  when: not key_file.stat.exists
+
+- name: Sign certificate for {{ item }}
+  shell:
+    chdir: '{{ ca_home_dir }}'
+    cmd: openssl x509 -req -sha256 -days 7300 -in {{ cert_dir }}/{{ item }}.csr -CA {{ca_cert_filename}} -CAkey {{ca_key_filename}} -out {{ cert_dir }}/{{ item }}.{{cert_suffix}} -CAserial serial.txt
+  when: not key_file.stat.exists
+
+- name: Download {{ item }} certificate to localhost
+  fetch:
+    src: '{{ cert_dir }}/{{ item }}.{{cert_suffix}}'
+    dest: files/certs/
+    flat: yes
+
+- name: Download {{ item }} private key to localhost
+  fetch:
+    src: '{{ cert_dir }}/{{ item }}.{{key_suffix}}'
+    dest: files/certs/
+    flat: yes
