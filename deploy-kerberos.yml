@@ -3,7 +3,7 @@
   become: yes
   tasks:
     - import_role:
-        name: roles/ansible-kerberos-server
+        name: ansible_roles/roles/ansible-kerberos-server
 
 - hosts: kdc
   tasks:
@@ -17,5 +17,5 @@
   become: yes
   tasks:
     - import_role:
-        name: roles/ansible-kerberos-client
+        name: ansible_roles/roles/ansible-kerberos-client
       tags: dhj

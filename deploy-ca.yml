@@ -3,7 +3,7 @@
   become: yes
   tasks:
     - import_role:
-        name: roles/ansible-ca
+        name: ansible_roles/roles/ansible-ca
 
 - hosts: all
   become: yes

@@ -3,7 +3,7 @@
   become: yes
   tasks:
     - import_role:
-        name: roles/ansible-role-postgresql
+        name: ansible_roles/roles/ansible-role-postgresql
       tags: pg
 
     - name: Trust connections from master ips (add to pg_hba.conf)
