@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Execute setup.sh script
+    command: "sh ./setup.sh {{gen_optional_ssh_key}} {{num_vagrant_processes}}"

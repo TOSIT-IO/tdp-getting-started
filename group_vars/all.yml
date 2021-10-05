@@ -1,6 +1,9 @@
 ---
+
 # TDP
 realm: REALM.TDP
+gen_optional_ssh_key: true
+num_vagrant_processes: 7
 
 # Ranger
 ranger_admin_password: RangerAdmin123

@@ -6,7 +6,7 @@ Each of the below section includes the command to exectue to deploy a component 
 
 # TL;DR
 ```bash
-ansible-playbook deploy-infrastructure.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-hdfs-yarn-mapreduce.yml deploy-users.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
+ansible-playbook deploy-all.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-hdfs-yarn-mapreduce.yml deploy-users.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
 ```
 
 ### Requirements
@@ -17,23 +17,10 @@ ansible-playbook deploy-infrastructure.yml deploy-ca.yml deploy-kerberos.yml dep
 
 **Infrastructure**
 
-The below command will create the core infrastructure expected by all tdp deployments documented in the guide.
-
-```bash
-ansible-playbook deploy-infrastructure.yml
-```
-It spawns and lightly configures a set of 8 virtual machines at static IPs below:
-
-* worker-01 192.168.32.10
-* worker-02 192.168.32.11
-* worker-03 192.168.32.12
-* master-01 192.168.32.13
-* master-02 192.168.32.14
-* master-03 192.168.32.15
-* edge-01 192.168.32.16
+The first action in `deploy-all.yml` is to execute the `setup.sh` script in the project root. It spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
 
 **Note that:**
-- To change the static IPs, update **both** the `Vagrantfile` and the `tdp-hosts` files
+- To change the static IPs you must update **both** the `Vagrantfile` and the `tdp-hosts` files
 - To edit the resources assigned to the vms, update the `Vagrantfile`
 
 *Check the status of the created VMs with the command `vagrant status`, and ssh to them with the cammand `vagrant ssh <target vm name>`*
