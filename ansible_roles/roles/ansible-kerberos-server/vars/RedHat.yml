@@ -1,0 +1,14 @@
+---
+
+  krb_pkg:
+  - libselinux-python
+  - krb5-libs
+  - krb5-server
+  - krb5-workstation
+
+  krb_service:
+  - krb5kdc
+  - kadmin
+
+  kdc_conf_path: /var/kerberos/krb5kdc/kdc.conf
+  kadm5_acl_path: /var/kerberos/krb5kdc/kadm5.acl

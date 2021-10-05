@@ -1,0 +1,56 @@
+---
+- name: Make sure we have the entry for hostname in /etc/hosts
+  lineinfile:
+    state: present
+    dest: /etc/hosts
+    regexp: '.*{{ ansible_default_ipv4.address }}\s*{{ ansible_hostname }}\s*{{ ansible_hostname }}.{{ realm_name|lower() }}'
+    line: '{{ ansible_default_ipv4.address }} {{ ansible_hostname }} {{ ansible_hostname }}.{{ realm_name|lower() }}'
+    unsafe_writes: yes
+
+- name: Link /dev/random to /dev/urandom
+  file:
+    path: /dev/random
+    src: /dev/urandom
+    state: link
+    force: yes
+
+- name: Add OS specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install needed Kerberos packages
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ krb_pkg }}"
+
+- name: Copy KDC configuration file
+  template:
+    src: kdc.conf.j2
+    dest: "{{ kdc_conf_path }}"
+  notify:
+   - restart kerberos
+
+- name: Copy KDC ACL configuration file
+  template:
+    src: kadm5.acl.j2
+    dest: "{{ kadm5_acl_path }}"
+  notify:
+   - restart kerberos
+
+- name: Copy client configuration file
+  template:
+    src: krb5.conf.j2
+    dest: /etc/krb5.conf
+
+- name: Create initial Kerberos database
+  shell: kdb5_util -P {{ master_db_pass }} create -s
+
+- name: Start Kerberos services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items: "{{ krb_service }}"
+
+- name: Create an admin for administering Kerberos server
+  shell: kadmin.local -q "addprinc -pw {{ kadmin_pass }} {{ kadmin_user }}"
