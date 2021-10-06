@@ -1,0 +1,19 @@
+---
+- name: Remove existing references to this host in the /etc/hosts file
+  lineinfile:
+    path: /etc/hosts
+    regexp: "{{ ansible_hostname }}"
+    state: absent
+
+- name: Parse cluster host info from ansible hosts file
+  become: yes
+  shell: cat /vagrant/inventory/hosts |awk 'length($0) > 20' | awk -F'[/= ]' '{print $3" "$1"."$9" "$1}'
+  register: _tdp_cluster_hosts_block
+
+- name: Apply cluster host entries to /etc/hosts
+  become: yes
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      {{_tdp_cluster_hosts_block.stdout}}
+ 

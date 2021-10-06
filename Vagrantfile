@@ -21,11 +21,6 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--memory", info[:mem], "--cpus", info[:cpus], "--hwvirtex", "on"]
         config.vm.synced_folder "./", "/vagrant", type: "rsync", rsync__auto: true, rsync__exclude: ['files/*.tar.gz', 'files/*.tgz', 'collections/', 'group_vars/', 'logs/', 'roles/']
       end # end provider
-
-      # Install core VM components
-      config.vm.provision "normalize", type: "ansible_local" do |ansible|
-        ansible.playbook = "provision/shared-provisioning-base.yml"
-      end
     end # end config
   end # end cluster
 end
