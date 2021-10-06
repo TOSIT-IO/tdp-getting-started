@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Execute setup.sh script to prepare ansible control node
+      command: "sh ./setup.sh {{num_vagrant_processes}}"
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Common setup and configuration accross all ansible hosts
+      import_role: 
+        name: ansible_roles/roles/ansible-tdp-common-actions
