@@ -6,4 +6,4 @@
 - import_playbook: deploy-zookeeper.yml
 - import_playbook: deploy-hdfs-yarn-mapreduce.yml
 - import_playbook: deploy-users.yml
-
+- import_playbook: deploy-postgres.yml

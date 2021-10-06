@@ -22,3 +22,6 @@
 - import_tasks: users.yml
 - import_tasks: databases.yml
 - import_tasks: users_props.yml
+
+# Configure for TDP-getting-started use
+- import_tasks: configure-for-tdp-getting-started.yml

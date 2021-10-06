@@ -1,0 +1,25 @@
+---
+- name: Trust connections from master ips (add to pg_hba.conf)
+  become_user: postgres
+  shell: cat /etc/hosts | grep master- | grep -v 0.0.0.0 | \
+          awk '{print "host all all "$1"/32   trust\nhost all all "$2"   trust\n"}' >> /var/lib/pgsql/data/pg_hba.conf
+
+- name: Trust connections from the ansible host (add to pg_hba.conf)
+  become_user: postgres
+  shell: echo "host all all 192.168.32.1/32   md5" >> /var/lib/pgsql/data/pg_hba.conf
+
+- name: Open listen addresses
+  become_user: postgres
+  shell: sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'"/ /var/lib/pgsql/data/postgresql.conf
+  tags: oip
+
+- name: Restart postgresql service
+  become: yes
+  ansible.builtin.service:
+    name: postgresql
+    state: restarted
+
+- name: Give postgres db user a password
+  become_user: postgres
+  shell: psql -c "ALTER ROLE postgres WITH PASSWORD 'postgres';"
+  tags: pgpw
