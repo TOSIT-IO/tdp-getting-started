@@ -1,12 +1,12 @@
 
 [all]
-worker-01 ansible_host=192.168.32.10 ansible_connection=ssh ansible_user=vagrant domain=tdp
-worker-02 ansible_host=192.168.32.11 ansible_connection=ssh ansible_user=vagrant domain=tdp
-worker-03 ansible_host=192.168.32.12 ansible_connection=ssh ansible_user=vagrant domain=tdp
-master-01 ansible_host=192.168.32.13 ansible_connection=ssh ansible_user=vagrant domain=tdp
-master-02 ansible_host=192.168.32.14 ansible_connection=ssh ansible_user=vagrant domain=tdp
-master-03 ansible_host=192.168.32.15 ansible_connection=ssh ansible_user=vagrant domain=tdp
-edge-01 ansible_host=192.168.32.16 ansible_connection=ssh ansible_user=vagrant domain=tdp
+worker-01 ansible_host=192.168.32.10 ansible_connection=ssh ansible_user=vagrant domain=tdp ansible_ssh_private_key_file=./.vagrant/machines/worker-01.tdp/virtualbox/private_key
+worker-02 ansible_host=192.168.32.11 ansible_connection=ssh ansible_user=vagrant domain=tdp ansible_ssh_private_key_file=./.vagrant/machines/worker-02.tdp/virtualbox/private_key
+worker-03 ansible_host=192.168.32.12 ansible_connection=ssh ansible_user=vagrant domain=tdp ansible_ssh_private_key_file=./.vagrant/machines/worker-03.tdp/virtualbox/private_key
+master-01 ansible_host=192.168.32.13 ansible_connection=ssh ansible_user=vagrant domain=tdp ansible_ssh_private_key_file=./.vagrant/machines/master-01.tdp/virtualbox/private_key
+master-02 ansible_host=192.168.32.14 ansible_connection=ssh ansible_user=vagrant domain=tdp ansible_ssh_private_key_file=./.vagrant/machines/master-02.tdp/virtualbox/private_key
+master-03 ansible_host=192.168.32.15 ansible_connection=ssh ansible_user=vagrant domain=tdp ansible_ssh_private_key_file=./.vagrant/machines/master-03.tdp/virtualbox/private_key
+edge-01 ansible_host=192.168.32.16 ansible_connection=ssh ansible_user=vagrant domain=tdp ansible_ssh_private_key_file=./.vagrant/machines/edge-01.tdp/virtualbox/private_key
 
 [edge]
 edge-01

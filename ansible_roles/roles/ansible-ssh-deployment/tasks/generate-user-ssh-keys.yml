@@ -1,0 +1,8 @@
+---
+- name: Generate an OpenSSH rsa keypair with a different size (2048 bits)
+  community.crypto.openssh_keypair:
+    path: "{{local_ssh_key_path}}"
+    size: "{{size}}"
+    type: "{{type}}"
+    mode: "{{mode}}"
+    comment: "{{comment}}"

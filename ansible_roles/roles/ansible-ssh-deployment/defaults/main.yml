@@ -1,0 +1,13 @@
+---
+# SSH keygen parameters
+local_ssh_key_path: files/id_rsa
+local_ssh_public_key_path: files/id_rsa.pub
+size: 2048
+type: rsa
+mode: 0644
+comment: tdp
+owner: vagrant
+
+# Deploying public key
+remote_ssh_public_key_path: "/home/{{owner}}/.ssh/id_rsa.pub"
+remote_authorised_keys_path: "/home/{{owner}}/.ssh/authorized_keys"

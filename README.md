@@ -25,6 +25,14 @@ The first action in `deploy-all.yml` is to execute the `setup.sh` script in the 
 
 *Check the status of the created VMs with the command `vagrant status`, and ssh to them with the cammand `vagrant ssh <target vm name>`*
 
+**SSH Key Generation and Deployment**
+
+It is **optionally** possible to generate a new ssh key pair and deploy the public key to each host. This is optional as `vagrant ssh <ansible-host>` works just fine in the context of this getting-started cluster. To do it, use the following command:
+
+```
+ansible-playbook deploy-ssh-key.yml
+```
+
 **Certificate Authority and Certificates**
 
 Creates a certificate authority at the `[ca]` ansible group and distributes signed certificates and keys to each VM.
