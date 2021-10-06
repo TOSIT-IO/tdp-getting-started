@@ -2,5 +2,5 @@
 - import_playbook: launch-vms.yml
 - import_playbook: deploy-ssh-key.yml # Optional
 - import_playbook: deploy-ca.yml
-
+- import_playbook: deploy-kerberos.yml
 
