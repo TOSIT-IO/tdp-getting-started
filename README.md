@@ -4,7 +4,7 @@ Launch a fully featured virtual TDP Hadoop cluster with a single command *or* cu
 
 Each of the below section includes the command to exectue to deploy a component or dependency of the cluster, along with some high level code blocks for you to quickly verify that it is working as intended.
 
-# TL;DR
+### TL;DR WIP to remove this command
 ```bash
 ansible-playbook deploy-all.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
 ```
@@ -13,17 +13,29 @@ ansible-playbook deploy-all.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-
 - ansible >= 2.9.6
 - vagrant >= 2.29
 
-## Deploy TDP
+# TDP Deployment
 
-**Infrastructure**
+## Single command deployment
 
-The first action in `deploy-all.yml` is to execute the `setup.sh` script in the project root. It spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
+```
+ansible-playbook deploy-all.yml -K
+```
 
-**Note that:**
+The first action in `deploy-all.yml` is to run the playbook `launch-vms.yml` which in calls the `setup.sh` script in the project root. This script spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
+
+**Important to note:**
 - To change the static IPs you must update **both** the `Vagrantfile` and the `tdp-hosts` files
 - To edit the resources assigned to the vms, update the `Vagrantfile`
+- The `-K` parameter requests your superuser password. This is because one of the tdp-ansible-roles delegates privileged commands from your localhost to the VMs. No privileged commands modify anything outside of the VMs and only the `deploy-hdfs-yarn-mapreduce.yml` playbook requires these superuser privileges
 
 *Check the status of the created VMs with the command `vagrant status`, and ssh to them with the cammand `vagrant ssh <target vm name>`*
+
+
+## Customised Deployment
+
+The following are brief intros to each of the `deploy-<something>.yml` playbooks in the project root. The correct order of deployment is the order in `deploy-all.yml`.
+
+*Note that some services depend on other services to function correctly*
 
 **SSH Key Generation and Deployment**
 
