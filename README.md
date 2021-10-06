@@ -6,7 +6,7 @@ Each of the below section includes the command to exectue to deploy a component 
 
 # TL;DR
 ```bash
-ansible-playbook deploy-all.yml deploy-ca.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-hdfs-yarn-mapreduce.yml deploy-users.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
+ansible-playbook deploy-all.yml deploy-kerberos.yml deploy-zookeeper.yml deploy-hdfs-yarn-mapreduce.yml deploy-users.yml deploy-postgres.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
 ```
 
 ### Requirements
