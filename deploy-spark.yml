@@ -37,7 +37,7 @@
     user:
       name: spark
       password: '{{ "spark123" | password_hash("sha512", "salt123") }}'
-    tags: rty
+
   - name: Generate spark user principal and keytab on all yarn nodemanagers and resource managers
     become: yes
     shell: |
@@ -47,7 +47,6 @@
     args:
       chdir: /etc/security/keytabs
       creates: /etc/security/keytabs/spark.principal.keytab
-    tags: rty
 
 - hosts: "{{ groups['spark_hs'][0] }}"
   tasks:
