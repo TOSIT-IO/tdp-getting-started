@@ -1,13 +1,6 @@
 # Getting Started with TDP
 
-Launch a fully featured virtual TDP Hadoop cluster with a single command *or* customise the infrastructure and components of your cluster with 1 command per component (e.g. `ansible-playbook deploy_<item>.yml`).
-
-Each of the below section includes the command to exectue to deploy a component or dependency of the cluster, along with some high level code blocks for you to quickly verify that it is working as intended.
-
-### TL;DR WIP to remove this command
-```bash
-ansible-playbook deploy-all.yml deploy-spark.yml -K
-```
+Launch a fully featured virtual TDP Hadoop cluster with a single command *or* customise the infrastructure and components of your cluster with 1 command per component.
 
 ### Requirements
 - ansible >= 2.9.6
@@ -17,45 +10,40 @@ ansible-playbook deploy-all.yml deploy-spark.yml -K
 ```bash
 git clone http://gitlab.adaltas.com/tdp/getting-started.git
 cd getting-started
-sh ./setup.sh
-# Copy binaries to files directory in project root
-ansible-playbook deploy-all.yml
+sh ./setup.sh # Setup local env and clone latest tdp-ansible-roles
+# MANUAL STEP: Copy binaries to files directory in project root
+ansible-playbook deploy-all.yml -K
 ```
 
+# Customised deployment 
+Each of the below sections includes a high level explanation of each possible step of a deployment using this repository.
 
-# Environment Setup
+## Environment Setup
 
-Execute the `setup.sh` script to create the project directories needed, clone the latest tdp-ansible-roles and install any python dependencies. 
+Execute the `setup.sh` script to create the project directories needed and clone the latest tdp-ansible-roles.
 
 ```bash
 sh ./setup.sh
 ```
 
-# TDP Deployment
-
-## Single command deploy to deploy all
+## Single command to deploy all services
 
 ```
 ansible-playbook deploy-all.yml -K
 ```
 
-The first action in `deploy-all.yml` is to run the `launch-VMs.sh` scri which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
+The first action in `deploy-all.yml` is to run the `launch-VMs.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
 
-**Important to note:**
-- To change the static IPs you must update **both** the `Vagrantfile` and the `tdp-hosts` files
-- To edit the resources assigned to the vms, update the `Vagrantfile`
+**Important:**
+- To change the static IPs you must update **both** the `Vagrantfile` and the `inventory/hosts` files
+- Update the machine resources assigned to the VMs in the `Vagrantfile`
 - The `-K` parameter requests your superuser password. This is because one of the tdp-ansible-roles delegates privileged commands from your localhost to the VMs. No privileged commands modify anything outside of the VMs and only the `deploy-hdfs-yarn-mapreduce.yml` playbook requires these superuser privileges
 
-*Check the status of the created VMs with the command `vagrant status`, and ssh to them with the cammand `vagrant ssh <target vm name>`*
-
-
-# deploy-[service/feature].yml Descriptions
-
-The following is a high level description of each of the deploy playbooks in the project root. Some include code snippets to test their functionality.
+*Check the status of the created VMs with the command `vagrant status`, and ssh to them with the cammand `vagrant ssh <target-ansible-host>`*
 
 **SSH Key Generation and Deployment**
 
-It is **optionally** possible to generate a new ssh key pair and deploy the public key to each host. This is optional as `vagrant ssh <ansible-host>` works just fine in the context of this getting-started cluster. To do it, use the following command:
+It is **optionally** possible to generate a new ssh key pair and deploy the public key to each host though `vagrant ssh <ansible-host>` works just fine in the context of this getting-started cluster. To do it, use the below command:
 
 ```
 ansible-playbook deploy-ssh-key.yml
