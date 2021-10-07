@@ -16,6 +16,3 @@ touch ./logs/tdp.log
 
 # Clone ansible-tdp-roles repository (doesn't fail iof not known host)
 git clone -o StrictHostKeyChecking=no git@github.com:TOSIT-FR/ansible-tdp-roles.git ansible_roles/collections/ansible_collections/tosit/tdp/
-
-# Install pip requirements
-pip install jmespath

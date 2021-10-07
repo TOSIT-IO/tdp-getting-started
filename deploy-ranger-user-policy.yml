@@ -2,6 +2,7 @@
 - hosts: ranger_admin[0]
   become: yes
   tasks:
+
     - name: "Ranger: get user list"
       uri:
         url: "{{ ranger_hdfs_install_properties.POLICY_MGR_URL }}/service/users"
@@ -17,7 +18,7 @@
       vars:
         jmesquery: "vXPortalUsers[? loginId == '{{ ranger_user }}'].id"
       set_fact:
-        user_id: "{{ jsoncontent.json | json_query(jmesquery) }}"
+        user_id: "{{ jsoncontent.json | community.general.json_query(jmesquery)}}"
 
     - name: Create user in ranger
       vars:
@@ -68,9 +69,8 @@
         hdfs_policy_query: "[? name == 'hive-user-hdfs-policy'].id"
         hive_policy_query: "[? name == 'tdp-user-hive-policy'].id"
       set_fact:
-        hdfs_policy_id: "{{ jsoncontent.json | json_query(hdfs_policy_query) }}"
-        hive_policy_id: "{{ jsoncontent.json | json_query(hive_policy_query) }}"
-
+        hdfs_policy_id: "{{ jsoncontent.json | community.general.json_query(hdfs_policy_query) }}"
+        hive_policy_id: "{{ jsoncontent.json | community.general.json_query(hive_policy_query) }}"
 
     - name: Create HDFS policy
       vars:
