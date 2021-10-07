@@ -7,6 +7,8 @@ type: rsa
 mode: 0644
 comment: tdp
 owner: vagrant
+group: vagrant
+passphrase: ""
 
 # Deploying public key
 remote_ssh_public_key_path: "/home/{{owner}}/.ssh/id_rsa.pub"

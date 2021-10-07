@@ -1,9 +1,10 @@
 ---
-- name: Copy newly created public key to remote
+- name: Copy public key to remote
   copy:
     src: "{{local_ssh_public_key_path}}"
     dest: "{{remote_ssh_public_key_path}}"
     owner: "{{owner}}"
+    group: "{{group}}"
   
 - name: Add Generated Public Key to Authorized Keys
   shell: "cat {{remote_ssh_public_key_path}} >> {{remote_authorised_keys_path}}"

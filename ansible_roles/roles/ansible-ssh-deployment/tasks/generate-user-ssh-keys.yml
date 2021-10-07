@@ -1,8 +1,8 @@
 ---
-- name: Generate an OpenSSH rsa keypair with a different size (2048 bits)
-  community.crypto.openssh_keypair:
+- name: Generate an OpenSSH rsa keypair
+  shell: "ssh-keygen -t {{type}}  -b {{size}} -f {{local_ssh_key_path}} -P '{{passphrase}}' -C '{{comment}}'"
+
+- name: Assign local private_key permissions
+  file:
     path: "{{local_ssh_key_path}}"
-    size: "{{size}}"
-    type: "{{type}}"
     mode: "{{mode}}"
-    comment: "{{comment}}"
