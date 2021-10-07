@@ -11,37 +11,33 @@
   become: yes
   become_user: postgres
   tasks:
-    - name: Create hive user if not exists
-      shell: psql -tc "SELECT 1 FROM pg_user WHERE usename = 'hive'" | grep -q 1 || (echo "CREATE USER hive WITH PASSWORD 'hive';" | psql -U postgres)
-
-    - name: Create hive database if it doesn't exist already
-      shell: psql -tc "SELECT 1 FROM pg_database WHERE datname = 'hive'" | grep -q 1 || (echo "CREATE DATABASE hive WITH OWNER = hive;" | psql -U postgres)
-
-    - name: Grant all privileges to hive user on hive database
-      shell: echo "GRANT ALL PRIVILEGES ON DATABASE hive TO hive;" | psql -U postgres
+    - name: Setup db and db user for hive
+      import_role: 
+        name: ansible_roles/roles/ansible-role-postgresql
+        tasks_from: deploy-hive-db-requirements
 
 - hosts: hive_s2
   become: yes
   tasks:
-    - import_role: 
+    - name: Deploy hive
+      import_role: 
         name: tosit.tdp.hive
 
 - hosts: "{{ groups['hdfs_nn'][0] }}"
   become: yes
   tasks:
-    - name: "Upload {{ tez_dist_file }}"
+    - name: "Upload {{ tez_dist_file }} to {{ groups['hdfs_nn'][0] }}"
       copy:
         src: "files/{{ tez_dist_file }}"
         dest: /tmp
-      tags: s4
 
 - hosts: hdfs_nn[0]
   become: yes
   tasks:
-    - import_role:
+    - name: Execute hive post install tasks
+      import_role:
         name: tosit.tdp.hive
         tasks_from: post_install
-      tags: s5
 
 - hosts: yarn_nm,yarn_rm
   become: yes
@@ -50,6 +46,7 @@
     user:
       name: hive
       password: '{{ "hive123" | password_hash("sha512", "salt123") }}'
+
   - name: Generate hive user principal and keytab on all yarn nodemanagers and resource managers
     become: yes
     shell: |

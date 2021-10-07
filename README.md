@@ -6,7 +6,7 @@ Each of the below section includes the command to exectue to deploy a component 
 
 ### TL;DR WIP to remove this command
 ```bash
-ansible-playbook deploy-all.yml deploy-hive.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
+ansible-playbook deploy-all.yml deploy-ranger-user-policy.yml deploy-spark.yml -K
 ```
 
 ### Requirements
