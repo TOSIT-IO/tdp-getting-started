@@ -1,8 +1,8 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Execute setup.sh script to prepare ansible control node
-      command: "sh ./setup.sh {{num_vagrant_processes}}"
+    - name: Execute setup.sh script to launch virtual machines
+      command: "sh ./vagrant-up-VMs.sh {{num_vagrant_processes}}"
 
 - hosts: all
   become: yes

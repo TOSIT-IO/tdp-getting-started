@@ -13,15 +13,23 @@ ansible-playbook deploy-all.yml deploy-ranger.yml deploy-hive.yml deploy-ranger-
 - ansible >= 2.9.6
 - vagrant >= 2.29
 
+# Environment Setup
+
+Execute the `setup.sh` script to create the project directories needed, clone the latest tdp-ansible-roles and install any python dependencies. 
+
+```bash
+sh ./setup.sh
+```
+
 # TDP Deployment
 
-## Single command deployment
+## Single command deploy to deploy all
 
 ```
 ansible-playbook deploy-all.yml -K
 ```
 
-The first action in `deploy-all.yml` is to run the playbook `launch-vms.yml` which in calls the `setup.sh` script in the project root. This script spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
+The first action in `deploy-all.yml` is to run the `launch-VMs.sh` scri which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
 
 **Important to note:**
 - To change the static IPs you must update **both** the `Vagrantfile` and the `tdp-hosts` files
@@ -31,11 +39,9 @@ The first action in `deploy-all.yml` is to run the playbook `launch-vms.yml` whi
 *Check the status of the created VMs with the command `vagrant status`, and ssh to them with the cammand `vagrant ssh <target vm name>`*
 
 
-## Customised Deployment
+# deploy-[service/feature].yml Descriptions
 
-The following are brief intros to each of the `deploy-<something>.yml` playbooks in the project root. The correct order of deployment is the order in `deploy-all.yml`.
-
-*Note that some services depend on other services to function correctly*
+The following is a high level description of each of the deploy playbooks in the project root. Some include code snippets to test their functionality.
 
 **SSH Key Generation and Deployment**
 
