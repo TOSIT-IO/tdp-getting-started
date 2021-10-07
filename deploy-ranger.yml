@@ -10,38 +10,30 @@
 - hosts: postgresql
   become: yes
   tasks:
-    - name: Create rangeradmin user if not exists
-      become_user: postgres
-      shell: psql -tc "SELECT 1 FROM pg_user WHERE usename = 'rangeradmin'" | grep -q 1 || (echo "CREATE USER rangeradmin WITH PASSWORD 'rangeradmin';" | psql -U postgres)
-      tags: pgchu
-    - name: Create ranger database if it doesn't exist already
-      become_user: postgres
-      shell: psql -tc "SELECT 1 FROM pg_database WHERE datname = 'ranger'" | grep -q 1 || (echo "CREATE DATABASE ranger;" | psql -U postgres)
-      tags: pgchu
-    - name: Grant all privileges to rangeradmin user on ranger database
-      become_user: postgres
-      shell: echo "GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;" | psql -U postgres
-      tags: pgchu
+    - name: Setup db and db user for ranger
+      import_role: 
+        name: ansible_roles/roles/ansible-role-postgresql
+        tasks_from: deploy-ranger-db-requirements
 
 - hosts: ranger_admin
   become: yes
   tasks:
-    - import_role: 
+    - name: Deploy ranger
+      import_role: 
         name: tosit.tdp.ranger
-      tags: rapb
 
 - hosts: hdfs_nn
   become: yes
   tasks:
-    - import_role:
+    - name: Deploy ranger hdfs plugin
+      import_role: 
         name: tosit.tdp.hadoop
         tasks_from: ranger_hdfs_plugin
-      tags: hdfspi
 
 - hosts: yarn_rm
   become: yes
   tasks:
-    - import_role:
+    - name: Deploy ranger yarn plugin
+      import_role: 
         name: tosit.tdp.hadoop
         tasks_from: ranger_yarn_plugin
-      tags: yarnpi
