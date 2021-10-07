@@ -13,6 +13,16 @@ ansible-playbook deploy-all.yml deploy-ranger-user-policy.yml deploy-spark.yml -
 - ansible >= 2.9.6
 - vagrant >= 2.29
 
+# Quick Start
+```bash
+git clone http://gitlab.adaltas.com/tdp/getting-started.git
+cd getting-started
+sh ./setup.sh
+# Copy binaries to files directory in project root
+ansible-playbook deploy-all.yml
+```
+
+
 # Environment Setup
 
 Execute the `setup.sh` script to create the project directories needed, clone the latest tdp-ansible-roles and install any python dependencies. 
