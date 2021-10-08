@@ -9,7 +9,7 @@ Launch a fully featured virtual TDP Hadoop cluster with a single command *or* cu
 # Quick Start
 ```bash
 git clone http://gitlab.adaltas.com/tdp/getting-started.git
-cd getting-started
+cd getting-started # Execute all commands from here
 sh ./setup.sh # Setup local env and clone latest tdp-ansible-roles
 # MANUAL STEP: Copy binaries to files directory in project root
 ansible-playbook deploy-all.yml -K
