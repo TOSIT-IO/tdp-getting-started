@@ -44,6 +44,10 @@
 
 - name: Create initial Kerberos database
   shell: kdb5_util -P {{ master_db_pass }} create -s
+  register: krb_db_creation
+  failed_when: |
+    krb_db_creation is failed and
+    'File exists while creating database' not in krb_db_creation.stderr
 
 - name: Start Kerberos services
   service:
