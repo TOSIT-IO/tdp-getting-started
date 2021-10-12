@@ -72,7 +72,7 @@ ansible-playbook deploy-kerberos.yml
 **Create Cluster Users**
 
 The below command creates:
-  - Unix users *tdp-user* and *tdp-admin* on each node of the cluster
+  - Unix users *tdp_user* and *tdp-admin* on each node of the cluster
   - A kerberos principal named `<user>/<fqdn>@<realm>` with keytabs at `/home/<user>/.ssh/<user>.kerberos.keytab`
   - All users are added to the users group
   - Users with 'admin' in the name will also be added to the group 'tdp-admin'
@@ -102,36 +102,36 @@ ansible-playbook deploy-hdfs-yarn-mapreduce.yml -K
 ```
 
 The following code snippets demonstrate that:
-  - The namenode kerberos principal can create an appropriate hdfs user directory for tdp-user:
+  - The namenode kerberos principal can create an appropriate hdfs user directory for tdp_user:
     
     - *From master-01.tdp:*
 
       ```bash
       kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp-user
-      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp-user:tdp-user /user/tdp-user
+      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
+      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user:tdp_user /user/tdp_user
       ```
 
-  - That tdp-user can access and write to their hdfs user directory:
+  - That tdp_user can access and write to their hdfs user directory:
 
     - *From edge-01.tdp:*
 
         ```bash
-        su tdp-user
-        kinit -kt /home/tdp-user/.ssh/tdp-user.principal.keytab tdp-user/edge-01.tdp@REALM.TDP
-        echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp-user/testFile
-        echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp-user/testFile
-        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp-user/testFile
+        su tdp_user
+        kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
+        echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
+        echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
+        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
         ```
 
-  - That writes using the tdp-user from edge-01.tdp can be read from master-01.tdp:
+  - That writes using the tdp_user from edge-01.tdp can be read from master-01.tdp:
 
     - *On master-01.tdp:*
 
       ```bash
-      su tdp-user
-      kinit -kt /home/tdp-user/.ssh/tdp-user.principal.keytab tdp-user/master-01.tdp@REALM.TDP
-      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp-user/testFile
+      su tdp_user
+      kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-01.tdp@REALM.TDP
+      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
       ```
 
 **Postgres**
@@ -169,34 +169,34 @@ ansible-playbook deploy-hive.yml
 *Execute the following code blocks to execute some hive queries using beeline:*
 
 The following code snippets:
-  - Create an hdfs user directory for tdp-user (this block is is the same as in the deploy hdfs example above):
+  - Create an hdfs user directory for tdp_user (this block is is the same as in the deploy hdfs example above):
 
     - *From master-01.tdp:*
 
         ```bash
         kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp-user
-        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp-user /user/tdp-user
+        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
+        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user /user/tdp_user
         ```
 
-  - Authenticate as tdp-user from one of the hive_s2 nodes and enter the beeline client interface:
+  - Authenticate as tdp_user from one of the hive_s2 nodes and enter the beeline client interface:
   
     - *From master-02.tdp:*
 
         ``bash
-        su tdp-user
+        su tdp_user
         export hive_truststore_password=Truststore123!
         # Either via zookeeper
-        kinit -kt /home/tdp-user/.ssh/tdp-user.principal.keytab tdp-user/master-02.tdp@REALM.TDP
+        kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-02.tdp@REALM.TDP
         /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
         # Or directly to a hiveserver
         /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-02.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
         ```
   
-  - As there is no ranger user sync configured in this cluster, add the tdp-user manually in the ranger UI at `https://master-02.tdp:6182/index.html` with `admin` and `RangerAdmin123` user and password (assuming default settings used). 
-      - Go to *RangerUI > Settings > users/Groups/Roles > Add New User* and create tdp-user
-      - Go to  *RangerUI > Service Manager > hive-tdp Policies* and create a policy to allow tdp-user full permissions to database tdp_user_db
-      - Go to  *RangerUI > Service Manager > hdfs-tdp Policies* and create a policy to allow tdp-user full read, write and execute permissions in  `/user/tdp-user` hdfs dir
+  - As there is no ranger user sync configured in this cluster, add the tdp_user manually in the ranger UI at `https://master-02.tdp:6182/index.html` with `admin` and `RangerAdmin123` user and password (assuming default settings used). 
+      - Go to *RangerUI > Settings > users/Groups/Roles > Add New User* and create tdp_user
+      - Go to  *RangerUI > Service Manager > hive-tdp Policies* and create a policy to allow tdp_user full permissions to database tdp_user_db
+      - Go to  *RangerUI > Service Manager > hdfs-tdp Policies* and create a policy to allow tdp_user full read, write and execute permissions in  `/user/tdp_user` hdfs dir
       - Go to  *RangerUI > Service Manager > hdfs-tdp Policies* and create a policy to hive user read, write and execute permissions in  `/user` hdfs dir
 
 From the beeline client, execute the following code blocks to interact with Hive:
@@ -235,8 +235,8 @@ ansible-playbook deploy-spark.yml
 *Execute the following command from any node in the `[spark_client]` ansible group to spark-submit an example jar from the spark installation:*
 
 ```bash
-su tdp-user
-kinit -kt /home/tdp-user/.ssh/tdp-user.principal.keytab tdp-user/edge-01.tdp@REALM.TDP
+su tdp_user
+kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
 export SPARK_CONF_DIR=/etc/spark/conf
 /opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode cluster /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```
@@ -244,5 +244,14 @@ export SPARK_CONF_DIR=/etc/spark/conf
 **Oozie**
 
 Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres database in the `[postgresql]` ansible group. 
+
+
+<!-- rename rar file
+Change variable
+add task to create oozie user
+add policy to ranger toa llow oozie access to hdfs /user
+
+bin/ooziedb.sh create -sqlfile oozie.sql -run # creates the sql commands at oozie.sql -->
+
 
 
