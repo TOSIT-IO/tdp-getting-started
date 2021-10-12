@@ -7,14 +7,16 @@
     register: hive_exists
     failed_when: hive_exists.stat.exists == False
 
-- hosts: postgresql
+- name: Prepare postgresql for hive
+  hosts: postgresql
   become: yes
   become_user: postgres
   tasks:
-    - name: Setup db and db user for hive
-      import_role: 
-        name: ansible_roles/roles/ansible-role-postgresql
-        tasks_from: deploy-hive-db-requirements
+    - include_role: 
+        name: ansible_roles/roles/ansible-tdp-common-actions
+        tasks_from: deploy-new-postgres-role
+      with_items:
+        - hive
 
 - hosts: hive_s2
   become: yes

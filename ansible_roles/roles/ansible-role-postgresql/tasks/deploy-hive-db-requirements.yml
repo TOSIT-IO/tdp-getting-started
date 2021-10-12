@@ -1,9 +1,0 @@
----
-- name: Create hive user if not exists
-  shell: psql -tc "SELECT 1 FROM pg_user WHERE usename = 'hive'" | grep -q 1 || (echo "CREATE USER hive WITH PASSWORD 'hive';" | psql -U postgres)
-
-- name: Create hive database if it doesn't exist already
-  shell: psql -tc "SELECT 1 FROM pg_database WHERE datname = 'hive'" | grep -q 1 || (echo "CREATE DATABASE hive WITH OWNER = hive;" | psql -U postgres)
-
-- name: Grant all privileges to hive user on hive database
-  shell: echo "GRANT ALL PRIVILEGES ON DATABASE hive TO hive;" | psql -U postgres
