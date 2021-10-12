@@ -1,0 +1,12 @@
+---
+oozie_release: oozie-5.3.0-TDP-0.1.0-SNAPSHOT
+oozie_dist_file: oozie-5.3.0-TDP-0.1.0-SNAPSHOT.tar.gz
+oozie_jdbc_connector_package: postgresql-jdbc
+oozie_db_url: "jdbc:postgresql://{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
+oozie_db_name: oozie
+oozie_site:
+  oozie.service.JPAService.validate.db.connection: true
+  oozie.service.JPAService.jdbc.driver: org.postgresql.Driver
+  oozie.service.JPAService.jdbc.url: "{{ oozie_db_url }}/{{ oozie_db_name }}"
+  oozie.service.JPAService.jdbc.username: oozie
+  oozie.service.JPAService.jdbc.password: oozie

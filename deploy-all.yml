@@ -8,4 +8,5 @@
 - import_playbook: deploy-ranger.yml
 - import_playbook: deploy-hive.yml
 - import_playbook: deploy-spark.yml
+- import_playbook: deploy-oozie.yml
 - import_playbook: deploy-users.yml

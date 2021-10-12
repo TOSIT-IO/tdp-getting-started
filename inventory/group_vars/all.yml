@@ -20,7 +20,8 @@ kadmin_user: "{{ kadmin_principal }}"
 kadmin_pass: "{{ kadmin_password }}"
 kdc_port: 88
 
-
+# oozie
+oozie_user: oozie
 
 # CA
 ca_cert_filename: root.pem
@@ -67,7 +68,7 @@ users:
   - username: smoke_user
     password: smoke_user123
 
-# Depends on hdfs service (hive policies )
+# Depends on hdfs service 
 user_hdfs_policies:
   - name: tdp_user-hdfs-home-policy
     description: tdp_user access to hdfs:////user/tdp_user
@@ -108,6 +109,29 @@ user_hdfs_policies:
         isExcludes: false
         isRecursive: true
         values: ['hdfs:////user/smoke_user']
+    service: hdfs-tdp
+
+# Depends on hdfs service (hive policies )
+oozie_hdfs_policies:
+  - name: oozie-hdfs-user-dir-policy
+    description: Necessary oozie access to hdfs:////user
+    isAuditEnabled: true
+    isEnabled: true
+    policyItems:
+    - accesses:
+      - {isAllowed: true, type: read}
+      - {isAllowed: true, type: write}
+      - {isAllowed: true, type: execute}
+      conditions: []
+      delegateAdmin: true
+      groups: []
+      users: ["{{oozie_user}}"]
+    repositoryType: hdfs
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ["/user"]
     service: hdfs-tdp
 
 # Depends on hive service

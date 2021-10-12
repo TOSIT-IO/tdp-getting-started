@@ -240,3 +240,9 @@ kinit -kt /home/tdp-user/.ssh/tdp-user.principal.keytab tdp-user/edge-01.tdp@REA
 export SPARK_CONF_DIR=/etc/spark/conf
 /opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode cluster /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```
+
+**Oozie**
+
+Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres database in the `[postgresql]` ansible group. 
+
+
