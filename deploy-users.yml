@@ -1,32 +1,32 @@
 ---
-- hosts: all
+- name: Deploy users
+  hosts: all
   become: yes
   tasks:
-  - name: Add unix users
-    user:
-      name: "{{item}}"
-      home: "/home/{{item}}/"
-      password: '{{ "{{item}}" | password_hash("sha512", "salt123") }}'
-    with_items: "{{users}}"
+    - name: Create unix user 
+      user:
+        name: "{{item.username}}"
+        home: "/home/{{item.username}}/"
+        password: '{{ "{{item.password}}" | password_hash("sha512", "salt123") }}'
+      with_items: "{{users}}"
+    - name: Ensure user ~/.ssh exists
+      file:
+        path: "/home/{{item.username}}/.ssh/"
+        state: directory
+      with_items: "{{users}}"
+    - name: Generate user principals and keytabs
+      become: yes
+      shell: |
+        kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "addprinc -randkey {{item.username}}/{{ ansible_fqdn }}@{{realm}}"
+        kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "xst -k {{item.username}}.principal.keytab {{item.username}}/{{ ansible_fqdn }}@{{realm}}"
+        chown {{item.username}}:{{item.username}} {{item.username}}.principal.keytab
+      args:
+        chdir: /home/{{item.username}}/.ssh/
+        creates: /home/{{item.username}}/.ssh/{{item.username}}.principal.keytab
+      with_items: "{{users}}"
 
-  - name: Ensure user ~/.ssh exists
-    file:
-      path: "/home/{{item}}/.ssh/"
-      state: directory
-    with_items: "{{users}}"
-
-  - name: Generate user principals and keytabs
-    become: yes
-    shell: |
-      kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "addprinc -randkey {{item}}/{{ ansible_fqdn }}@{{realm}}"
-      kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "xst -k {{item}}.principal.keytab {{item}}/{{ ansible_fqdn }}@{{realm}}"
-      chown {{item}}:{{item}} {{item}}.principal.keytab
-    args:
-      chdir: /home/{{item}}/.ssh/
-      creates: /home/{{item}}/.ssh/{{item}}.principal.keytab
-    with_items: "{{users}}"
-
-- hosts: hdfs_nn[0]
+- name: Create user hdfs dir
+  hosts: hdfs_nn[0]
   become: yes
   tasks:
   - name: Kinit for hdfs
@@ -38,9 +38,39 @@
     become_user: "{{ hdfs_user }}"
     tosit.tdp.hdfs_file:
       hdfs_conf: "{{ hadoop_conf_dir }}"
-      path: "/user/{{ item }}"
+      path: "/user/{{ item.username }}"
       state: directory
-      owner: "{{ item }}"
-      group: "{{ item }}"
+      owner: "{{ item.username }}"
+      group: "{{ item.username }}"
       mode: "755"
     loop: "{{ users }}"
+
+- name: Create users in ranger
+  hosts: ranger_admin[0]
+  become: yes
+  tasks:
+    - include_role:
+        name: ansible_roles/roles/ansible-tdp-common-actions
+        tasks_from: deploy-new-ranger-user
+      with_items:
+        - "{{ users }}"
+
+- name: Create hdfs user access policies in ranger
+  hosts: ranger_admin[0]
+  become: yes
+  tasks:
+    - include_role:
+        name: ansible_roles/roles/ansible-tdp-common-actions
+        tasks_from: deploy-ranger-hdfs-policy
+      with_items:
+        - "{{ user_hdfs_policies }}"
+
+- name: Deploy ranger hive policies in ranger
+  hosts: ranger_admin[0]
+  become: yes
+  tasks:
+    - include_role: 
+        name: ansible_roles/roles/ansible-tdp-common-actions
+        tasks_from: deploy-ranger-hive-policy
+      with_items:
+        - "{{ user_hive_policies }}"

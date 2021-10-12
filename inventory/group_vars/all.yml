@@ -62,4 +62,87 @@ hadoop_ha_zookeeper_quorum: "{{groups['zk'] | map('extract', hostvars, ['ansible
 
 # User management
 users:
-  - tdp-user
+  - username: tdp_user
+    password: tdp_user123
+  - username: smoke_user
+    password: smoke_user123
+
+# Depends on hdfs service (hive policies )
+user_hdfs_policies:
+  - name: tdp_user-hdfs-home-policy
+    description: tdp_user access to hdfs:////user/tdp_user
+    isAuditEnabled: true
+    isEnabled: true
+    policyItems:
+    - accesses:
+      - {isAllowed: true, type: read}
+      - {isAllowed: true, type: write}
+      - {isAllowed: true, type: execute}
+      conditions: []
+      delegateAdmin: true
+      groups: []
+      users: [tdp_user]
+    repositoryType: hdfs
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ['hdfs:////user/tdp_user']
+    service: hdfs-tdp
+  - name: smoke_user-hdfs-home-policy
+    description: smoke_user access to hdfs:////user/smoke_user
+    isAuditEnabled: true
+    isEnabled: true
+    policyItems:
+    - accesses:
+      - {isAllowed: true, type: read}
+      - {isAllowed: true, type: write}
+      - {isAllowed: true, type: execute}
+      conditions: []
+      delegateAdmin: true
+      groups: []
+      users: [smoke_user]
+    repositoryType: hdfs
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ['hdfs:////user/smoke_user']
+    service: hdfs-tdp
+
+# Depends on hive service
+user_hive_policies:
+  - name: tdp-user-hive-policy
+    description: Hive Client Check
+    service: hive-tdp
+    repositoryType: hive
+    isAuditEnabled: true
+    isEnabled: true
+    resources:
+      column:
+        isExcludes: false
+        values: ['*']
+      database:
+        isExcludes: false
+        values: [tdp_user_db]
+      table:
+        isExcludes: false
+        values: ['*']
+    policyItems:
+    - users: [tdp_user]
+      groups: []
+      delegateAdmin: true
+      accesses:
+      - {isAllowed: true, type: select}
+      - {isAllowed: true, type: update}
+      - {isAllowed: true, type: Create}
+      - {isAllowed: true, type: Drop}
+      - {isAllowed: true, type: Alter}
+      - {isAllowed: true, type: Index}
+      - {isAllowed: true, type: Lock}
+      - {isAllowed: true, type: All}
+      - {isAllowed: true, type: Read}
+      - {isAllowed: true, type: Write}
+      - {isAllowed: true, type: Refresh}
+      conditions: []
+

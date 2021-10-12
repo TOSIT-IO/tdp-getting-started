@@ -64,4 +64,13 @@
       service:
         name: hive-server2
         state: restarted
-      tags: sh
+
+- hosts: ranger_admin[0]
+  become: yes
+  tasks:
+    - name: Deploy ranger hdfs policies
+      include_role:
+        name: ansible_roles/roles/ansible-tdp-common-actions
+        tasks_from: deploy-ranger-hdfs-policy
+      with_items:
+        - "{{ ranger_hdfs_policies }}"

@@ -4,8 +4,8 @@
 - import_playbook: deploy-kerberos.yml
 - import_playbook: deploy-zookeeper.yml
 - import_playbook: deploy-hdfs-yarn-mapreduce.yml
-- import_playbook: deploy-users.yml
 - import_playbook: deploy-postgres.yml
 - import_playbook: deploy-ranger.yml
 - import_playbook: deploy-hive.yml
 - import_playbook: deploy-spark.yml
+- import_playbook: deploy-users.yml

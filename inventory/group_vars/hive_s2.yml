@@ -1,4 +1,5 @@
 ---
+hive_user: hive
 hive_jdbc_connector_package: postgresql-jdbc
 hive_ms_db_url: "jdbc:postgresql://{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
 db_type: postgres
@@ -10,3 +11,26 @@ hive_site:
   javax.jdo.option.ConnectionUserName: hive
   javax.jdo.option.ConnectionPassword: hive
   hive.server2.enable.doAs: no
+
+# Depends on hdfs service
+ranger_hdfs_policies:
+  - name: hive-user-hdfs-policy
+    description: Hive Client Check
+    isAuditEnabled: true
+    isEnabled: true
+    policyItems:
+    - accesses:
+      - {isAllowed: true, type: read}
+      - {isAllowed: true, type: write}
+      - {isAllowed: true, type: execute}
+      conditions: []
+      delegateAdmin: true
+      groups: []
+      users: ["{{ hive_user }}"]
+    repositoryType: hdfs
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ['hdfs:////warehouse']
+    service: hdfs-tdp

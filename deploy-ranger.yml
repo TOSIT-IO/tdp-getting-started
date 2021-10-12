@@ -37,11 +37,3 @@
       import_role: 
         name: tosit.tdp.hadoop
         tasks_from: ranger_yarn_plugin
-
-- hosts: ranger_admin[0]
-  become: yes
-  tasks:
-    - name: Deploy ranger user policies
-      import_role: 
-        name: ansible_roles/roles/ansible-tdp-common-actions
-        tasks_from: deploy-ranger-user-policy
