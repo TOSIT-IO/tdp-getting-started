@@ -1,0 +1,9 @@
+---
+- name: "Create {{item}} user if not exists"
+  shell: psql -tc "SELECT 1 FROM pg_user WHERE usename = '{{item}}'" | grep -q 1 || (echo "CREATE USER {{item}} WITH PASSWORD '{{item}}';" | psql -U postgres)
+
+- name: "Create {{item}} database if it doesn't exist already"
+  shell: psql -tc "SELECT 1 FROM pg_database WHERE datname = '{{item}}'" | grep -q 1 || (echo "CREATE DATABASE {{item}} WITH OWNER = {{item}};" | psql -U postgres)
+
+- name: "Grant all privileges to {{item}} user on {{item}} database"
+  shell: echo "GRANT ALL PRIVILEGES ON DATABASE {{item}} TO {{item}};" | psql -U postgres
