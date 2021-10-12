@@ -2,6 +2,7 @@
 
 Creates a a set of ssh keys locally and then deploys the public key to all hosts.
 
+For users who want to ssh to a host using a private key instead of `vagrant ssh <host_fqdn>`
 # Example playbook
 
 ```yaml
