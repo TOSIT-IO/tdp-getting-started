@@ -1,11 +1,11 @@
 cluster={
-  "worker-01.tdp"=>{:ip=>"192.168.32.10",:cpus=>4,:mem=>2048},
-  "worker-02.tdp"=>{:ip=>"192.168.32.11",:cpus=>4,:mem=>2048},
-  "worker-03.tdp"=>{:ip=>"192.168.32.12",:cpus=>4,:mem=>2048},
-  "master-01.tdp"=>{:ip=>"192.168.32.13",:cpus=>4,:mem=>3072},
-  "master-02.tdp"=>{:ip=>"192.168.32.14",:cpus=>8,:mem=>3072},
-  "master-03.tdp"=>{:ip=>"192.168.32.15",:cpus=>4,:mem=>3072},
-  "edge-01.tdp"=>{:ip=>"192.168.32.16",:cpus=>4,:mem=>2048},
+  "worker-01.tdp"=>{:ip=>"192.168.32.10",:cpus=>2,:mem=>2048},
+  "worker-02.tdp"=>{:ip=>"192.168.32.11",:cpus=>2,:mem=>2048},
+  "worker-03.tdp"=>{:ip=>"192.168.32.12",:cpus=>2,:mem=>2048},
+  "master-01.tdp"=>{:ip=>"192.168.32.13",:cpus=>2,:mem=>2048},
+  "master-02.tdp"=>{:ip=>"192.168.32.14",:cpus=>2,:mem=>2048},
+  "master-03.tdp"=>{:ip=>"192.168.32.15",:cpus=>2,:mem=>2048},
+  "edge-01.tdp"=>{:ip=>"192.168.32.16",:cpus=>2,:mem=>2048},
 }
 
 Vagrant.configure("2") do |config|
