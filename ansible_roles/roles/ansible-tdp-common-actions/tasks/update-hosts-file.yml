@@ -1,0 +1,7 @@
+---
+- name: Add all clusters hosts to /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ hostvars[item]['ansible_host'] }} {{ item }}.{{ hostvars[item]['domain'] }} {{ item }}"
+    insertafter: EOF
+  loop: "{{ groups['all'] }}"

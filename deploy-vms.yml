@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Start VMs in parallel
+      command: "sh ./vagrant-up-parallel.sh {{num_vagrant_processes}}"
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Common setup and configuration accross all ansible hosts
+      import_role:
+        name: ansible_roles/roles/ansible-tdp-common-actions

@@ -1,0 +1,22 @@
+---
+- name: Set root password to Vagrant
+  user:
+    name: root
+    password: '{{ "vagrant" | password_hash("sha512", "salt123") }}'
+
+- name: Install common packages
+  yum:
+    name:
+      - vim
+      - java-1.8.0-openjdk
+      - wget
+      - curl
+      - unzip
+      - nc
+    state: present
+
+- name: Set JAVA_HOME
+  lineinfile:
+    path: /etc/environment
+    regexp: "^JAVA_HOME="
+    line: JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk
