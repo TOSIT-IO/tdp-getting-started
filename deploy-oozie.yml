@@ -50,5 +50,14 @@
         name: oozie-server
         state: started
 
+    - name: Create auto setting OOZIE_CLIENT_OPS env var
+      copy:
+        content: "export OOZIE_CLIENT_OPTS='-Djavax.net.ssl.trustStore={{oozie_truststore_location}}'"
+        dest: /etc/profile.d/OOZIE_CLIENT_OPS.sh
+        force: no
+        group: sys
+        owner: root
+        mode: 0755
+
 # ToDo
 # - Add oozie HA
