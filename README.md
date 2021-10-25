@@ -1,3 +1,16 @@
+arn Https Address
+https://master-01.tdp:8090/cluster
+
+Namenode information
+https://master-02.tdp:9871/dfshealth.html#tab-overview
+
+journalnode info 
+https://master-02.tdp:8481/
+
+datanode info
+https://worker-02.tdp:9865/datanode.html
+
+
 # Getting Started with TDP
 
 Launch a fully featured virtual TDP Hadoop cluster with a single command *or* customise the infrastructure and components of your cluster with 1 command per component.
@@ -245,13 +258,10 @@ export SPARK_CONF_DIR=/etc/spark/conf
 
 Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres database in the `[postgresql]` ansible group. 
 
-
-<!-- rename rar file
-Change variable
-add task to create oozie user
-add policy to ranger toa llow oozie access to hdfs /user
-
-bin/ooziedb.sh create -sqlfile oozie.sql -run # creates the sql commands at oozie.sql -->
+To check the status of oozie, from an oozie_server node:
+```bash
+/opt/tdp/oozie/bin/oozie admin -status -oozie https://master-01.tdp:11443/oozie
+```
 
 
 
