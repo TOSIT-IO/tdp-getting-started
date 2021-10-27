@@ -1,3 +1,6 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
 cluster={
   "worker-01.tdp"=>{:ip=>"192.168.32.10",:cpus=>2,:mem=>2048},
   "worker-02.tdp"=>{:ip=>"192.168.32.11",:cpus=>2,:mem=>2048},
