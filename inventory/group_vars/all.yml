@@ -20,6 +20,43 @@ kadmin_user: "{{ kadmin_principal }}"
 kadmin_pass: "{{ kadmin_password }}"
 kdc_port: 88
 
+# Service start on boot
+hdfs_nn_start_on_boot: yes
+hdfs_dn_start_on_boot: yes
+hdfs_jn_start_on_boot: yes
+hdfs_zkfc_start_on_boot: yes
+yarn_nm_start_on_boot: yes
+yarn_rm_start_on_boot: yes
+yarn_ts_start_on_boot: yes
+hbase_master_start_on_boot: yes
+hbase_rs_start_on_boot: yes
+hiveserver2_start_on_boot: yes
+knox_start_on_boot: yes
+oozie_start_on_boot: yes
+ranger_admin_start_on_boot: yes
+ranger_usync_start_on_boot: yes
+spark_hs_start_on_boot: yes
+zk_start_on_boot: yes
+krb_start_on_boot: yes
+
+# Service restart policies
+hdfs_nn_restart: always
+hdfs_dn_restart: always
+hdfs_jn_restart: always
+hdfs_zkfc_restart: always
+yarn_nm_restart: always
+yarn_rm_restart: always
+yarn_ts_restart: always
+hbase_master_restart: always
+hbase_rs_restart: always
+hiveserver2_restart: always
+knox_restart: always
+oozie_restart: always
+ranger_admin_restart: always
+ranger_usync_restart: always
+spark_hs_restart: always
+zk_restart: always
+
 # oozie
 oozie_user: oozie
 
@@ -169,4 +206,3 @@ user_hive_policies:
       - {isAllowed: true, type: Write}
       - {isAllowed: true, type: Refresh}
       conditions: []
-

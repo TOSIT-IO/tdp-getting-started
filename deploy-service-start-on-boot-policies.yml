@@ -1,0 +1,101 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: "Apply hadoop-hdfs-namenode service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hadoop-hdfs-namenode
+        enabled: "{{ hdfs_nn_start_on_boot }}"
+      loop: "{{ groups['hdfs_nn'] }}"
+
+    - name: "Apply hadoop-hdfs-journalnode service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hadoop-hdfs-journalnode
+        enabled: "{{ hdfs_jn_start_on_boot }}"
+      loop: "{{ groups['hdfs_jn'] }}"
+
+    - name: "Apply hadoop-hdfs-zkfc service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hadoop-hdfs-zkfc
+        enabled: "{{ hdfs_zkfc_start_on_boot }}"
+      loop: "{{ groups['hdfs_nn'] }}"
+
+    - name: "Apply hadoop-hdfs-datanode service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hadoop-hdfs-datanode
+        enabled: "{{ hdfs_dn_start_on_boot }}"
+      loop: "{{ groups['hdfs_dn'] }}"
+
+    - name: "Apply zookeeper service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: zookeeper
+        enabled: "{{ zk_start_on_boot }}"
+      loop: "{{ groups['zk'] }}"
+
+    - name: "Apply krb5-kdc service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: krb5kdc
+        enabled: "{{ krb_start_on_boot }}"
+      loop: "{{ groups['kdc'] }}"
+
+    - name: "Apply kadmin service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: kadmin
+        enabled: "{{ krb_start_on_boot }}"
+      loop: "{{ groups['kdc'] }}"
+
+    - name: "Apply hadoop-yarn-resourcemanager service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hadoop-yarn-resourcemanager
+        enabled: "{{ yarn_rm_start_on_boot }}"
+      loop: "{{ groups['yarn_rm'] }}"
+
+    - name: "Apply hadoop-yarn-nodemanager service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hadoop-yarn-nodemanager
+        enabled: "{{ yarn_nm_start_on_boot }}"
+      loop: "{{ groups['yarn_nm'] }}"
+
+    - name: "Apply hadoop-yarn-timelineserver service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hadoop-yarn-timelineserver
+        enabled: "{{ yarn_ts_start_on_boot }}"
+      loop: "{{ groups['yarn_ats'] }}"
+
+    - name: "Apply hive-server2 service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hive-server2
+        enabled: "{{ hiveserver2_start_on_boot }}"
+      loop: "{{ groups['hive_s2'] }}"
+
+    - name: "Apply ranger-admin service start on boot policy"
+      delegate_to: "{{ groups['ranger_admin'][0] }}"
+      service:
+        name: ranger-admin
+        enabled: "{{ ranger_admin_start_on_boot }}"
+
+    - name: "Apply oozie-server service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: oozie-server
+        enabled: "{{ oozie_start_on_boot }}"
+      loop: "{{ groups['oozie_server'] }}"
+
+    - name: "Apply spark-history-server service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: spark-history-server
+        enabled: "{{ spark_hs_start_on_boot }}"
+      loop: "{{ groups['spark_hs'] }}"
+
