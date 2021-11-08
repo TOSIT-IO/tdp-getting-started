@@ -1,11 +1,10 @@
 ---
-- name: Make sure we have the entry for hostname in /etc/hosts
+- name: Make sure that the hostname is in /etc/hosts
   lineinfile:
-    state: present
     dest: /etc/hosts
-    regexp: '.*{{ ansible_default_ipv4.address }}\s*{{ ansible_hostname }}\s*{{ ansible_hostname }}.{{ realm_name|lower() }}'
-    line: '{{ ansible_default_ipv4.address }} {{ ansible_hostname }} {{ ansible_hostname }}.{{ realm_name|lower() }}'
-    unsafe_writes: yes
+    regexp: '{{ ansible_host }}\s*{{ inventory_hostname }}.{{ domain }}\s*{{ inventory_hostname }}'
+    line: "{{ ansible_host }} {{ inventory_hostname }}.{{ domain }} {{ inventory_hostname }}"
+    insertafter: EOF
 
 - name: Link /dev/random to /dev/urandom
   file:
@@ -15,7 +14,7 @@
     force: yes
 
 - name: Add OS specific variables
-  include_vars: "{{ ansible_os_family }}.yml"
+  include_vars: "{{ ansible_os_family | lower }}.yml"
 
 - name: Install needed Kerberos packages
   package:
@@ -28,14 +27,14 @@
     src: kdc.conf.j2
     dest: "{{ kdc_conf_path }}"
   notify:
-   - restart kerberos
+    - Restart Kerberos
 
 - name: Copy KDC ACL configuration file
   template:
     src: kadm5.acl.j2
     dest: "{{ kadm5_acl_path }}"
   notify:
-   - restart kerberos
+    - Restart Kerberos
 
 - name: Copy client configuration file
   template:

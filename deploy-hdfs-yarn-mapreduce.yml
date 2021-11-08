@@ -1,5 +1,5 @@
 ---
-- name: "Deploy Hadoop"
+- name: Deploy Hadoop
   become: yes
   hosts: hdfs_nn:hdfs_jn:hdfs_dn:yarn_rm:yarn_nm:hadoop_client
   gather_facts: true
@@ -8,8 +8,7 @@
         name: tosit.tdp.hadoop
       tags: install
 
-- name: "Hadoop cluster bootstrap"
-  become: yes
+- name: Hadoop cluster bootstrap
   hosts: localhost
   tasks:
     - import_role:
