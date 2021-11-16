@@ -149,6 +149,30 @@ user_hdfs_policies:
     service: hdfs-tdp
 
 # Depends on hdfs service (hive policies )
+# # Depends on hdfs service (hive policies )
+# hive_hdfs_policies:
+#   - name: hive-hdfs-user-policy
+#     description: Necessary oozie access to hdfs:////user
+#     isAuditEnabled: true
+#     isEnabled: true
+#     policyItems:
+#     - accesses:
+#       - {isAllowed: true, type: read}
+#       - {isAllowed: true, type: write}
+#       - {isAllowed: true, type: execute}
+#       conditions: []
+#       delegateAdmin: true
+#       groups: []
+#       users: ["{{oozie_user}}"]
+#     repositoryType: hdfs
+#     resources:
+#       path:
+#         isExcludes: false
+#         isRecursive: true
+#         values: ["/user"]
+#     service: hdfs-tdp
+
+
 oozie_hdfs_policies:
   - name: oozie-hdfs-user-dir-policy
     description: Necessary oozie access to hdfs:////user
