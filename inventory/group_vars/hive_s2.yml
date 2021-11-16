@@ -32,5 +32,5 @@ ranger_hdfs_policies:
       path:
         isExcludes: false
         isRecursive: true
-        values: ['hdfs:////warehouse']
+        values: ['hdfs:////warehouse','hdfs:////user']
     service: hdfs-tdp
