@@ -49,14 +49,14 @@ The first action in `deploy-all.yml` is to run the `launch-VMs.sh` script which 
 
 **Important:**
 - To change the static IPs you must update **both** the `Vagrantfile` and the `inventory/hosts` files
-- Update the machine resources assigned to the VMs in the `Vagrantfile`
+- Update the machine resources assigned to the VMs in the `Vagrantfile` according to you machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
 - The `-K` parameter requests your superuser password. This is because one of the tdp-ansible-roles delegates privileged commands from your localhost to the VMs. No privileged commands modify anything outside of the VMs and only the `deploy-hdfs-yarn-mapreduce.yml` playbook requires these superuser privileges
 
-*Check the status of the created VMs with the command `vagrant status`, and ssh to them with the cammand `vagrant ssh <target-ansible-host>`*
+*Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`*
 
 **SSH Key Generation and Deployment**
 
-It is **optionally** possible to generate a new ssh key pair and deploy the public key to each host though `vagrant ssh <ansible-host>` works just fine in the context of this getting-started cluster. To do it, use the below command:
+It is **optionally** possible to generate a new ssh key pair and deploy the public key to each host, though `vagrant ssh <ansible-host>` works just fine in the context of this getting-started cluster. Use the below command to generate SSH keys and deploy them throughout the cluster:
 
 ```
 ansible-playbook deploy-ssh-key.yml
@@ -169,7 +169,7 @@ Creates a suitably configured postgres database to the `[postgresql]` ansible gr
 ansible-playbook deploy-ranger.yml
 ```
 
-The Ranger UI can be accessed at the address https://<master-02.tdp ip>:6182/login.jsp and the user `admin` and password `RangerAdmin123` (assuming default *ranger_admin_password* parameter). You may bneed to import the `root.pem` certificate authority into your browser to access.
+The Ranger UI can be accessed at the address https://<master-02.tdp ip>:6182/login.jsp and the user `admin` and password `RangerAdmin123` (assuming default *ranger_admin_password* parameter). You may need to import the `root.pem` certificate authority into your browser to access.
 
 **Hive**
 
@@ -203,14 +203,10 @@ The following code snippets:
         kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-02.tdp@REALM.TDP
         /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
         # Or directly to a hiveserver
-        /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-02.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
+/opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
         ```
   
-  - As there is no ranger user sync configured in this cluster, add the tdp_user manually in the ranger UI at `https://master-02.tdp:6182/index.html` with `admin` and `RangerAdmin123` user and password (assuming default settings used). 
-      - Go to *RangerUI > Settings > users/Groups/Roles > Add New User* and create tdp_user
-      - Go to  *RangerUI > Service Manager > hive-tdp Policies* and create a policy to allow tdp_user full permissions to database tdp_user_db
-      - Go to  *RangerUI > Service Manager > hdfs-tdp Policies* and create a policy to allow tdp_user full read, write and execute permissions in  `/user/tdp_user` hdfs dir
-      - Go to  *RangerUI > Service Manager > hdfs-tdp Policies* and create a policy to hive user read, write and execute permissions in  `/user` hdfs dir
+    *Note that all necessary ranger policies have been deployed automatically as part of the `deploy-hive.yml` process*
 
 From the beeline client, execute the following code blocks to interact with Hive:
 
@@ -251,8 +247,15 @@ ansible-playbook deploy-spark.yml
 su tdp_user
 kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
 export SPARK_CONF_DIR=/etc/spark/conf
-/opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn --deploy-mode cluster /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
+
+# Run a spark application locally
+/opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master local[4]  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
+
+# Or spark-submit a spark application to yarn
+/opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```
+
+*Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` dir, such as pyspark, spark-shell, spark-sql, sparkR etc.*
 
 **Oozie**
 

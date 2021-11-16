@@ -7,6 +7,6 @@
 - hosts: all
   become: yes
   tasks:
-    - name: Common setup and configuration accross all ansible hosts
+    - name: Common setup and configuration across all ansible hosts
       import_role: 
         name: ansible_roles/roles/ansible-tdp-common-actions
