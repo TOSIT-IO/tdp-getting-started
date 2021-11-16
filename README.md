@@ -1,16 +1,3 @@
-arn Https Address
-https://master-01.tdp:8090/cluster
-
-Namenode information
-https://master-02.tdp:9871/dfshealth.html#tab-overview
-
-journalnode info 
-https://master-02.tdp:8481/
-
-datanode info
-https://worker-02.tdp:9865/datanode.html
-
-
 # Getting Started with TDP
 
 Launch a fully featured virtual TDP Hadoop cluster with a single command *or* customise the infrastructure and components of your cluster with 1 command per component.
@@ -120,9 +107,9 @@ The following code snippets demonstrate that:
     - *From master-01.tdp:*
 
       ```bash
-      kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
-      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user:tdp_user /user/tdp_user
+kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user:tdp_user /user/tdp_user
       ```
 
   - That tdp_user can access and write to their hdfs user directory:
@@ -130,11 +117,11 @@ The following code snippets demonstrate that:
     - *From edge-01.tdp:*
 
         ```bash
-        su tdp_user
-        kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
-        echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
-        echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
-        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
+su tdp_user
+kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
+echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
+echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
         ```
 
   - That writes using the tdp_user from edge-01.tdp can be read from master-01.tdp:
@@ -142,9 +129,9 @@ The following code snippets demonstrate that:
     - *On master-01.tdp:*
 
       ```bash
-      su tdp_user
-      kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-01.tdp@REALM.TDP
-      /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
+su tdp_user
+kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-01.tdp@REALM.TDP
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
       ```
 
 **Postgres**
@@ -186,10 +173,10 @@ The following code snippets:
 
     - *From master-01.tdp:*
 
-        ```bash
-        kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
-        /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user /user/tdp_user
+          ```bash
+kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user /user/tdp_user
         ```
 
   - Authenticate as tdp_user from one of the hive_s2 nodes and enter the beeline client interface:
@@ -197,11 +184,11 @@ The following code snippets:
     - *From master-02.tdp:*
 
         ``bash
-        su tdp_user
-        export hive_truststore_password=Truststore123!
-        # Either via zookeeper
-        kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-02.tdp@REALM.TDP
-        /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
+su tdp_user
+export hive_truststore_password=Truststore123!
+# Either via zookeeper
+kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-02.tdp@REALM.TDP
+/opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
         # Or directly to a hiveserver
 /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
         ```
@@ -263,8 +250,12 @@ Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres
 
 To check the status of oozie, from an oozie_server node:
 ```bash
+export OOZIE_CLIENT_OPTS='-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks'
 /opt/tdp/oozie/bin/oozie admin -status -oozie https://master-01.tdp:11443/oozie
 ```
-
-
-
+The standard oozie application examples are already deployed to `/opt/tdp/oozie/oozie-examples.tar.gz`. To be used:
+  - Update any application `job.properties` files to reflect:
+    - `nameNode=hdfs://mycluster:8020`
+    - `resourceManager=master-02.tdp:8190`
+    - `master=yarn`
+  - Use the OOZIE_URL cli parameter `-oozie https://master-01.tdp:11443/oozie`
