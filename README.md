@@ -69,19 +69,6 @@ ansible-playbook deploy-kerberos.yml
 
 *After this, you can login as the kerberos admin from any VM with the command `kinit admin/admin` and the passwork `admin`.*
 
-**Create Cluster Users**
-
-The below command creates:
-  - Unix users *tdp_user* and *tdp-admin* on each node of the cluster
-  - A kerberos principal named `<user>/<fqdn>@<realm>` with keytabs at `/home/<user>/.ssh/<user>.kerberos.keytab`
-  - All users are added to the users group
-  - Users with 'admin' in the name will also be added to the group 'tdp-admin'
-
-```
-ansible-playbook deploy-users.yml
-```
-
-*Additional users can be added to the ansible-playbook parameter **users** in the `deploy-users.yml` if required*
 
 **Zookeeper**
 
@@ -259,3 +246,17 @@ The standard oozie application examples are already deployed to `/opt/tdp/oozie/
     - `resourceManager=master-02.tdp:8190`
     - `master=yarn`
   - Use the OOZIE_URL cli parameter `-oozie https://master-01.tdp:11443/oozie`
+
+**Create Cluster Users**
+
+The below command creates:
+  - Unix users *tdp_user* and *tdp-admin* on each node of the cluster
+  - A kerberos principal named `<user>/<fqdn>@<realm>` with keytabs at `/home/<user>/.ssh/<user>.kerberos.keytab`
+  - All users are added to the users group
+  - Users with 'admin' in the name will also be added to the group 'tdp-admin'
+
+```
+ansible-playbook deploy-users.yml
+```
+
+*Additional users can be added to the ansible-playbook parameter **users** in the `deploy-users.yml` if required*
