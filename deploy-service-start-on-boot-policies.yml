@@ -85,13 +85,6 @@
         name: ranger-admin
         enabled: "{{ ranger_admin_start_on_boot }}"
 
-    - name: "Apply oozie-server service start on boot policy"
-      delegate_to: "{{ item }}"
-      service:
-        name: oozie-server
-        enabled: "{{ oozie_start_on_boot }}"
-      loop: "{{ groups['oozie_server'] }}"
-
     - name: "Apply spark-history-server service start on boot policy"
       delegate_to: "{{ item }}"
       service:
@@ -99,3 +92,10 @@
         enabled: "{{ spark_hs_start_on_boot }}"
       loop: "{{ groups['spark_hs'] }}"
 
+    - name: "Apply systemd service start on boot policies"
+      delegate_to: "{{ item }}"
+      service:
+        name: spark-history-server
+        enabled: "{{ spark_hs_start_on_boot }}"
+      loop: "{{ groups['spark_hs'] }}"
+ 
