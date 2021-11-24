@@ -59,5 +59,14 @@
         owner: root
         mode: 0755
 
+    - name: Create auto setting OOZIE_CONFIG env var
+      copy:
+        content: "export OOZIE_CONFIG='/etc/oozie/conf.server'"
+        dest: /etc/profile.d/OOZIE_CONFIG.sh
+        force: no
+        group: sys
+        owner: root
+        mode: 0755
+
 # ToDo
 # - Add oozie HA

@@ -237,7 +237,6 @@ Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres
 
 To check the status of oozie, from an oozie_server node:
 ```bash
-export OOZIE_CLIENT_OPTS='-Djavax.net.ssl.trustStore=/etc/ssl/certs/truststore.jks'
 /opt/tdp/oozie/bin/oozie admin -status -oozie https://master-01.tdp:11443/oozie
 ```
 The standard oozie application examples are already deployed to `/opt/tdp/oozie/oozie-examples.tar.gz`. To be used:
