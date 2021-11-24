@@ -259,3 +259,13 @@ ansible-playbook deploy-users.yml
 ```
 
 *Additional users can be added to the ansible-playbook parameter **users** in the `deploy-users.yml` if required*
+
+**Autostart Cluster Services**
+
+As the getting started cluster is entirely virtual, when you switch off your computer the VMs will also turn off. To simplify getting your cluster up and running after booting up, the following command will launch a playbook which auto starts the necessary services to run the getting started cluster services:
+
+```yaml
+ansible-playbook deploy-service-start-on-boot-policies.yml
+```
+
+**NOTE: *This oozie deployment will not survive a system reboot. It must be recreated by executing the command `/opt/tdp/oozie/bin/oozie-setup.sh db create -run` from the `[oozie_server]` host after a reboot.***
