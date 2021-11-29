@@ -3,6 +3,6 @@ pythonenv/
 *.log
 files/
 test.yml
-.vscode/tasks.json
+.vscode/
 ansible_roles/collections/ansible_collections/tosit/tdp/
 RemoveTDP.yml
