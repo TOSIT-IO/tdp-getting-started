@@ -3,8 +3,9 @@
 Launch a fully featured virtual TDP Hadoop cluster with a single command *or* customise the infrastructure and components of your cluster with 1 command per component.
 
 ### Requirements
-- ansible >= 2.9.6
-- vagrant >= 2.29
+- ansible >= 2.9.6 (to excecute the playbooks)
+- vagrant >= 2.29 (to launch and manage the VMs)
+- The Python package `jmespath` (an Ansible dependency for json querying) 
 
 # Quick Start
 ```bash
