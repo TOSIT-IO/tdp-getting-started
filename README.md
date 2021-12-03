@@ -1,22 +1,25 @@
 # Getting Started with TDP
 
-Launch a fully featured virtual TDP Hadoop cluster with a single command *or* customise the infrastructure and components of your cluster with 1 command per component.
+Launch a fully featured virtual TDP Hadoop cluster with a single command _or_ customise the infrastructure and components of your cluster with 1 command per component.
 
 ### Requirements
+
 - ansible >= 2.9.6 (to excecute the playbooks)
 - vagrant >= 2.29 (to launch and manage the VMs)
-- The Python package `jmespath` (an Ansible dependency for json querying) 
+- The Python package `jmespath` (an Ansible dependency for json querying)
 
 # Quick Start
+
 ```bash
 git clone http://gitlab.adaltas.com/tdp/getting-started.git
 cd getting-started # Execute all commands from here
 sh ./setup.sh # Setup local env and clone latest tdp-ansible-roles
 # MANUAL STEP: Copy binaries to files directory in project root
-ansible-playbook deploy-all.yml -K
+ansible-playbook deploy-all.yml
 ```
 
-# Customised deployment 
+# Customised deployment
+
 Each of the below sections includes a high level explanation of each possible step of a deployment using this repository.
 
 ## Environment Setup
@@ -30,17 +33,17 @@ sh ./setup.sh
 ## Single command to deploy all services
 
 ```
-ansible-playbook deploy-all.yml -K
+ansible-playbook deploy-all.yml
 ```
 
 The first action in `deploy-all.yml` is to run the `launch-VMs.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
 
 **Important:**
+
 - To change the static IPs you must update **both** the `Vagrantfile` and the `inventory/hosts` files
 - Update the machine resources assigned to the VMs in the `Vagrantfile` according to you machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
-- The `-K` parameter requests your superuser password. This is because one of the tdp-ansible-roles delegates privileged commands from your localhost to the VMs. No privileged commands modify anything outside of the VMs and only the `deploy-hdfs-yarn-mapreduce.yml` playbook requires these superuser privileges
 
-*Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`*
+_Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`_
 
 **SSH Key Generation and Deployment**
 
@@ -58,9 +61,9 @@ Creates a certificate authority at the `[ca]` ansible group and distributes sign
 ansible-playbook deploy-ca.yml
 ```
 
-*The certificates will also be downloaded to the `files/certs` local project folder.*
+_The certificates will also be downloaded to the `files/certs` local project folder._
 
-***Kerberos***
+**_Kerberos_**
 
 Launches a KDC at the `[kdc]` ansible group and installs kerberos clients on each of the VMs.
 
@@ -68,59 +71,64 @@ Launches a KDC at the `[kdc]` ansible group and installs kerberos clients on eac
 ansible-playbook deploy-kerberos.yml
 ```
 
-*After this, you can login as the kerberos admin from any VM with the command `kinit admin/admin` and the passwork `admin`.*
-
+_After this, you can login as the kerberos admin from any VM with the command `kinit admin/admin` and the passwork `admin`._
 
 **Zookeeper**
 
 Deploys Apache ZooKeeper to the the `[zk]` ansible group and starts a 3 node Zookeeper quorum.
-  
+
 ```
 ansible-playbook deploy-zookeeper.yml
 ```
 
-*Run `echo stat | nc localhost 2181` from any node in the `[zk]` group to see it's zookeeper status.*
+_Run `echo stat | nc localhost 2181` from any node in the `[zk]` group to see it's zookeeper status._
 
 **Launch HDFS, Yarn & MapReduce**
 
-Launches a high availability hdfs distributed filesystem. 
+Launches a high availability hdfs distributed filesystem.
 
 ```
-ansible-playbook deploy-hdfs-yarn-mapreduce.yml -K
+ansible-playbook deploy-hdfs-yarn-mapreduce.yml
 ```
 
 The following code snippets demonstrate that:
-  - The namenode kerberos principal can create an appropriate hdfs user directory for tdp_user:
-    
-    - *From master-01.tdp:*
 
-      ```bash
+```bash
 kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
 /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
 /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user:tdp_user /user/tdp_user
-      ```
+```
 
-  - That tdp_user can access and write to their hdfs user directory:
+```bash
+kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
+/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user:tdp_user /user/tdp_user
+```
 
-    - *From edge-01.tdp:*
+- That tdp_user can access and write to their hdfs user directory:
 
-        ```bash
-su tdp_user
-kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
-echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
-echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
-        ```
+  ```bash
+  su tdp_user
+  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
+  echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
+  echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
+  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
+  ```
 
-  - That writes using the tdp_user from edge-01.tdp can be read from master-01.tdp:
+  ```bash
+  su tdp_user
+  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
+  echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
+  echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
+  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
+  ```
 
-    - *On master-01.tdp:*
-
-      ```bash
-su tdp_user
-kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-01.tdp@REALM.TDP
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
-      ```
+- That writes using the tdp_user from edge-01.tdp can be read from master-01.tdp:
+  ```bash
+  su tdp_user
+  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-01.tdp@REALM.TDP
+  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
+  ```
 
 **Postgres**
 
@@ -132,19 +140,17 @@ The DBA user **postgres** is created with the password **postgres**.
 ansible-playbook deploy-postgres.yml
 ```
 
-
 **Ranger**
 
 Creates a suitably configured postgres database to the `[postgresql]` ansible group, then deploys Ranger to the `[ranger_admin]` ansible group.
 
-*Note that any changes to the `[ranger_admin]` hosts should be also be reflected in the `[hadoop client group`]*
-  
+_Note that any changes to the `[ranger_admin]` hosts should be also be reflected in the `[hadoop client group`]_
 
 ```
 ansible-playbook deploy-ranger.yml
 ```
 
-The Ranger UI can be accessed at the address https://<master-02.tdp ip>:6182/login.jsp and the user `admin` and password `RangerAdmin123` (assuming default *ranger_admin_password* parameter). You may need to import the `root.pem` certificate authority into your browser to access.
+The Ranger UI can be accessed at the address https://<master-02.tdp ip>:6182/login.jsp and the user `admin` and password `RangerAdmin123` (assuming default _ranger_admin_password_ parameter). You may need to import the `root.pem` certificate authority into your browser to access.
 
 **Hive**
 
@@ -154,34 +160,30 @@ Deploys hive to the `[hive_s2]` ansible group. HDFS filesystem is created and th
 ansible-playbook deploy-hive.yml
 ```
 
-*Execute the following code blocks to execute some hive queries using beeline:*
+_Execute the following code blocks to execute some hive queries using beeline:_
 
 The following code snippets:
-  - Create an hdfs user directory for tdp_user (this block is is the same as in the deploy hdfs example above):
 
-    - *From master-01.tdp:*
+- Create an hdfs user directory for tdp_user (this block is is the same as in the deploy hdfs example above):
+  - _From master-01.tdp:_
+  ```bash
+  kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
+  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
+  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user /user/tdp_user
+  ```
+- Authenticate as tdp_user from one of the hive_s2 nodes and enter the beeline client interface:
+  - _From master-02.tdp:_
+  ```bash
+  su tdp_user
+  export hive_truststore_password=Truststore123!
+  # Either via zookeeper
+  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-02.tdp@REALM.TDP
+  /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
+  # Or directly to a hiveserver
+  /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
+  ```
 
-          ```bash
-kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user /user/tdp_user
-        ```
-
-  - Authenticate as tdp_user from one of the hive_s2 nodes and enter the beeline client interface:
-  
-    - *From master-02.tdp:*
-
-        ``bash
-su tdp_user
-export hive_truststore_password=Truststore123!
-# Either via zookeeper
-kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-02.tdp@REALM.TDP
-/opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
-        # Or directly to a hiveserver
-/opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
-        ```
-  
-    *Note that all necessary ranger policies have been deployed automatically as part of the `deploy-hive.yml` process*
+_Note that all necessary ranger policies have been deployed automatically as part of the `deploy-hive.yml` process_
 
 From the beeline client, execute the following code blocks to interact with Hive:
 
@@ -209,14 +211,16 @@ INSERT INTO TABLE table1 VALUES (1, 'one'), (2, 'two');
 # Examine the database table
 SELECT * FROM table1;
 ```
+
 **Spark**
 
-Deploys spark installations to the `[spark_hs]` and the `[spark_client]` ansible group. 
+Deploys spark installations to the `[spark_hs]` and the `[spark_client]` ansible group.
 
 ```
 ansible-playbook deploy-spark.yml
 ```
-*Execute the following command from any node in the `[spark_client]` ansible group to spark-submit an example jar from the spark installation:*
+
+_Execute the following command from any node in the `[spark_client]` ansible group to spark-submit an example jar from the spark installation:_
 
 ```bash
 su tdp_user
@@ -230,36 +234,40 @@ export SPARK_CONF_DIR=/etc/spark/conf
 /opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```
 
-*Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` dir, such as pyspark, spark-shell, spark-sql, sparkR etc.*
+_Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` dir, such as pyspark, spark-shell, spark-sql, sparkR etc._
 
 **Oozie**
 
-Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres database in the `[postgresql]` ansible group. 
+Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres database in the `[postgresql]` ansible group.
 
 To check the status of oozie, from an oozie_server node:
+
 ```bash
 /opt/tdp/oozie/bin/oozie admin -status -oozie https://master-01.tdp:11443/oozie
 ```
+
 The standard oozie application examples are already deployed to `/opt/tdp/oozie/oozie-examples.tar.gz`. To be used:
-  - Update any application `job.properties` files to reflect:
-    - `nameNode=hdfs://mycluster:8020`
-    - `resourceManager=master-02.tdp:8190`
-    - `master=yarn`
-  - Use the OOZIE_URL cli parameter `-oozie https://master-01.tdp:11443/oozie`
+
+- Update any application `job.properties` files to reflect:
+  - `nameNode=hdfs://mycluster:8020`
+  - `resourceManager=master-02.tdp:8190`
+  - `master=yarn`
+- Use the OOZIE_URL cli parameter `-oozie https://master-01.tdp:11443/oozie`
 
 **Create Cluster Users**
 
 The below command creates:
-  - Unix users *tdp_user* and *tdp-admin* on each node of the cluster
-  - A kerberos principal named `<user>/<fqdn>@<realm>` with keytabs at `/home/<user>/.ssh/<user>.kerberos.keytab`
-  - All users are added to the users group
-  - Users with 'admin' in the name will also be added to the group 'tdp-admin'
+
+- Unix users _tdp_user_ and _tdp-admin_ on each node of the cluster
+- A kerberos principal named `<user>/<fqdn>@<realm>` with keytabs at `/home/<user>/.ssh/<user>.kerberos.keytab`
+- All users are added to the users group
+- Users with 'admin' in the name will also be added to the group 'tdp-admin'
 
 ```
 ansible-playbook deploy-users.yml
 ```
 
-*Additional users can be added to the ansible-playbook parameter **users** in the `deploy-users.yml` if required*
+_Additional users can be added to the ansible-playbook parameter **users** in the `deploy-users.yml` if required_
 
 **Autostart Cluster Services**
 
@@ -269,4 +277,4 @@ As the getting started cluster is entirely virtual, when you switch off your com
 ansible-playbook deploy-service-start-on-boot-policies.yml
 ```
 
-**NOTE: *This oozie deployment will not survive a system reboot. It must be recreated by executing the command `/opt/tdp/oozie/bin/oozie-setup.sh db create -run` from the `[oozie_server]` host after a reboot.***
+**NOTE: _This oozie deployment will not survive a system reboot. It must be recreated by executing the command `/opt/tdp/oozie/bin/oozie-setup.sh db create -run` from the `[oozie_server]` host after a reboot._**
