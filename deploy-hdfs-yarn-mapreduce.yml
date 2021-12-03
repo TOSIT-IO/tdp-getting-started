@@ -10,6 +10,8 @@
 
 - name: Hadoop cluster bootstrap
   hosts: localhost
+  become: yes
+  gather_facts: no
   tasks:
     - import_role:
         name: tosit.tdp.hadoop

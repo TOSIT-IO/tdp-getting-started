@@ -1,12 +1,17 @@
 ---
-- name: Trust connections from master ips (add to pg_hba.conf)
-  become_user: postgres
-  shell: cat /etc/hosts | grep master- | grep -v 0.0.0.0 | \
-          awk '{print "host all all "$1"/32   trust\nhost all all "$2"   trust\n"}' >> /var/lib/pgsql/data/pg_hba.conf
+- name: Trust connections from postgresql_client (add to pg_hba.conf)
+  blockinfile:
+    path: "{{ postgresql_data_dir }}/pg_hba.conf"
+    block: |
+      host all all {{ hostvars[item]['ansible_host'] }}/32 trust
+      host all all {{ item }}.{{ hostvars[item]['domain'] }} trust
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+  loop: "{{ groups['postgresql_client'] }}"
 
 - name: Trust connections from the ansible host (add to pg_hba.conf)
-  become_user: postgres
-  shell: echo "host all all 192.168.32.1/32   md5" >> /var/lib/pgsql/data/pg_hba.conf
+  lineinfile:
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    line: "host all all 192.168.32.1/32 md5"
 
 - name: Open listen addresses
   become_user: postgres
@@ -15,7 +20,7 @@
 
 - name: Restart postgresql service
   become: yes
-  ansible.builtin.service:
+  service:
     name: postgresql
     state: restarted
 

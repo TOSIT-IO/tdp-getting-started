@@ -52,7 +52,6 @@ master-02
 master-02
 master-03
 
-
 [hadoop_client]
 edge-01
 master-02
@@ -61,6 +60,11 @@ master-01
 
 [postgresql]
 master-02
+
+[postgresql_client:children]
+hive_s2
+ranger_admin
+oozie_server
 
 [ranger_admin]
 master-02

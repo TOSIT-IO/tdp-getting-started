@@ -3,10 +3,10 @@
 - include_tasks: variables.yml
 
 # Setup/install tasks.
-- include_tasks: setup-RedHat.yml
+- include_tasks: setup-redhat.yml
   when: ansible_os_family == 'RedHat'
 
-- include_tasks: setup-Debian.yml
+- include_tasks: setup-debian.yml
   when: ansible_os_family == 'Debian'
 
 - include_tasks: initialize.yml
