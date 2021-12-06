@@ -173,7 +173,6 @@ user_hdfs_policies:
 #         values: ["/user"]
 #     service: hdfs-tdp
 
-
 oozie_hdfs_policies:
   - name: oozie-hdfs-user-dir-policy
     description: Necessary oozie access to hdfs:////user

@@ -2,13 +2,13 @@
 
 Launch a fully featured virtual TDP Hadoop cluster with a single command _or_ customise the infrastructure and components of your cluster with 1 command per component.
 
-### Requirements
+## Requirements
 
 - ansible >= 2.9.6 (to excecute the playbooks)
 - vagrant >= 2.29 (to launch and manage the VMs)
 - The Python package `jmespath` (an Ansible dependency for json querying)
 
-# Quick Start
+## Quick Start
 
 ```bash
 git clone http://gitlab.adaltas.com/tdp/getting-started.git
@@ -18,11 +18,11 @@ sh ./setup.sh # Setup local env and clone latest tdp-ansible-roles
 ansible-playbook deploy-all.yml
 ```
 
-# Customised deployment
+## Customised deployment
 
 Each of the below sections includes a high level explanation of each possible step of a deployment using this repository.
 
-## Environment Setup
+### Environment Setup
 
 Execute the `setup.sh` script to create the project directories needed and clone the latest tdp-ansible-roles.
 
@@ -30,7 +30,7 @@ Execute the `setup.sh` script to create the project directories needed and clone
 sh ./setup.sh
 ```
 
-## Single command to deploy all services
+### Single command to deploy all services
 
 ```
 ansible-playbook deploy-all.yml
