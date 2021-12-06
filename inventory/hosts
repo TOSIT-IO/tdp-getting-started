@@ -48,15 +48,18 @@ worker-03
 [yarn_ats]
 master-02
 
-[hive_s2]
-master-02
-master-03
-
 [hadoop_client]
 edge-01
 master-02
 master-03
 master-01
+
+[hive_s2]
+master-02
+master-03
+
+[hive_client]
+edge-01
 
 [postgresql]
 master-02
@@ -77,3 +80,6 @@ edge-01
 
 [oozie_server]
 master-01
+
+[oozie_client]
+edge-01

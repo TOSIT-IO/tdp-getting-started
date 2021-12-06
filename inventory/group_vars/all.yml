@@ -58,6 +58,8 @@ zk_restart: always
 
 # oozie
 oozie_user: oozie
+oozie_release: oozie-5.3.0-TDP-0.1.0-SNAPSHOT
+oozie_dist_file: oozie-5.3.0-TDP-0.1.0-SNAPSHOT-distro.tar.gz
 
 # CA
 ca_cert_filename: root.pem

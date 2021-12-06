@@ -1,18 +1,18 @@
 ---
 - hosts: localhost
   tasks:
-  - name: Check oozie binary exists
-    stat:
-      path: files/oozie-5.3.0-TDP-0.1.0-SNAPSHOT.tar.gz
-    register: oozie_exists
-    failed_when: oozie_exists.stat.exists == False
+    - name: Check oozie binary exists
+      stat:
+        path: files/oozie-5.3.0-TDP-0.1.0-SNAPSHOT-distro.tar.gz
+      register: oozie_exists
+      failed_when: oozie_exists.stat.exists == False
 
 - name: Prepare postgresql for oozie
   hosts: postgresql
   become: yes
   become_user: postgres
   tasks:
-    - include_role: 
+    - include_role:
         name: ansible_roles/roles/ansible-tdp-common-actions
         tasks_from: deploy-new-postgres-role
       with_items:
@@ -33,20 +33,24 @@
   hosts: ranger_admin[0]
   become: yes
   tasks:
-    - include_role: 
+    - include_role:
         name: ansible_roles/roles/ansible-tdp-common-actions
         tasks_from: deploy-ranger-hdfs-policy
       with_items:
         - "{{ oozie_hdfs_policies }}"
 
-- hosts: oozie_server
+- hosts: oozie_server:oozie_client
   become: yes
   tasks:
     - name: Deploy oozie
-      import_role: 
+      import_role:
         name: tosit.tdp.oozie
+
+- hosts: oozie_server
+  become: yes
+  tasks:
     - name: Start oozie-server service
-      service: 
+      service:
         name: oozie-server
         state: started
 
@@ -67,6 +71,5 @@
         group: sys
         owner: root
         mode: 0755
-
 # ToDo
 # - Add oozie HA

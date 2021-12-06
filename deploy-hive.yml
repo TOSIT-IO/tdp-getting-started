@@ -1,28 +1,28 @@
 ---
 - hosts: localhost
   tasks:
-  - name: Check hive binary exists
-    stat:
-      path: files/apache-hive-3.1.3-TDP-0.1.0-SNAPSHOT-bin.tar.gz
-    register: hive_exists
-    failed_when: hive_exists.stat.exists == False
+    - name: Check hive binary exists
+      stat:
+        path: files/apache-hive-3.1.3-TDP-0.1.0-SNAPSHOT-bin.tar.gz
+      register: hive_exists
+      failed_when: hive_exists.stat.exists == False
 
 - name: Prepare postgresql for hive
   hosts: postgresql
   become: yes
   become_user: postgres
   tasks:
-    - include_role: 
+    - include_role:
         name: ansible_roles/roles/ansible-tdp-common-actions
         tasks_from: deploy-new-postgres-role
       with_items:
         - hive
 
-- hosts: hive_s2
+- hosts: hive_s2:hive_client
   become: yes
   tasks:
     - name: Deploy hive
-      import_role: 
+      import_role:
         name: tosit.tdp.hive
 
 - hosts: "{{ groups['hdfs_nn'][0] }}"
@@ -33,7 +33,8 @@
         src: "files/{{ tez_dist_file }}"
         dest: /tmp
 
-- hosts: hdfs_nn[0]
+- hosts: localhost
+  gather_facts: no
   become: yes
   tasks:
     - name: Execute hive post install tasks
@@ -44,20 +45,20 @@
 - hosts: yarn_nm,yarn_rm
   become: yes
   tasks:
-  - name: Ensure hive user on all yarn nodemanagers and resource managers
-    user:
-      name: hive
-      password: '{{ "hive123" | password_hash("sha512", "salt123") }}'
+    - name: Ensure hive user on all yarn nodemanagers and resource managers
+      user:
+        name: hive
+        password: '{{ "hive123" | password_hash("sha512", "salt123") }}'
 
-  - name: Generate hive user principal and keytab on all yarn nodemanagers and resource managers
-    become: yes
-    shell: |
-      kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "addprinc -randkey hive/{{ ansible_fqdn }}@{{realm}}"
-      kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "xst -k hive.service.keytab hive/{{ ansible_fqdn }}@{{realm}}"
-      chown hive:hadoop hive.service.keytab
-    args:
-      chdir: /etc/security/keytabs
-      creates: /etc/security/keytabs/hive.principal.keytab
+    - name: Generate hive user principal and keytab on all yarn nodemanagers and resource managers
+      become: yes
+      shell: |
+        kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "addprinc -randkey hive/{{ ansible_fqdn }}@{{realm}}"
+        kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "xst -k hive.service.keytab hive/{{ ansible_fqdn }}@{{realm}}"
+        chown hive:hadoop hive.service.keytab
+      args:
+        chdir: /etc/security/keytabs
+        creates: /etc/security/keytabs/hive.principal.keytab
 
 - hosts: hive_s2
   become: yes

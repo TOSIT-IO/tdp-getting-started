@@ -1,6 +1,7 @@
 ---
 - hosts: localhost
   become: yes
+  gather_facts: no
   tasks:
     - name: "Apply hadoop-hdfs-namenode service start on boot policy"
       delegate_to: "{{ item }}"
@@ -98,4 +99,3 @@
         name: spark-history-server
         enabled: "{{ spark_hs_start_on_boot }}"
       loop: "{{ groups['spark_hs'] }}"
- 

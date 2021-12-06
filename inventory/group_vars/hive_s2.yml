@@ -7,7 +7,7 @@ hive_site:
   javax.jdo.option.ConnectionURL: "{{ hive_ms_db_url }}/{{ hive_ms_db_name }}"
   javax.jdo.option.ConnectionDriverName: org.postgresql.Driver
   datanucleus.autoCreateSchema: false
-  hive.zookeeper.quorum: "{{ groups['zk'] |  map('tosit.tdp.access_fqdn', hostvars) |  map('regex_replace', '^(.*)$', '\\1:2181') | join(',') | trim}}"
+  hive.zookeeper.quorum: "{{ hadoop_ha_zookeeper_quorum }}"
   javax.jdo.option.ConnectionUserName: hive
   javax.jdo.option.ConnectionPassword: hive
   hive.server2.enable.doAs: no
@@ -19,18 +19,18 @@ ranger_hdfs_policies:
     isAuditEnabled: true
     isEnabled: true
     policyItems:
-    - accesses:
-      - {isAllowed: true, type: read}
-      - {isAllowed: true, type: write}
-      - {isAllowed: true, type: execute}
-      conditions: []
-      delegateAdmin: true
-      groups: []
-      users: ["{{ hive_user }}"]
+      - accesses:
+          - { isAllowed: true, type: read }
+          - { isAllowed: true, type: write }
+          - { isAllowed: true, type: execute }
+        conditions: []
+        delegateAdmin: true
+        groups: []
+        users: ["{{ hive_user }}"]
     repositoryType: hdfs
     resources:
       path:
         isExcludes: false
         isRecursive: true
-        values: ['hdfs:////warehouse','hdfs:////user']
+        values: ["hdfs:////warehouse", "hdfs:////user"]
     service: hdfs-tdp
