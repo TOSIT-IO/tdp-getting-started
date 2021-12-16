@@ -97,7 +97,7 @@ yarn_site:
   yarn.timeline-service.http-authentication.kerberos.keytab: /etc/security/keytabs/spnego.service.keytab
 
 # Zookeeper
-hadoop_ha_zookeeper_quorum: "{{groups['zk'] | map('extract', hostvars, ['ansible_host']) | map('regex_replace', '^(.*)$', '\\1:2181') | join(',') }}"
+hadoop_ha_zookeeper_quorum: "{{ groups['zk'] |  map('tosit.tdp.access_fqdn', hostvars) |  map('regex_replace', '^(.*)$', '\\1:2181') | join(',') | trim}}"
 
 # User management
 users:
