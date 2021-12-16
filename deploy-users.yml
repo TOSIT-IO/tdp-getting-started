@@ -1,39 +1,68 @@
 ---
-- name: Create users principals
-  hosts: kdc
-  become: yes
-  tasks:
-    - name: Create user principal
-      become: yes
-      shell: |
-        kadmin -r {{ realm }} -p {{ kadmin_principal }} -w {{ kadmin_password }} -q "addprinc -randkey {{ item.username }}@{{ realm }}"
-      with_items: "{{ users }}"
-
-- name: Create users
+- name: Create new unix users accross cluster
   hosts: all
   become: yes
   tasks:
-    - name: Create Unix user
-      user:
+    - user:
         name: "{{ item.username }}"
         home: "/home/{{ item.username }}/"
         password: '{{ "{{ item.password }}" | password_hash("sha512", "salt123") }}'
       with_items: "{{ users }}"
 
-    - name: Create ~/.keytabs directory
+- name: Create user kerberos principals
+  hosts: kdc
+  become: yes
+  tasks:
+    - name: Create user principal
+      shell: |
+        kadmin -r {{ realm }} -p {{ kadmin_principal }} -w {{ kadmin_password }} -q "addprinc -randkey {{ item.username }}@{{ realm }}"
+      with_items: "{{ users }}"
+
+- name: Generate and keytab for users on first edge
+  hosts: edge[0]
+  tasks:
+    - name: Ensure local keytab dir exists
+      become: yes
       file:
-        path: "/home/{{ item.username }}/.keytabs/"
+        path: /home/{{ item.username }}/.keytabs/
         state: directory
+        owner: "{{ item.username }}"
+        group: "{{ item.username }}"
+        mode: 600
       with_items: "{{ users }}"
 
     - name: Generate user keytab
       become: yes
       shell: |
         kadmin -r {{ realm }} -p {{ kadmin_principal }} -w {{ kadmin_password }} -q "xst -k {{ item.username }}.principal.keytab {{ item.username }}@{{ realm }}"
-        chown {{ item.username }}:{{ item.username }} {{ item.username }}.principal.keytab
       args:
         chdir: /home/{{ item.username }}/.keytabs/
         creates: /home/{{ item.username }}/.keytabs/{{ item.username }}.principal.keytab
+      with_items: "{{ users }}"
+
+    - name: Pull keytabs to ansible control node
+      become: yes
+      fetch:
+        src: "/home/{{ item.username }}/.keytabs/{{ item.username }}.principal.keytab"
+        dest: ./files/keytabs/{{ item.username }}.principal.keytab
+        flat: yes
+      with_items: "{{ users }}"
+
+- name: Deploy user keytab to remote user keytabs dir
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure keytab dir exists
+      file:
+        path: "/home/{{ item.username }}/.keytabs/"
+        state: directory
+      with_items: "{{ users }}"
+
+    - name: Copy user keytab to remote
+      copy:
+        src: "./files/keytabs/{{ item.username }}.principal.keytab"
+        dest: "/home/{{ item.username }}/.keytabs/{{ item.username }}.principal.keytab"
+        owner: "{{ item.username }}"
       with_items: "{{ users }}"
 
 - name: Create users HDFS directories
@@ -41,12 +70,10 @@
   become: yes
   tasks:
     - name: Kinit as hdfs
-      become: yes
       become_user: "{{ hdfs_user }}"
       command: "kinit -kt /etc/security/keytabs/nn.service.keytab nn/{{ groups['hdfs_nn'][0] | tosit.tdp.access_fqdn(hostvars) }}@{{ realm }}"
 
     - name: Create home folder in HDFS
-      become: yes
       become_user: "{{ hdfs_user }}"
       tosit.tdp.hdfs_file:
         hdfs_conf: "{{ hadoop_conf_dir }}"
