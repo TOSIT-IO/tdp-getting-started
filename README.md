@@ -10,6 +10,9 @@ Launch a fully featured virtual TDP Hadoop cluster with a single command _or_ cu
 
 ## Quick Start
 
+The below steps will deploy a TDP cluster using the parameters in the `inventory` directory.
+The Ansible `host` file and the `Vagrantfile` will both be generated using the `hosts` variable in `inventory/all.yml`.
+
 ```bash
 git clone http://gitlab.adaltas.com/tdp/getting-started.git
 cd getting-started # Execute all commands from here
@@ -93,12 +96,7 @@ ansible-playbook deploy-hdfs-yarn-mapreduce.yml
 
 The following code snippets demonstrate that:
 
-```bash
-kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user:tdp_user /user/tdp_user
-```
-
+- From master-01.tdp
 ```bash
 kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
 /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
@@ -106,27 +104,22 @@ kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
 ```
 
 - That tdp_user can access and write to their hdfs user directory:
+  - From edge-01.tdp
 
   ```bash
   su tdp_user
-  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
-  echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
-  echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
-  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
-  ```
-
-  ```bash
-  su tdp_user
-  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
+  kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
   echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
   echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
   /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
   ```
 
 - That writes using the tdp_user from edge-01.tdp can be read from master-01.tdp:
+  - From master-01.tdp
+
   ```bash
   su tdp_user
-  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-01.tdp@REALM.TDP
+  kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
   /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
   ```
 
@@ -175,9 +168,9 @@ The following code snippets:
   - _From master-02.tdp:_
   ```bash
   su tdp_user
+  kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
   export hive_truststore_password=Truststore123!
   # Either via zookeeper
-  kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/master-02.tdp@REALM.TDP
   /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
   # Or directly to a hiveserver
   /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
@@ -224,7 +217,7 @@ _Execute the following command from any node in the `[spark_client]` ansible gro
 
 ```bash
 su tdp_user
-kinit -kt /home/tdp_user/.ssh/tdp_user.principal.keytab tdp_user/edge-01.tdp@REALM.TDP
+kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
 export SPARK_CONF_DIR=/etc/spark/conf
 
 # Run a spark application locally

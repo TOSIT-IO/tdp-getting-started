@@ -1,4 +1,5 @@
 ---
+- import_playbook: generate-node-deployment-config.yml
 - import_playbook: deploy-vms.yml
 - import_playbook: deploy-ca.yml
 - import_playbook: deploy-kerberos.yml
