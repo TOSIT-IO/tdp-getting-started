@@ -4,7 +4,7 @@ Launch a fully featured virtual TDP Hadoop cluster with a single command _or_ cu
 
 ## Requirements
 
-- ansible >= 2.9.6 (to excecute the playbooks)
+- ansible >= 2.9.6 (to execute the playbooks)
 - vagrant >= 2.29 (to launch and manage the VMs)
 - The Python package `jmespath` (an Ansible dependency for json querying)
 
@@ -99,8 +99,8 @@ The following code snippets demonstrate that:
 - From master-01.tdp
 ```bash
 kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
-/opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user:tdp_user /user/tdp_user
+hdfs dfs -mkdir -p /user/tdp_user
+hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
 ```
 
 - That tdp_user can access and write to their hdfs user directory:
@@ -109,9 +109,9 @@ kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
   ```bash
   su tdp_user
   kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
-  echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
-  echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
-  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
+  echo "This is the first line." | hdfs dfs -put - /user/tdp_user/testFile
+  echo "This is the second (appended) line." | hdfs dfs -appendToFile - /user/tdp_user/testFile
+  hdfs dfs -cat /user/tdp_user/testFile
   ```
 
 - That writes using the tdp_user from edge-01.tdp can be read from master-01.tdp:
@@ -120,7 +120,7 @@ kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
   ```bash
   su tdp_user
   kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
-  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
+  hdfs dfs -cat /user/tdp_user/testFile
   ```
 
 **Postgres**
@@ -161,8 +161,8 @@ The following code snippets:
   - _From master-01.tdp:_
   ```bash
   kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -mkdir -p /user/tdp_user
-  /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -chown -R tdp_user /user/tdp_user
+  hdfs dfs -mkdir -p /user/tdp_user
+  hdfs dfs -chown -R tdp_user /user/tdp_user
   ```
 - Authenticate as tdp_user from one of the hive_s2 nodes and enter the beeline client interface:
   - _From master-02.tdp:_
