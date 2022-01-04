@@ -11,6 +11,10 @@ hive_site:
   javax.jdo.option.ConnectionUserName: hive
   javax.jdo.option.ConnectionPassword: hive
   hive.server2.enable.doAs: no
+  # Support hive concurrency
+  hive.support.concurrency: yes
+  hive.txn.manager: org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager
+  hive.lock.manager: org.apache.hadoop.hive.ql.lockmgr.zookeeper.ZooKeeperHiveLockManager
 
 # Depends on hdfs service
 ranger_hdfs_policies:
