@@ -1,0 +1,9 @@
+---
+- name: Add all users to host's authorized_keys file
+  ansible.posix.authorized_key:
+    user: "{{ user.username }}"
+    state: present
+    key: "{{ lookup('file',  './files/ssh/id_rsa_{{ user.username }}_{{ inventory_hostname_loop_iteration }}.pub') }}"
+  with_items: "{{ users }}"
+  loop_control:
+    loop_var: user
