@@ -23,18 +23,5 @@
       import_role: 
         name: tosit.tdp.ranger
 
-- hosts: hdfs_nn
-  become: yes
-  tasks:
-    - name: Deploy ranger hdfs plugin
-      import_role: 
-        name: tosit.tdp.hadoop
-        tasks_from: ranger_hdfs_plugin
-
-- hosts: yarn_rm
-  become: yes
-  tasks:
-    - name: Deploy ranger yarn plugin
-      import_role: 
-        name: tosit.tdp.hadoop
-        tasks_from: ranger_yarn_plugin
+- name: Deploy Ranger HDFS and YARN plugins
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_plugins_hadoop.yml
