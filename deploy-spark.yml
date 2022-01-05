@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  become: False
   tasks:
     - name: Check spark binary exists
       stat:
