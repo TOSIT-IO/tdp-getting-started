@@ -21,6 +21,14 @@ sh ./setup.sh # Setup local env and clone latest tdp-ansible-roles
 ansible-playbook deploy-all.yml
 ```
 
+## Web UIs
+
+- [HDFS NN Master 01](https://master-01.tdp:9871/dfshealth.html)
+- [HDFS NN Master 02](https://master-02.tdp:9871/dfshealth.html)
+- [YARN RM Master 01](https://master-01.tdp:8090/cluster/apps)
+- [YARN RM Master 02](https://master-02.tdp:8090/cluster/apps)
+- [Ranger Admin](https://master-02.tdp:6182/index.html)
+
 ## Customised deployment
 
 Each of the below sections includes a high level explanation of each possible step of a deployment using this repository.
@@ -143,7 +151,7 @@ _Note that any changes to the `[ranger_admin]` hosts should be also be reflected
 ansible-playbook deploy-ranger.yml
 ```
 
-The Ranger UI can be accessed at the address https://<master-02.tdp ip>:6182/login.jsp and the user `admin` and password `RangerAdmin123` (assuming default _ranger_admin_password_ parameter). You may need to import the `root.pem` certificate authority into your browser to access.
+The Ranger UI can be accessed at the address https://<master-02.tdp ip>:6182/login.jsp and the user `admin` and password `RangerAdmin123` (assuming default _ranger_admin_password_ parameter). You may need to import the `root.pem` certificate authority into your browser or accept the SSL exception.
 
 **Hive**
 
@@ -165,15 +173,20 @@ The following code snippets:
   hdfs dfs -chown -R tdp_user /user/tdp_user
   ```
 - Authenticate as tdp_user from one of the hive_s2 nodes and enter the beeline client interface:
-  - _From master-02.tdp:_
+  - _From edge-01.tdp:_
   ```bash
   su tdp_user
   kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
   export hive_truststore_password=Truststore123!
-  # Either via zookeeper
-  /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
-  # Or directly to a hiveserver
-  /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
+
+  # Either via ZooKeeper
+  /opt/tdp/hive/bin/hive --config /etc/hive/conf --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
+
+  # Or directly to a HiveServer2
+  /opt/tdp/hive/bin/hive --config /etc/hive/conf --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
+
+  # You can also use beeline_auto which is a preconfigured beeline command to connect via zookeeper
+  beeline_auto
   ```
 
 _Note that all necessary ranger policies have been deployed automatically as part of the `deploy-hive.yml` process_
@@ -215,6 +228,7 @@ ansible-playbook deploy-spark.yml
 
 _Execute the following command from any node in the `[spark_client]` ansible group to spark-submit an example jar from the spark installation:_
 
+- _From edge-01.tdp:_
 ```bash
 su tdp_user
 kinit -kt ~/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
