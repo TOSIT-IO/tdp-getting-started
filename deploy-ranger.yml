@@ -25,3 +25,9 @@
 
 - name: Deploy Ranger HDFS and YARN plugins
   import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_plugins_hadoop.yml
+
+- name: Deploy Ranger HBase plugin
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_plugins_hbase.yml
+
+- name: Deploy Ranger Phoenix policy
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_phoenix_policy.yml

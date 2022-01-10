@@ -10,5 +10,6 @@
 - import_playbook: deploy-hive.yml
 - import_playbook: deploy-spark.yml
 - import_playbook: deploy-oozie.yml
+- import_playbook: deploy-hbase.yml
 - import_playbook: deploy-users.yml
 - import_playbook: deploy-service-start-on-boot-policies.yml
