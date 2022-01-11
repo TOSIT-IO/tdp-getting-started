@@ -94,12 +94,12 @@ ansible-playbook deploy-zookeeper.yml
 
 _Run `echo stat | nc localhost 2181` from any node in the `[zk]` group to see it's zookeeper status._
 
-**Launch HDFS, Yarn & MapReduce**
+**Launch HDFS, YARN & MapReduce**
 
-Launches a high availability hdfs distributed filesystem.
+Launches HDFS, YARN and deploy MapReduce clients.
 
 ```
-ansible-playbook deploy-hdfs-yarn-mapreduce.yml
+ansible-playbook deploy-hadoop.yml
 ```
 
 The following code snippets demonstrate that:
