@@ -8,51 +8,5 @@
       register: spark_exists
       failed_when: spark_exists.stat.exists == False
 
-- hosts: spark_client, spark_hs
-  become: yes
-  collections:
-    - tosit.tdp
-  roles:
-    - role: spark
-
-- hosts: "{{ groups['hdfs_nn'][0] }}"
-  become: yes
-  tasks:
-    - name: Create & set ownership of spark logs hdfs dir
-      command: "{{ item }}"
-      register: hdfs_action
-      with_items:
-        - kinit -kt /etc/security/keytabs/nn.service.keytab nn/{{ groups['hdfs_nn'][0] | tosit.tdp.access_fqdn(hostvars) }}@{{ realm }}
-        - "{{ hadoop_root_dir }}/hadoop/bin/hdfs --config {{ hadoop_root_conf_dir }}/conf.nn dfs -mkdir /spark-logs"
-        - "{{ hadoop_root_dir }}/hadoop/bin/hdfs --config {{ hadoop_root_conf_dir }}/conf.nn dfs -chown spark:hadoop /spark-logs"
-        - "{{ hadoop_root_dir }}/hadoop/bin/hdfs --config {{ hadoop_root_conf_dir }}/conf.nn dfs -chmod 777 /spark-logs"
-      failed_when: |
-        hdfs_action.failed == True and
-        hdfs_action.stderr is defined and
-        'File exists' not in hdfs_action.stderr
-
-- hosts: yarn_nm,yarn_rm
-  become: yes
-  tasks:
-  - name: Ensure spark user on all yarn nodemanagers and resource managers
-    user:
-      name: spark
-      password: '{{ "spark123" | password_hash("sha512", "salt123") }}'
-
-  - name: Generate spark user principal and keytab on all yarn nodemanagers and resource managers
-    become: yes
-    shell: |
-      kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "addprinc -randkey spark/{{ ansible_fqdn }}@{{realm}}"
-      kadmin -r {{realm}} -p {{kadmin_principal}} -w {{kadmin_password}} -q "xst -k spark.service.keytab spark/{{ ansible_fqdn }}@{{realm}}"
-      chown spark:hadoop spark.service.keytab
-    args:
-      chdir: /etc/security/keytabs
-      creates: /etc/security/keytabs/spark.principal.keytab
-
-- hosts: "{{ groups['spark_hs'][0] }}"
-  tasks:
-    - name: Start spark-history-server
-      become: yes
-      service:
-        name: spark-history-server
-        state: started
+- name: Deploy Spark
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/spark.yml
