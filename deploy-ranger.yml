@@ -27,3 +27,6 @@
 
 - name: Deploy Ranger Phoenix policy
   import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_phoenix_policy.yml
+
+- name: Deploy Ranger Hive plugin
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_plugins_hive.yml

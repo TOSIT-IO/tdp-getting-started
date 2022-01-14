@@ -19,13 +19,7 @@
       with_items:
         - hive
 
-- hosts: hive_s2:hive_client
-  become: yes
-  tasks:
-    - name: Deploy hive
-      import_role:
-        name: tosit.tdp.hive
-
+# Quick fix while https://github.com/TOSIT-FR/ansible-tdp-roles/issues/73 is not fixed
 - hosts: "{{ groups['hdfs_nn'][0] }}"
   become: yes
   tasks:
@@ -34,14 +28,8 @@
         src: "files/{{ tez_dist_file }}"
         dest: /tmp
 
-- hosts: localhost
-  gather_facts: no
-  become: yes
-  tasks:
-    - name: Execute hive post install tasks
-      import_role:
-        name: tosit.tdp.hive
-        tasks_from: post_install
+- name: Deploy Hive
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hive.yml
 
 - hosts: yarn_nm,yarn_rm
   become: yes
@@ -61,20 +49,13 @@
         chdir: /etc/security/keytabs
         creates: /etc/security/keytabs/hive.principal.keytab
 
-- hosts: hive_s2
-  become: yes
-  tasks:
-    - name: Start hive-server2
-      service:
-        name: hive-server2
-        state: restarted
-
-- hosts: ranger_admin[0]
-  become: yes
-  tasks:
-    - name: Deploy ranger hdfs policies
-      include_role:
-        name: ansible_roles/roles/ansible-tdp-common-actions
-        tasks_from: deploy-ranger-hdfs-policy
-      with_items:
-        - "{{ ranger_hdfs_policies }}"
+# TODO: move this somewhere else
+# - hosts: ranger_admin[0]
+#   become: yes
+#   tasks:
+#     - name: Deploy ranger hdfs policies
+#       include_role:
+#         name: ansible_roles/roles/ansible-tdp-common-actions
+#         tasks_from: deploy-ranger-hdfs-policy
+#       with_items:
+#         - "{{ ranger_hdfs_policies }}"
