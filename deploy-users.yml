@@ -76,7 +76,6 @@
     - name: Create home folder in HDFS
       become_user: "{{ hdfs_user }}"
       tosit.tdp.hdfs_file:
-        hdfs_conf: "{{ hadoop_conf_dir }}"
         path: "/user/{{ item.username }}"
         state: directory
         owner: "{{ item.username }}"
