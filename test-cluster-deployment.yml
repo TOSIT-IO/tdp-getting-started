@@ -101,3 +101,72 @@
       tags:
         - hive
 
+- hosts: hbase_client
+  become: yes
+  become_user: tdp_user
+  tasks:
+  - name: Run HBase 'list'
+    become: yes
+    become_user: tdp_user
+    shell: |
+      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      echo 'list' | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
+    register: _result
+    failed_when: _result.rc != 0
+    tags:
+      - hbase
+
+  - name: HBase 'list_namespace'
+    become: yes
+    become_user: tdp_user
+    shell: |
+      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      echo 'list_namespace' | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
+    register: _result
+    failed_when: _result.rc != 0
+    tags:
+      - hbase
+
+  - name: HBase create testTable
+    become: yes
+    become_user: tdp_user
+    shell: |
+      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      echo "create 'testTable', 'cf' " | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
+    register: _result
+    failed_when: _result.rc != 0
+    tags:
+      - hbase
+
+  - name: HBase put into testTable
+    become: yes
+    become_user: tdp_user
+    shell: |
+      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      echo "put 'testTable', 'row1', 'cf:testColumn', 'testValue'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
+    register: _result
+    failed_when: _result.rc != 0
+    tags:
+      - hbase
+
+  - name: HBase disable testTable
+    become: yes
+    become_user: tdp_user
+    shell: |
+      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      echo "disable 'testTable'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
+    register: _result
+    failed_when: _result.rc != 0
+    tags:
+      - hbase
+
+  - name: HBase drop testTable
+    become: yes
+    become_user: tdp_user
+    shell: |
+      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      echo "drop 'testTable'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
+    register: _result
+    failed_when: _result.rc != 0
+    tags:
+      - hbase
