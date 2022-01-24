@@ -243,24 +243,6 @@ export SPARK_CONF_DIR=/etc/spark/conf
 
 _Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` dir, such as pyspark, spark-shell, spark-sql, sparkR etc._
 
-**Oozie**
-
-Deploys an oozie server the `[oozie_server]` ansible group and an oozie postgres database in the `[postgresql]` ansible group.
-
-To check the status of oozie, from an oozie_server node:
-
-```bash
-/opt/tdp/oozie/bin/oozie admin -status -oozie https://master-01.tdp:11443/oozie
-```
-
-The standard oozie application examples are already deployed to `/opt/tdp/oozie/oozie-examples.tar.gz`. To be used:
-
-- Update any application `job.properties` files to reflect:
-  - `nameNode=hdfs://mycluster:8020`
-  - `resourceManager=master-02.tdp:8190`
-  - `master=yarn`
-- Use the OOZIE_URL cli parameter `-oozie https://master-01.tdp:11443/oozie`
-
 **Create Cluster Users**
 
 The below command creates:
@@ -283,5 +265,3 @@ As the getting started cluster is entirely virtual, when you switch off your com
 ```yaml
 ansible-playbook deploy-service-start-on-boot-policies.yml
 ```
-
-**NOTE: _This oozie deployment will not survive a system reboot. It must be recreated by executing the command `/opt/tdp/oozie/bin/oozie-setup.sh db create -run` from the `[oozie_server]` host after a reboot._**
