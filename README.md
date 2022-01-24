@@ -243,6 +243,27 @@ export SPARK_CONF_DIR=/etc/spark/conf
 
 _Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` dir, such as pyspark, spark-shell, spark-sql, sparkR etc._
 
+**HBase**
+
+Deploys HBase masters, regionservers, rest and clients to the `[hbase_master]`, `[hbase_rs]`, `[hbase_rest]` and `[hbase_client]` ansible groups respectively.
+
+```
+ansible-playbook deploy-hbase.yml
+```
+
+As tdp_user on an `[hbase_client]` host, obtain a Kerberos TGT with the command `kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP` and access the HBase shell with the command `/opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell`.
+
+Commands such as the below can be used to test your HBase deployment:
+
+```
+list
+list_namespace
+create 'testTable' 'cf'
+put 'testTable', 'row1', 'cf:testColumn', 'testValue'
+disable 'testTable'
+drop 'testTable'
+```
+
 **Create Cluster Users**
 
 The below command creates:
