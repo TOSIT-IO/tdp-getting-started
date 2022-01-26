@@ -1,7 +1,0 @@
----
-
-realm_name: REALM.NAME.COM
-kdc_port: 88
-master_db_pass: m4st3r_p4ssw0rd
-kadmin_user: defaultuser
-kadmin_pass: d3f4ultp4ss

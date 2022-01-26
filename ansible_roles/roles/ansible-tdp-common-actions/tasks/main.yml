@@ -1,3 +1,0 @@
----
-- include_tasks: common-deployment-actions.yml
-- include_tasks: update-hosts-file.yml

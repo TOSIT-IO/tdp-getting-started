@@ -1,8 +1,0 @@
----
-- name: Generate an OpenSSH rsa keypair
-  shell: "ssh-keygen -t {{type}}  -b {{size}} -f {{local_ssh_key_path}} -P '{{passphrase}}' -C '{{comment}}'"
-
-- name: Assign local private_key permissions
-  file:
-    path: "{{local_ssh_key_path}}"
-    mode: "{{mode}}"

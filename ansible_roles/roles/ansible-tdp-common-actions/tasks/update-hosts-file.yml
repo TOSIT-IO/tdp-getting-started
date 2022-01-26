@@ -1,6 +1,0 @@
----
-- name: Update hosts file
-  template:
-    backup: yes
-    dest: /etc/hosts
-    src: hosts.j2
