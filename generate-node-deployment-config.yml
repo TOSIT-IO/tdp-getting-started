@@ -2,15 +2,13 @@
 - hosts: localhost
   become: False
   tasks:
-    - name: Template ansible hosts file
-      template: 
-        src: ansible_roles/roles/ansible-tdp-common-actions/templates/ansible-hosts.j2
-        dest: inventory/hosts
+    - import_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        tasks_from: ansible-hosts
 
-    - name: Template Vagrant file
-      template: 
-        src: ansible_roles/roles/ansible-tdp-common-actions/templates/Vagrantfile.j2
-        dest: Vagrantfile
+    - import_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        tasks_from: vagrantfile
 
     - name: Refresh inventory to load newly generated ansible inventory
       meta: refresh_inventory

@@ -3,12 +3,12 @@
   become: yes
   tasks:
     - import_role:
-        name: ansible_roles/roles/ansible-ca
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ca
         tasks_from: create-ca-and-certs
 
 - hosts: all
   become: yes
   tasks:
     - import_role:
-        name: ansible_roles/roles/ansible-ca
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ca
         tasks_from: deploy-certs-to-hosts

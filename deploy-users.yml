@@ -88,7 +88,7 @@
   become: yes
   tasks:
     - include_role:
-        name: ansible_roles/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
         tasks_from: deploy-new-ranger-user
       with_items:
         - "{{ users }}"
@@ -98,7 +98,7 @@
   become: yes
   tasks:
     - include_role:
-        name: ansible_roles/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
         tasks_from: deploy-ranger-hdfs-policy
       with_items:
         - "{{ user_hdfs_policies }}"
@@ -108,7 +108,7 @@
   become: yes
   tasks:
     - include_role:
-        name: ansible_roles/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
         tasks_from: deploy-ranger-hive-policy
       with_items:
         - "{{ user_hive_policies }}"
@@ -149,7 +149,7 @@
 
     - name: Write users' public ssh key to users' authorized_key files
       include_role:
-        name: ansible_roles/roles/ansible-ssh-deployment
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/ansible-ssh-deployment
         tasks_from: add-user-ssh-to-authorized_keys-file
       with_items: "{{ groups['all'] }}"
       loop_control:
