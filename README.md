@@ -27,6 +27,8 @@ ansible-playbook deploy-all.yml
 - [HDFS NN Master 02](https://master-02.tdp:9871/dfshealth.html)
 - [YARN RM Master 01](https://master-01.tdp:8090/cluster/apps)
 - [YARN RM Master 02](https://master-02.tdp:8090/cluster/apps)
+- [HBase Master 01](https://master-01.tdp:16010/master-status)
+- [HBase Master 02](https://master-02.tdp:16010/master-status)
 - [Ranger Admin](https://master-02.tdp:6182/index.html)
 
 ## Customised deployment
