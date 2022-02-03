@@ -28,7 +28,7 @@
         state: directory
         owner: "{{ item.username }}"
         group: "{{ item.username }}"
-        mode: 600
+        mode: "770"
       with_items: "{{ users }}"
 
     - name: Generate user keytab
