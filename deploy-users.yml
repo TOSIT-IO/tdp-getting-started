@@ -113,44 +113,13 @@
       with_items:
         - "{{ user_hive_policies }}"
 
-- hosts: all
-  become: yes
+- hosts: edge-01
   tasks:
-    - name: Ensure remote ~/.ssh dir exists
-      file:
-        path: /home/{{ item.username }}/.ssh/
-        state: directory
-        owner: "{{ item.username }}"
-        group: "{{ item.username }}"
-        mode: 660
-      with_items: "{{ users }}"
-    
-    - name: Generate an OpenSSH rsa keypair
-      shell: "ssh-keygen -t rsa -b 2048 -f '/home/{{ item.username }}/.ssh/id_rsa_{{ item.username }}_{{ inventory_hostname }}' -P '' -C '{{ item.username }} {{ inventory_hostname }} private key'"
-      with_items: "{{ users }}"
-
-    - name: Assign private_key permissions
-      file:
-        path: "/home/{{ item.username }}/.ssh/id_rsa_{{ item.username }}_{{ inventory_hostname }}"
-        mode: "660"
-      with_items: "{{ users }}"
-
-    - name: Restart sshd
-      service:
-        name: sshd
-        state: restarted
-
-    - name: Download users' public ssh keys to control node 
-      fetch:
-        src: '/home/{{ item.username }}/.ssh/id_rsa_{{ item.username }}_{{ inventory_hostname }}.pub'
-        dest: './files/ssh/id_rsa_{{ item.username }}_{{ inventory_hostname }}.pub'
-        flat: yes
-      with_items: "{{ users }}"
-
-    - name: Write users' public ssh key to users' authorized_key files
+    - name: Deploy users' ssh
       include_role:
         name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ssh-deployment
-        tasks_from: add-user-ssh-to-authorized_keys-file
-      with_items: "{{ groups['all'] }}"
-      loop_control:
-        loop_var: inventory_hostname_loop_iteration
+      vars:
+        owner: "{{ item.username }}"
+      with_items:
+        - "{{ users }}"
+  tags: ssh
