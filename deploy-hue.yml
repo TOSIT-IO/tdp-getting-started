@@ -1,0 +1,7 @@
+---
+- hosts: edge-01
+  become: yes
+  tasks:
+    - name: Install hue
+      include_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp/roles/hue
