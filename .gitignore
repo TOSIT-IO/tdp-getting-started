@@ -7,4 +7,5 @@ test.yml
 ansible_roles/collections/ansible_collections/tosit/
 RemoveTDP.yml
 inventory/hosts
+inventory/tdp_vars
 Vagrantfile
