@@ -10,7 +10,7 @@ hive_site:
   hive.zookeeper.quorum: "{{ hadoop_ha_zookeeper_quorum }}"
   javax.jdo.option.ConnectionUserName: hive
   javax.jdo.option.ConnectionPassword: hive
-  hive.server2.enable.doAs: no
+  hive.server2.enable.doAs: yes
   # Support hive concurrency
   hive.support.concurrency: yes
   hive.txn.manager: org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager
