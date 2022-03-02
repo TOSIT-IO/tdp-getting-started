@@ -12,7 +12,7 @@ hosts:
 
 # TDP
 realm: REALM.TDP
-num_vagrant_processes: 7
+num_vagrant_processes: 4
 
 # Ranger
 ranger_admin_password: RangerAdmin123
@@ -67,6 +67,14 @@ ranger_usync_restart: always
 spark_hs_restart: always
 zk_restart: always
 
+
+hdfs_site:
+  dfs.webhdfs.enabled: yes
+  hadoop.proxyuser.hue.hosts: "*"
+  hadoop.proxyuser.hue.groups: "*"
+
+
+
 # oozie
 oozie_user: oozie
 oozie_release: oozie-5.3.0-TDP-0.1.0-SNAPSHOT
@@ -116,6 +124,12 @@ users:
     password: tdp_user123
   - username: smoke_user
     password: smoke_user123
+  - username: hue_test_user1
+    password: hue-user123
+    group: hue_test_user1
+  - username: hue_test_user2
+    password: hue-user123
+    group: hue_test_user2
 
 # Depends on hdfs service
 user_hdfs_policies:
@@ -157,8 +171,72 @@ user_hdfs_policies:
       path:
         isExcludes: false
         isRecursive: true
-        values: ["/user/smoke_user"]
+        values: ["hdfs:////user/smoke_user"]
     service: hdfs-tdp
+  - name: "hue_test_user1-hdfs-home-policy"
+    description: "tdp_user access to hdfs:////user/hue_test_user1"
+    isAuditEnabled: true
+    isEnabled: true
+    policyItems:
+      - accesses:
+          - { isAllowed: true, type: read }
+          - { isAllowed: true, type: write }
+          - { isAllowed: true, type: execute }
+        conditions: []
+        # delegateAdmin: true
+        groups: ["hue_test_user1"]
+        users: ["hue_test_user1"]
+    repositoryType: hdfs
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ["hdfs:////user/hue_test_user1"]
+    service: hdfs-tdp
+  - name: "hue_test_user2-hdfs-home-policy"
+    description: "tdp_user access to hdfs:////user/hue_test_user2"
+    isAuditEnabled: true
+    isEnabled: true
+    policyItems:
+      - accesses:
+          - { isAllowed: true, type: read }
+          - { isAllowed: true, type: write }
+          - { isAllowed: true, type: execute }
+        conditions: []
+        delegateAdmin: true
+        groups: ["hue_test_user2"]
+        users: ["hue_test_user2"]
+    repositoryType: hdfs
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ["hdfs:////user/hue_test_user2"]
+    service: hdfs-tdp
+# Depends on hdfs service (hive policies )
+# # Depends on hdfs service (hive policies )
+# hive_hdfs_policies:
+#   - name: hive-hdfs-user-policy
+#     description: Necessary oozie access to hdfs:////user
+#     isAuditEnabled: true
+#     isEnabled: true
+#     policyItems:
+#     - accesses:
+#       - {isAllowed: true, type: read}
+#       - {isAllowed: true, type: write}
+#       - {isAllowed: true, type: execute}
+#       conditions: []
+#       delegateAdmin: true
+#       groups: []
+#       users: ["{{oozie_user}}"]
+#     repositoryType: hdfs
+#     resources:
+#       path:
+#         isExcludes: false
+#         isRecursive: true
+#         values: ["/user"]
+#     service: hdfs-tdp
+
 
 # Depends on hive service
 user_hive_policies:
@@ -181,6 +259,72 @@ user_hive_policies:
     policyItems:
       - users: [tdp_user]
         groups: []
+        delegateAdmin: true
+        accesses:
+          - { isAllowed: true, type: select }
+          - { isAllowed: true, type: update }
+          - { isAllowed: true, type: Create }
+          - { isAllowed: true, type: Drop }
+          - { isAllowed: true, type: Alter }
+          - { isAllowed: true, type: Index }
+          - { isAllowed: true, type: Lock }
+          - { isAllowed: true, type: All }
+          - { isAllowed: true, type: Read }
+          - { isAllowed: true, type: Write }
+          - { isAllowed: true, type: Refresh }
+        conditions: []
+  - name: "hue_test_user1-hive-policy"
+    description: Hive Client Check
+    service: hive-tdp
+    repositoryType: hive
+    isAuditEnabled: true
+    isEnabled: true
+    resources:
+      column:
+        isExcludes: false
+        values: ["*"]
+      database:
+        isExcludes: false
+        values: ["hue_test_user1"]
+      table:
+        isExcludes: false
+        values: ["*"]
+    policyItems:
+      - users: ["hue_test_user1"]
+        groups: ["hue_test_user1"]
+        # delegateAdmin: true
+        accesses:
+          - { isAllowed: true, type: select }
+          - { isAllowed: true, type: update }
+          - { isAllowed: true, type: Create }
+          - { isAllowed: true, type: Drop }
+          - { isAllowed: true, type: Alter }
+          - { isAllowed: true, type: Index }
+          - { isAllowed: true, type: Lock }
+          - { isAllowed: true, type: All }
+          - { isAllowed: true, type: Read }
+          - { isAllowed: true, type: Write }
+          - { isAllowed: true, type: Refresh }
+        conditions: []
+  - name: "hue_test_user2-hive-policy"
+    description: Hive Client Check
+    service: hive-tdp
+    repositoryType: hive
+    isAuditEnabled: true
+    isEnabled: true
+    resources:
+      column:
+        isExcludes: false
+        values: ["*"]
+      database:
+        isExcludes: false
+        values: ["hue_test_user2"]
+      table:
+        isExcludes: false
+        values: ["*"]
+    policyItems:
+      - users: ["hue_test_user2"]
+        groups: ["hue_test_user2"]
         delegateAdmin: true
         accesses:
           - { isAllowed: true, type: select }
