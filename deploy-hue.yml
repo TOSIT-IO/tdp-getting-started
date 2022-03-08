@@ -1,11 +1,3 @@
 ---
-
 - name: Deploy Hue
   import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hue.yml
-
-# - name: update hue.ini
-#   import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hue-update-hue.ini.yml
-
-
-# - name: Deploy hue users
-#   import_playbook: deploy-users.yml

@@ -11,10 +11,14 @@ TDP_ROLES_EXTRA_PATH=ansible_roles/collections/ansible_collections/tosit/tdp-ext
 # Create directories
 mkdir -p logs
 mkdir -p files
+mkdir -p inventory/tdp_vars
 
 # Clone ansible-tdp-roles repository (doesn't fail iof not known host)
 [[ -d "$TDP_ROLES_PATH" ]] || git clone -o StrictHostKeyChecking=no git@github.com:TOSIT-IO/ansible-tdp-roles.git "$TDP_ROLES_PATH"
 [[ -d "$TDP_ROLES_EXTRA_PATH" ]] || git clone -o StrictHostKeyChecking=no git@github.com:TOSIT-IO/tdp-collection-extras.git "$TDP_ROLES_EXTRA_PATH"
+
+# Symlink the tdp_vars_defaults files to the inventory dir
+ln -s ansible_roles/collections/ansible_collections/tosit/tdp/tdp_vars_defaults inventory/tdp_vars
 
 # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-FR/ansible-tdp-roles/pull/57)
 ln -s $PWD/files $TDP_ROLES_PATH/playbooks/files
