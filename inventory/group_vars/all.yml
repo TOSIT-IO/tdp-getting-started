@@ -68,12 +68,11 @@ spark_hs_restart: always
 zk_restart: always
 
 
-hdfs_site:
+# core-site.xml - common
+core_site:
   dfs.webhdfs.enabled: yes
   hadoop.proxyuser.hue.hosts: "*"
   hadoop.proxyuser.hue.groups: "*"
-
-
 
 # oozie
 oozie_user: oozie
@@ -95,6 +94,14 @@ ranger_hdfs_install_properties:
 ranger_hive_install_properties:
   POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
   REPOSITORY_NAME: hive-tdp
+
+# mapred
+mapred_site:
+  # Enable hue to fetch app logs and display in hue ui
+  # https://groups.google.com/a/cloudera.org/g/hue-user/c/QClHvlZu_20
+  mapreduce.cluster.acls.enabled: "true"
+  mapreduce.job.acl-view-job: "mapred,hue"
+  mapreduce.job.acl-modify-job: "mapred,hue"
 
 # Spark
 spark_defaults:
@@ -213,30 +220,6 @@ user_hdfs_policies:
         isRecursive: true
         values: ["hdfs:////user/hue_test_user2"]
     service: hdfs-tdp
-# Depends on hdfs service (hive policies )
-# # Depends on hdfs service (hive policies )
-# hive_hdfs_policies:
-#   - name: hive-hdfs-user-policy
-#     description: Necessary oozie access to hdfs:////user
-#     isAuditEnabled: true
-#     isEnabled: true
-#     policyItems:
-#     - accesses:
-#       - {isAllowed: true, type: read}
-#       - {isAllowed: true, type: write}
-#       - {isAllowed: true, type: execute}
-#       conditions: []
-#       delegateAdmin: true
-#       groups: []
-#       users: ["{{oozie_user}}"]
-#     repositoryType: hdfs
-#     resources:
-#       path:
-#         isExcludes: false
-#         isRecursive: true
-#         values: ["/user"]
-#     service: hdfs-tdp
-
 
 # Depends on hive service
 user_hive_policies:

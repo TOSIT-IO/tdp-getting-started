@@ -11,6 +11,7 @@ hive_site:
   javax.jdo.option.ConnectionUserName: hive
   javax.jdo.option.ConnectionPassword: hive
   hive.server2.enable.doAs: yes
+  hive.server2.enable.impersonation: yes
   # Support hive concurrency
   hive.support.concurrency: yes
   hive.txn.manager: org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager
