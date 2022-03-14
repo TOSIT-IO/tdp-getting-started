@@ -18,18 +18,3 @@
 
 - name: Deploy Ranger Admin and Usersync
   import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger.yml
-
-- name: Deploy Ranger HDFS plugins
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hdfs_ranger.yml
-
-- name: Deploy Ranger YARN plugins
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/yarn_ranger.yml
-
-- name: Deploy Ranger HBase plugin
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hbase_ranger.yml
-
-- name: Deploy Ranger Phoenix policy
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hbase_phoenix_ranger_policy.yml
-
-- name: Deploy Ranger Hive plugin
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hive_ranger.yml
