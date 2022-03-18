@@ -1,3 +1,3 @@
 ---
 - name: Deploy Hue
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hue.yml
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp-extra/playbooks/hue.yml
