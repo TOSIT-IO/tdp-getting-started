@@ -15,7 +15,7 @@ mkdir -p inventory/tdp_vars
 mkdir -p inventory/tdp_extra_vars
 
 # Clone ansible-tdp-roles repository (doesn't fail iof not known host)
-[[ -d "$TDP_ROLES_PATH" ]] || git clone -o StrictHostKeyChecking=no git@github.com:TOSIT-IO/ansible-tdp-roles.git "$TDP_ROLES_PATH"
+[[ -d "$TDP_ROLES_PATH" ]] || git clone --branch hue-extra -o StrictHostKeyChecking=no git@github.com:TOSIT-IO/ansible-tdp-roles.git "$TDP_ROLES_PATH"
 [[ -d "$TDP_ROLES_EXTRA_PATH" ]] || git clone --branch hue -o StrictHostKeyChecking=no git@github.com:TOSIT-IO/tdp-collection-extras.git "$TDP_ROLES_EXTRA_PATH"
 
 # Symlink the tdp_vars_defaults files to the inventory dir
