@@ -9,3 +9,5 @@ RemoveTDP.yml
 inventory/hosts
 inventory/tdp_vars
 Vagrantfile
+inventory/tdp_vars
+inventory/tdp_extra_vars

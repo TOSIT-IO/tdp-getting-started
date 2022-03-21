@@ -70,7 +70,7 @@
         dest: /home/tdp_user/hive-test
         content: |
           DROP DATABASE IF EXISTS tdp_user_db CASCADE;
-          CREATE DATABASE IF NOT EXISTS tdp_user_db;
+          CREATE DATABASE IF NOT EXISTS tdp_user_db LOCATION '/user/tdp_user';
           SHOW DATABASES;
           USE tdp_user_db;
           SHOW TABLES;
