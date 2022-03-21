@@ -11,8 +11,6 @@ TDP_ROLES_EXTRA_PATH=ansible_roles/collections/ansible_collections/tosit/tdp-ext
 # Create directories
 mkdir -p logs
 mkdir -p files
-mkdir -p inventory/tdp_vars
-mkdir -p inventory/tdp_extra_vars
 
 # Clone ansible-tdp-roles repository (doesn't fail iof not known host)
 [[ -d "$TDP_ROLES_PATH" ]] || git clone --branch hue-ansible-tdp-role -o StrictHostKeyChecking=no git@github.com:TOSIT-IO/ansible-tdp-roles.git "$TDP_ROLES_PATH"
@@ -24,7 +22,7 @@ ln -s $PWD/files $TDP_ROLES_EXTRA_PATH/playbooks/files
 
 # Copy the default tdp_vars
 [[ -d inventory/tdp_vars ]] || cp -r ansible_roles/collections/ansible_collections/tosit/tdp/tdp_vars_defaults inventory/tdp_vars
-[[ -d inventory/tdp_extra_vars ]] || cp -r ansible_roles/collections/ansible_collections/tosit/tdp/tdp_extra_vars_defaults inventory/tdp_extra_vars
+[[ -d inventory/tdp_extra_vars ]] || cp -r ansible_roles/collections/ansible_collections/tosit/tdp-extra/tdp_extra_vars_defaults inventory/tdp_extra_vars
 
 # Fetch the TDP .tar.gz releases (once we go open source)
 # https://github.com/TOSIT-FR/hadoop/releases/download/hadoop-project-dist-3.1.1-TDP-0.1.0-SNAPSHOT/hadoop-3.1.1-TDP-0.1.0-SNAPSHOT.tar.gz
