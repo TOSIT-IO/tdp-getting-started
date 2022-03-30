@@ -5,13 +5,9 @@ ranger_admin_password: RangerAdmin123
 
 ranger_jdbc_connector_package: postgresql-jdbc
 install_properties:
-  #setup_mode: postgres
+  DB_FLAVOR: postgres
+  SQL_CONNECTOR_JAR: /usr/share/java/postgresql-jdbc.jar
   db_host: "{{groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
+  db_name: ranger
   db_user: rangeradmin
   db_password: rangeradmin
-  DB_FLAVOR: postgres
-  db_name: ranger
-  audit_store: db # deprecated but keeps the setup.sh script from requesting a solr endpoint
-  SQL_CONNECTOR_JAR: /usr/share/java/postgresql-jdbc.jar
-  db_root_user: postgres
-  db_root_password: postgres

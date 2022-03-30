@@ -30,7 +30,7 @@ ansible-playbook deploy-all.yml
 - [HBase Master 01](https://master-01.tdp:16010/master-status)
 - [HBase Master 02](https://master-02.tdp:16010/master-status)
 - [Spark History Server](https://master-03.tdp:18081/)
-- [Ranger Admin](https://master-02.tdp:6182/index.html)
+- [Ranger Admin](https://master-03.tdp:6182/index.html)
 
 ## Customised deployment
 
