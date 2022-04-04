@@ -1,97 +1,23 @@
 ---
-- name: Create new unix users accross cluster
-  hosts: all
-  become: yes
+- name: "Add defined users"
+  hosts: edge
+  strategy: linear # Do not use Mitogen
   tasks:
-    - user:
-        name: "{{ item.username }}"
-        home: "/home/{{ item.username }}/"
-        password: '{{ "{{ item.password }}" | password_hash("sha512", "salt123") }}'
-      with_items: "{{ users }}"
+  - include_role:
+      name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-hadoop-user
+    vars:
+      ldap_admin_dn: cn=Manager,ou=tdp,o=tosit,c=io
+      ldap_admin_pwd: secret
+      ldap_group_base: ou=groups,c=io
+      ldap_user_base: ou=users,c=io
+      user: "{{ item.user }}"
+      password: "{{ item.password }}"
+      group: "{{ item.group }}"
+      uid: "{{ item.uid }}"
+      gid: "{{ item.gid }}"
+    with_items: "{{ users }}"
 
-- name: Create user kerberos principals
-  hosts: kdc
-  become: yes
-  tasks:
-    - name: Create user principal
-      shell: |
-        kadmin -r {{ realm }} -p {{ kadmin_principal }} -w {{ kadmin_password }} -q "addprinc -randkey {{ item.username }}@{{ realm }}"
-      with_items: "{{ users }}"
-
-- name: Generate and keytab for users on first edge
-  hosts: edge[0]
-  tasks:
-    - name: Ensure local keytab dir exists
-      become: yes
-      file:
-        path: /home/{{ item.username }}/.keytabs/
-        state: directory
-        owner: "{{ item.username }}"
-        group: "{{ item.username }}"
-        mode: "770"
-      with_items: "{{ users }}"
-
-    - name: Generate user keytab
-      become: yes
-      shell: |
-        kadmin -r {{ realm }} -p {{ kadmin_principal }} -w {{ kadmin_password }} -q "xst -k {{ item.username }}.principal.keytab {{ item.username }}@{{ realm }}"
-      args:
-        chdir: /home/{{ item.username }}/.keytabs/
-        creates: /home/{{ item.username }}/.keytabs/{{ item.username }}.principal.keytab
-      with_items: "{{ users }}"
-
-    - name: Pull keytabs to ansible control node
-      become: yes
-      fetch:
-        src: "/home/{{ item.username }}/.keytabs/{{ item.username }}.principal.keytab"
-        dest: ./files/keytabs/{{ item.username }}.principal.keytab
-        flat: yes
-      with_items: "{{ users }}"
-
-- name: Deploy user keytab to remote user keytabs dir
-  hosts: all
-  become: yes
-  tasks:
-    - name: Ensure keytab dir exists
-      file:
-        path: "/home/{{ item.username }}/.keytabs/"
-        state: directory
-      with_items: "{{ users }}"
-
-    - name: Copy user keytab to remote
-      copy:
-        src: "./files/keytabs/{{ item.username }}.principal.keytab"
-        dest: "/home/{{ item.username }}/.keytabs/{{ item.username }}.principal.keytab"
-        owner: "{{ item.username }}"
-      with_items: "{{ users }}"
-
-- name: Create users HDFS directories
-  hosts: hdfs_nn[0]
-  become: yes
-  tasks:
-    - name: Kinit as hdfs
-      become_user: "{{ hdfs_user }}"
-      command: "kinit -kt /etc/security/keytabs/nn.service.keytab nn/{{ groups['hdfs_nn'][0] | tosit.tdp.access_fqdn(hostvars) }}@{{ realm }}"
-
-    - name: Create home folder in HDFS
-      become_user: "{{ hdfs_user }}"
-      tosit.tdp.hdfs_file:
-        path: "/user/{{ item.username }}"
-        state: directory
-        owner: "{{ item.username }}"
-        group: "{{ item.username }}"
-        mode: "755"
-      loop: "{{ users }}"
-
-- name: Create users in Ranger
-  hosts: ranger_admin[0]
-  become: yes
-  tasks:
-    - include_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
-        tasks_from: deploy-new-ranger-user
-      with_items:
-        - "{{ users }}"
+- import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_usersync_restart.yml 
 
 - name: Create HDFS access policies in Ranger
   hosts: ranger_admin[0]
@@ -119,7 +45,7 @@
       include_role:
         name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ssh-deployment
       vars:
-        owner: "{{ item.username }}"
+        owner: "{{ item.user }}"
       with_items:
         - "{{ users }}"
   tags: ssh
