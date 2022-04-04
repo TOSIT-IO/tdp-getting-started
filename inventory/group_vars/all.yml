@@ -19,7 +19,7 @@ ranger_admin_password: RangerAdmin123
 
 # Kerberos
 kadmin_principal: admin/admin
-kadmin_password: admin
+kadmin_password: admin123
 kadmind_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}"
 kdc_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }} "
 

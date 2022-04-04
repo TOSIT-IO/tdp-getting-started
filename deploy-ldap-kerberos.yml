@@ -1,0 +1,17 @@
+---
+- hosts: kdc
+  tasks:
+    - import_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ldap-kerberos
+
+- hosts: all
+  tasks:
+    - import_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ldap-kerberos
+        tasks_from: sssd.yml
+
+- hosts: all
+  tasks:
+    - import_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ldap-kerberos
+        tasks_from: install_kerberos_client.yml
