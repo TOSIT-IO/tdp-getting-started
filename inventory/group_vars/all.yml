@@ -110,12 +110,18 @@ yarn_site:
 # Zookeeper
 hadoop_ha_zookeeper_quorum: "{{ groups['zk'] |  map('tosit.tdp.access_fqdn', hostvars) |  map('regex_replace', '^(.*)$', '\\1:2181') | join(',') | trim}}"
 
-# User management
+# User management (users created in deploy-users.yml)
 users:
-  - username: tdp_user
+  - user: tdp_user
     password: tdp_user123
-  - username: smoke_user
+    group: tdp_user
+    uid: 1101
+    gid: 1101
+  - user: smoke_user
     password: smoke_user123
+    group: smoke_user
+    uid: 1102
+    gid: 1102
 
 # Depends on hdfs service
 user_hdfs_policies:
