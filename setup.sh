@@ -14,7 +14,7 @@ mkdir -p logs
 mkdir -p files
 
 # Clone ansible-tdp-roles repository (doesn't fail iof not known host)
-[[ -d "$TDP_ROLES_PATH" ]] || git clone --branch master -o origin git@github.com:TOSIT-IO/ansible-tdp-roles.git "$TDP_ROLES_PATH"
+[[ -d "$TDP_ROLES_PATH" ]] || git clone --branch master -o origin git@github.com:TOSIT-IO/tdp-collection.git "$TDP_ROLES_PATH"
 [[ -d "$TDP_ROLES_EXTRA_PATH" ]] || git clone --branch hue -o origin git@github.com:TOSIT-IO/tdp-collection-extras.git "$TDP_ROLES_EXTRA_PATH"
 
 # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-FR/ansible-tdp-roles/pull/57)
