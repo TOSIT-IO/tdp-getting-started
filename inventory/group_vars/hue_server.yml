@@ -1,1 +1,8 @@
 ---
+hue_desktop_db:
+  engine: postgresql_psycopg2
+  host: "{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}"
+  port: 5432
+  user: hue
+  password: hue
+  name: hue

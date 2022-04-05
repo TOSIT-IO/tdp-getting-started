@@ -1,3 +1,109 @@
 ---
+- hosts: postgresql
+  name: Provision postgresql user for hue
+  become: yes
+  become_user: postgres
+  tasks:
+    - tosit.tdp.resolve:
+        node_name: hue_service
+    - include_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        tasks_from: deploy-new-postgres-role
+      with_items:
+        - "{{ hue_user }}"
+    - meta: clear_facts
+
+- hosts: hue_server
+  become: yes
+  tasks:
+    - name: Install Hue Dependencies
+      # https://docs.gethue.com/administrator/installation/dependencies/
+      yum:
+        name:
+          - ant
+          - asciidoc
+          - cyrus-sasl-devel
+          - cyrus-sasl-gssapi
+          - cyrus-sasl-plain
+          - gcc
+          - gcc-c++
+          - git
+          - krb5-devel
+          - libffi-devel
+          - libxml2-devel
+          - libxslt-devel
+          - make
+          - mysql
+          - mysql-devel
+          - openldap-devel
+          - python-devel
+          - sqlite-devel
+          - postgresql-devel
+          - gmp-devel
+          - maven
+          - openssl-devel
+        state: present
+
+    - name: Check python installed
+      command: |
+        python --version
+      register: python_version
+
+    - name: Stop if python 2.7.5 not available
+      meta: end_play
+      when: "'python 2.7.5' not in {{ python_version.stderr_lines | lower }}"
+
+    - name: Ensure pip installed
+      command: pip --version
+      register: pip_version
+      failed_when: no
+
+    - name: Install pip
+      shell: |
+        yum install -y epel-release
+        yum install -y python-pip
+      when: pip_version.rc != 0
+
+    - name: Ensure python27 compatible version of psycopg2
+      shell: |
+        pip uninstall psycopg2 --yes
+        pip install psycopg2==2.7.4
+    - name: Ensure NPM installed
+      shell: |
+        curl -sL https://rpm.nodesource.com/setup_14.x | bash -
+        yum install -y nodejs
+        npm install --global npm
+
+    - name: Ensure python27 compatible version of psycopg2
+      shell: |
+        pip uninstall psycopg2 --yes
+        pip install psycopg2==2.7.4
+
+    - name: Ensure NPM installed
+      shell: |
+        curl -sL https://rpm.nodesource.com/setup_14.x | bash -
+        yum install -y nodejs
+        npm install --global npm
+
+- hosts: ranger_admin[0]
+  become: yes
+  tasks:
+    - tosit.tdp.resolve:
+        node_name: hue_service
+    - name: "Create {{ hue_user }} in Ranger"
+      include_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        tasks_from: deploy-new-ranger-user
+      with_items:
+        - username: "{{ hue_user }}"
+          password: "{{ hue_user_pass }}"
+    - name: Create hue user HDFS access policies in Ranger
+      include_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        tasks_from: deploy-ranger-hdfs-policy
+      with_items:
+        - "{{ hue_user_hdfs_policy }}"
+    - meta: clear_facts
+
 - name: Deploy Hue
   import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp-extra/playbooks/hue.yml
