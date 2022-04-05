@@ -16,7 +16,7 @@ The Ansible `host` file and the `Vagrantfile` will both be generated using the `
 
 ```bash
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
-cd getting-started # Execute all commands from here
+cd tdp-getting-started # Execute all commands from here
 sh ./setup.sh # Setup local env and clone latest tdp-ansible-roles
 # MANUAL STEP: Copy binaries to files directory in project root
 ansible-playbook deploy-all.yml
@@ -55,7 +55,6 @@ The first action in `deploy-all.yml` is to run the `launch-VMs.sh` script which 
 
 **Important:**
 
-- To change the static IPs you must update **both** the `Vagrantfile` and the `inventory/hosts` files
 - Update the machine resources assigned to the VMs in the `Vagrantfile` according to you machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
 
 _Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`_
