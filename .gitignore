@@ -1,6 +1,7 @@
 pythonenv/
 .vagrant/
 *.log
+.DS_Store
 files/
 test.yml
 .vscode/
