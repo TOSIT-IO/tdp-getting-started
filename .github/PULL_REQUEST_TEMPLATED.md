@@ -16,3 +16,12 @@ Fixes #
 Example: `"I was not sure if it is the right way to do but..."
 -->
 
+To make clear that you license your contribution under
+the [Apache License Version 2.0, January 2004](http://www.apache.org/licenses/LICENSE-2.0) and that you give permission to [TOSIT](https://www.tosit.io/),
+you have to acknowledge this by using the following check-box.
+
+ - [ ] I hereby declare this contribution to be licenced under the [Apache License Version 2.0, January 2004](http://www.apache.org/licenses/LICENSE-2.0)
+
+ - [ ] I hereby agree to grant [TOSIT](https://www.tosit.io/) a copyright license to use my contributions.
+
+
