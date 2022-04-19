@@ -24,3 +24,5 @@ https://github.com/TOSIT-IO/phoenix/releases/download/phoenix-hbase-2.1-5.1.3-TD
 https://github.com/TOSIT-IO/phoenix-queryserver/releases/download/phoenix-queryserver-6.0.0-TDP-0.1.0-SNAPSHOT/phoenix-queryserver-6.0.0-TDP-0.1.0-SNAPSHOT-bin.tar.gz
 # solr
 https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.3/solr-7.7.3.tgz?action=download
+# jmx prometheus
+https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.16.1/jmx_prometheus_javaagent-0.16.1.jar
