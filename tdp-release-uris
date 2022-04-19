@@ -28,3 +28,5 @@ https://github.com/TOSIT-FR/spark/releases/download/spark-2.3.5-TDP-0.1.0-SNAPSH
 https://github.com/TOSIT-FR/tez/releases/download/tez-0.9.1-TDP-0.1.0-SNAPSHOT/tez-0.9.1-TDP-0.1.0-SNAPSHOT.tar.gz
 # solr
 https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.3/solr-7.7.3.tgz?action=download
+# zookeeper
+https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
