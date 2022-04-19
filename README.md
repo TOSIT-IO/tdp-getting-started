@@ -255,7 +255,7 @@ Deploys HBase masters, regionservers, rest and clients to the `[hbase_master]`, 
 ansible-playbook deploy-hbase.yml
 ```
 
-As `tdp_user` on an `[hbase_client]` host, obtain a Kerberos TGT with the command `kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP` and access the HBase shell with the command `/opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell`.
+As `tdp_user` on an `[hbase_client]` host, obtain a Kerberos TGT with the command `kinit -kt ~/tdp_user.keytabtdp_user@REALM.TDP` and access the HBase shell with the command `/opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell`.
 
 Commands such as the below can be used to test your HBase deployment:
 
