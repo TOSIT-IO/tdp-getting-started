@@ -2,13 +2,13 @@
 # Cluster VMs' ip, hastname, domain, cpus and memory (generates VM deployment config)
 hosts:
   # |------ip-------|-hostname-|domain|cpus|memory|
-  - ['192.168.32.10', worker-01, tdp, 2, 2048]
-  - ['192.168.32.11', worker-02, tdp, 2, 2048]
-  - ['192.168.32.12', worker-03, tdp, 2, 2048]
-  - ['192.168.32.13', master-01, tdp, 3, 3072]
-  - ['192.168.32.14', master-02, tdp, 3, 3072]
-  - ['192.168.32.15', master-03, tdp, 3, 3072]
-  - ['192.168.32.16', edge-01, tdp, 2, 2048]
+  - ['192.168.56.10', worker-01, tdp, 2, 2048]
+  - ['192.168.56.11', worker-02, tdp, 2, 2048]
+  - ['192.168.56.12', worker-03, tdp, 2, 2048]
+  - ['192.168.56.13', master-01, tdp, 3, 3072]
+  - ['192.168.56.14', master-02, tdp, 3, 3072]
+  - ['192.168.56.15', master-03, tdp, 3, 3072]
+  - ['192.168.56.16', edge-01, tdp, 2, 2048]
 
 # TDP
 realm: REALM.TDP
