@@ -29,10 +29,13 @@ ansible-playbook deploy-all.yml
 - [HDFS NN Master 02](https://master-02.tdp:9871/dfshealth.html)
 - [YARN RM Master 01](https://master-01.tdp:8090/cluster/apps)
 - [YARN RM Master 02](https://master-02.tdp:8090/cluster/apps)
+- [MapReduce Job History Server](https://master-03.tdp:19890/jobhistory)
 - [HBase Master 01](https://master-01.tdp:16010/master-status)
 - [HBase Master 02](https://master-02.tdp:16010/master-status)
 - [Spark History Server](https://master-03.tdp:18081/)
 - [Ranger Admin](https://master-03.tdp:6182/index.html)
+
+**Note:** All the WebUIs are Kerberized, you need to have a working Kerberos client on your host, configure the KDC in your `/etc/krb5.conf` file and obtain a valid ticket. You can also access the WebUIs through [Knox](#knox).
 
 ## Customised deployment
 
@@ -267,6 +270,25 @@ put 'testTable', 'row1', 'cf:testColumn', 'testValue'
 disable 'testTable'
 drop 'testTable'
 ```
+
+**Knox**
+
+Deploys Knox Gateway on the `[knox]` Ansible group:
+
+```
+ansible-playbook deploy-knox.yml
+```
+
+You can then access the WebUIs of the TDP services through Knox:
+
+- [HDFS NN](https://edge-01.tdp:8443/gateway/tdpldap/hdfs)
+- [YARN RM](https://edge-01.tdp:8443/gateway/tdpldap/yarn)
+- [MapReduce Job History Server](https://edge-01.tdp:8443/gateway/tdpldap/jobhistory)
+- [HBase Master](https://edge-01.tdp:8443/gateway/tdpldap/hbase/webui/master/master-status?host=master-01.tdp&port=16010)
+- [Spark History Server](https://edge-01.tdp:8443/gateway/tdpldap/sparkhistory)
+- [Ranger Admin](https://edge-01.tdp:8443/gateway/tdpldap/ranger)
+
+_Note: You can login to Knox usign the `tdp_user` that is created in the next step.
 
 **Create Cluster Users**
 
