@@ -37,7 +37,7 @@
       delegate_to: "{{ groups['edge'][0] }}"
       become_user: tdp_user
       shell: |
-        kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+        kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
         echo "This is the first line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -put - /user/tdp_user/testFile
         echo "This is the second (appended) line." | /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -appendToFile - /user/tdp_user/testFile
         /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf dfs -cat /user/tdp_user/testFile
@@ -53,9 +53,8 @@
 
     - name: cat written contents from another node
       delegate_to: "{{ groups['hdfs_nn'][0] }}"
-      become_user: tdp_user
       shell: |
-        kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+        kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
         /opt/tdp/hadoop/bin/hdfs --config /etc/hadoop/conf.nn dfs -cat /user/tdp_user/testFile
       register: _result
       tags:
@@ -88,7 +87,7 @@
       become: yes
       become_user: tdp_user
       shell: |
-        kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+        kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
         export hive_truststore_password=Truststore123!
         echo '!run /home/tdp_user/hive-test' | /opt/tdp/hive/bin/hive --config /etc/hive/conf.s2 --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
       register: _result
@@ -109,7 +108,7 @@
     become: yes
     become_user: tdp_user
     shell: |
-      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
       echo 'list' | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0
@@ -120,7 +119,7 @@
     become: yes
     become_user: tdp_user
     shell: |
-      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
       echo 'list_namespace' | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0
@@ -131,7 +130,7 @@
     become: yes
     become_user: tdp_user
     shell: |
-      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
       echo "create 'testTable', 'cf' " | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0
@@ -142,7 +141,7 @@
     become: yes
     become_user: tdp_user
     shell: |
-      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
       echo "put 'testTable', 'row1', 'cf:testColumn', 'testValue'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0
@@ -153,7 +152,7 @@
     become: yes
     become_user: tdp_user
     shell: |
-      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
       echo "disable 'testTable'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0
@@ -164,7 +163,7 @@
     become: yes
     become_user: tdp_user
     shell: |
-      kinit -kt /home/tdp_user/.keytabs/tdp_user.principal.keytab tdp_user@REALM.TDP
+      kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
       echo "drop 'testTable'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0

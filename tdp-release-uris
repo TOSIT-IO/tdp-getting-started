@@ -1,0 +1,32 @@
+# hadoop
+https://github.com/TOSIT-FR/hadoop/releases/download/hadoop-project-dist-3.1.1-TDP-0.1.0-SNAPSHOT/hadoop-3.1.1-TDP-0.1.0-SNAPSHOT.tar.gz
+# hbase
+https://github.com/TOSIT-IO/hbase/releases/download/hbase-2.1.10-TDP-0.1.0-SNAPSHOT/hbase-2.1.10-TDP-0.1.0-SNAPSHOT-bin.tar.gz
+# hive
+https://github.com/TOSIT-FR/hive/releases/download/apache-hive-metastore-3.1.3-TDP-0.1.0-SNAPSHOT/apache-hive-3.1.3-TDP-0.1.0-SNAPSHOT-bin.tar.gz
+# jmx prometheus
+https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.16.1/jmx_prometheus_javaagent-0.16.1.jar
+# phoenix hbase
+https://github.com/TOSIT-IO/phoenix/releases/download/phoenix-hbase-2.1-5.1.3-TDP-0.1.0-SNAPSHOT/phoenix-hbase-2.1-5.1.3-TDP-0.1.0-SNAPSHOT-bin.tar.gz
+# phoenix queryserver
+https://github.com/TOSIT-IO/phoenix-queryserver/releases/download/phoenix-queryserver-6.0.0-TDP-0.1.0-SNAPSHOT/phoenix-queryserver-6.0.0-TDP-0.1.0-SNAPSHOT-bin.tar.gz
+# ranger
+https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-admin.tar.gz
+# ranger hdfs plugin
+https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-hdfs-plugin.tar.gz
+# ranger hive plugin
+https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-hive-plugin.tar.gz
+# ranger yarn plugin
+https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-yarn-plugin.tar.gz
+# ranger hbase plugin
+https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-hbase-plugin.tar.gz
+# ranger usersync plugin
+https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-usersync.tar.gz
+# spark
+https://github.com/TOSIT-FR/spark/releases/download/spark-2.3.5-TDP-0.1.0-SNAPSHOT/spark-2.3.5-TDP-0.1.0-SNAPSHOT-bin-tdp.tgz
+# tez
+https://github.com/TOSIT-FR/tez/releases/download/tez-0.9.1-TDP-0.1.0-SNAPSHOT/tez-0.9.1-TDP-0.1.0-SNAPSHOT.tar.gz
+# solr
+https://www.apache.org/dyn/closer.lua/lucene/solr/7.7.3/solr-7.7.3.tgz?action=download
+# zookeeper
+https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
