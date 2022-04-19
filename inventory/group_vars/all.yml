@@ -12,7 +12,7 @@ hosts:
 
 # TDP
 realm: REALM.TDP
-num_vagrant_processes: 7
+num_vagrant_processes: 4
 
 # Ranger
 ranger_admin_password: RangerAdmin123
