@@ -1,6 +1,3 @@
 ---
-- name: Deploy jmx exporters
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/exporter.yml
-
 - name: Deploy HDFS
   import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hdfs.yml
