@@ -27,7 +27,7 @@ tdp_release_uris=$(sed -E '/^[[:blank:]]*(#|$)/d; s/#.*//' $PWD/tdp-release-uris
 
 # Fetch the TDP .tar.gz releases
 for tdp_release_uri in $tdp_release_uris; do
-    release_name=$(basename $tdp_release_uri)
+    release_name=$(basename $tdp_release_uri | cut -d? -f1)
     # Fetch the TDP .tar.gz releases
     [[ -f "$PWD/files/$release_name" ]] || wget $tdp_release_uri -nc -nd -O $PWD/files/$release_name
 done
