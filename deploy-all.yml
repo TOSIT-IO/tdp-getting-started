@@ -4,6 +4,7 @@
 - import_playbook: deploy-ca.yml
 - import_playbook: deploy-ldap-kerberos.yml
 - import_playbook: deploy-postgres.yml
+- import_playbook: deploy-exporter.yml
 - import_playbook: deploy-zookeeper.yml
 - import_playbook: deploy-hadoop.yml
 - import_playbook: deploy-ranger.yml
