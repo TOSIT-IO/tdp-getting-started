@@ -309,7 +309,7 @@ You can then access the WebUIs of the TDP services through Knox:
 - [Spark History Server](https://edge-01.tdp:8443/gateway/tdpldap/sparkhistory)
 - [Ranger Admin](https://edge-01.tdp:8443/gateway/tdpldap/ranger)
 
-_Note: You can login to Knox usign the `tdp_user` that is created in the next step._
+_Note: You can login to Knox using the `tdp_user` that is created in the next step._
 
 **Create Cluster Users**
 
