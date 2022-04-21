@@ -30,3 +30,6 @@ https://github.com/TOSIT-FR/tez/releases/download/tez-0.9.1-TDP-0.1.0-SNAPSHOT/t
 https://dlcdn.apache.org/lucene/solr/7.7.3/solr-7.7.3.tgz
 # zookeeper
 https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
+# knox
+https://github.com/TOSIT-IO/knox/releases/download/knox-1.6.1-TDP-0.1.0-SNAPSHOT/knox-1.6.1-TDP-0.1.0-SNAPSHOT.tar.gz
+
