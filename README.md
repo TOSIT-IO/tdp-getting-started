@@ -46,7 +46,25 @@ Each of the below sections includes a high-level explanation of each possible st
 Execute the `setup.sh` script to create the project directories needed and clone the latest ansible TDP roles.
 
 ```bash
-sh ./setup.sh
+sh ./scripts/setup.sh
+```
+
+### Configuration files generation
+
+```
+ansible-playbook generate-node-deployment-config.yml
+```
+
+This playbook will generate the `Vagrantfile` and the `inventory/hosts` file.
+
+**Important:**
+
+- Update the machine resources assigned to the VMs in the `Vagrantfile` according to your machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
+
+**Note:** The `helper.sh` script can generate the list of hosts in the cluster. Add the generated lines to your `/etc/hosts` file to resolve the local nodes from your shell or browser.
+
+```bash
+sh ./scripts/helper.sh -h
 ```
 
 ### Single command to deploy all services
@@ -55,11 +73,7 @@ sh ./setup.sh
 ansible-playbook deploy-all.yml
 ```
 
-The first action in `deploy-all.yml` is to run the `launch-VMs.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
-
-**Important:**
-
-- Update the machine resources assigned to the VMs in the `Vagrantfile` according to your machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
+The first action in `deploy-all.yml` is to run the `vagrant-up-parallel.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
 
 _Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`._
 
