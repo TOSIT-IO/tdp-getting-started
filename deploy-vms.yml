@@ -3,7 +3,7 @@
   become: False
   tasks:
     - name: Start VMs in parallel
-      command: "sh ./vagrant-up-parallel.sh {{num_vagrant_processes}}"
+      command: "sh ./scripts/vagrant-up-parallel.sh {{num_vagrant_processes}}"
 
 - hosts: all
   become: yes

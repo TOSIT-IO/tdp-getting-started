@@ -18,7 +18,7 @@ The Ansible `host` file and the `Vagrantfile` will both be generated using the `
 ```bash
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 cd tdp-getting-started # Execute all commands from here
-sh ./setup.sh # Setup local env and clone latest tdp-ansible-roles
+sh ./scripts/setup.sh # Setup local env and clone latest tdp-ansible-roles
 cp /path/to/tdp-binaries/* ./files # Copy your tdp-binaries to the ./files directory
 ansible-playbook deploy-all.yml
 ```
@@ -46,7 +46,25 @@ Each of the below sections includes a high-level explanation of each possible st
 Execute the `setup.sh` script to create the project directories needed and clone the latest ansible TDP roles.
 
 ```bash
-sh ./setup.sh
+sh ./scripts/setup.sh
+```
+
+### Configuration files generation
+
+```
+ansible-playbook generate-node-deployment-config.yml
+```
+
+This playbook will generate the `Vagrantfile` and the `inventory/hosts` file.
+
+**Important:**
+
+- Update the machine resources assigned to the VMs in the `Vagrantfile` according to your machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
+
+**Note:** The `helper.sh` script can generate the list of hosts in the cluster. Add the generated lines to your `/etc/hosts` file to resolve the local nodes from your shell or browser.
+
+```bash
+sh ./scripts/helper.sh -h
 ```
 
 ### Single command to deploy all services
@@ -55,11 +73,7 @@ sh ./setup.sh
 ansible-playbook deploy-all.yml
 ```
 
-The first action in `deploy-all.yml` is to run the `launch-VMs.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
-
-**Important:**
-
-- Update the machine resources assigned to the VMs in the `Vagrantfile` according to your machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
+The first action in `deploy-all.yml` is to run the `vagrant-up-parallel.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
 
 _Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`._
 
@@ -112,6 +126,7 @@ ansible-playbook deploy-hadoop.yml
 The following code snippets demonstrate that:
 
 - From `master-01.tdp`
+
 ```bash
 kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
 hdfs dfs -mkdir -p /user/tdp_user
@@ -119,6 +134,7 @@ hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
 ```
 
 - That `tdp_user` can access and write to its HDFS user directory:
+
   - From `edge-01.tdp`
 
   ```bash
@@ -130,6 +146,7 @@ hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
   ```
 
 - That writes using the `tdp_user` from `edge-01.tdp` can be read from `master-01.tdp`:
+
   - From `master-01.tdp`
 
   ```bash
@@ -175,14 +192,17 @@ The following code snippets:
 - Create an HDFS user directory for `tdp_user` (this block is is the same as in the deploy HDFS example above):
   - _From `master-01.tdp`:_
   ```bash
+  sudo su
   kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
   hdfs dfs -mkdir -p /user/tdp_user
   hdfs dfs -chown -R tdp_user /user/tdp_user
   ```
 - Authenticate as `tdp_user` from one of the `hive_s2` nodes and enter the Beeline client interface:
+
   - _From `edge-01.tdp`:_
+
   ```bash
-  su tdp_user
+  sudo su tdp_user
   kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
   export hive_truststore_password=Truststore123!
 
@@ -202,7 +222,7 @@ From the Beeline client, execute the following code blocks to interact with Hive
 
 ```bash
 # Create the database
-CREATE DATABASE tdp_user_db;
+CREATE DATABASE IF NOT EXISTS tdp_user_db;
 USE tdp_user_db;
 
 # Examine the database
@@ -210,10 +230,10 @@ SHOW DATABASES;
 SHOW TABLES;
 
 # Modify the database
-CREATE TABLE IF NOT EXISTS table1
- (col1 int COMMENT 'Integer Column',
- col2 string COMMENT 'String Column'
- );
+CREATE TABLE IF NOT EXISTS table1 (
+  col1 INT COMMENT 'Integer Column',
+  col2 STRING COMMENT 'String Column'
+);
 
 # Examine the database
 SHOW TABLES;
@@ -236,6 +256,7 @@ ansible-playbook deploy-spark.yml
 _Execute the following command from any node in the `[spark_client]` Ansible group to `spark-submit` an example jar from the Spark installation:_
 
 - _From `edge-01.tdp`:_
+
 ```bash
 su tdp_user
 kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
@@ -265,7 +286,7 @@ Commands such as the below can be used to test your HBase deployment:
 ```
 list
 list_namespace
-create 'testTable' 'cf'
+create 'testTable', 'cf'
 put 'testTable', 'row1', 'cf:testColumn', 'testValue'
 disable 'testTable'
 drop 'testTable'
@@ -288,7 +309,7 @@ You can then access the WebUIs of the TDP services through Knox:
 - [Spark History Server](https://edge-01.tdp:8443/gateway/tdpldap/sparkhistory)
 - [Ranger Admin](https://edge-01.tdp:8443/gateway/tdpldap/ranger)
 
-_Note: You can login to Knox usign the `tdp_user` that is created in the next step.
+_Note: You can login to Knox using the `tdp_user` that is created in the next step._
 
 **Create Cluster Users**
 
