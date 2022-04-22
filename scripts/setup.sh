@@ -6,12 +6,7 @@
 ###
 
 # Get tdp-getting-started root dir
-if [[ $(basename $PWD) == "tdp-getting-started" ]]
-then
-  root_dir=$PWD
-else
-  root_dir="$(dirname $PWD)"
-fi
+root_dir=$(echo $PWD | sed 's/tdp-getting-started.*/tdp-getting-started/')
 
 TDP_ROLES_PATH="$root_dir/ansible_roles/collections/ansible_collections/tosit/tdp"
 TDP_ROLES_EXTRA_PATH="$root_dir/ansible_roles/collections/ansible_collections/tosit/tdp-extra"
