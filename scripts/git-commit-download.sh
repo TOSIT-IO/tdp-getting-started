@@ -18,6 +18,11 @@ print_usage() {
 
 get_git_repository_commit() {
 
+  if [ "$#" -ne 3 ]; then
+  echo "Missing arguments. Exiting." >&2
+  exit 1
+  fi
+
   root_dir="$(dirname "$0")/.." # project root dir
   target_dir="$root_dir/$1"
   target_repository_url="$2"
@@ -32,5 +37,8 @@ get_git_repository_commit() {
   cp -r "/tmp/$repository_name-$target_commit/." "$target_dir"
 }
 
-print_usage
+while getopts 'h' flag; do
+  print_usage && exit 1
+done
+
 get_git_repository_commit
