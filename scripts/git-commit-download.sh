@@ -4,8 +4,7 @@
 # Bash script to download git archive
 ###
 
-root_dir="$(dirname "$0")/.." # project root dir
-target_dir="$root_dir/$1"
+target_dir="$1"
 target_repository_url="$2"
 target_commit="$3"
 archive_filename="$target_commit.zip"
