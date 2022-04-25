@@ -18,7 +18,7 @@ The Ansible `host` file and the `Vagrantfile` will both be generated using the `
 ```bash
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 cd tdp-getting-started # Execute all commands from here
-sh ./scripts/setup.sh # Setup local env and clone latest tdp-ansible-roles
+./scripts/setup.sh # Setup local env and clone latest tdp-ansible-roles
 cp /path/to/tdp-binaries/* ./files # Copy your tdp-binaries to the ./files directory
 ansible-playbook deploy-all.yml
 ```
@@ -43,10 +43,12 @@ Each of the below sections includes a high-level explanation of each possible st
 
 ### Environment Setup
 
-Execute the `setup.sh` script to create the project directories needed and clone the latest ansible TDP roles.
+Execute the `setup.sh` script to create the project directories needed and clone the latest ansible TDP roles. It also downloads the TDP binaries from their GitHub releases (e.g., [Hadoop](https://github.com/TOSIT-IO/hadoop/releases/tag/hadoop-project-dist-3.1.1-TDP-0.1.0-SNAPSHOT)).
+
+**Note:** The list of TDP binaries needed for deployment is maintained in the `scripts/tdp-release-uris.txt` file.
 
 ```bash
-sh ./scripts/setup.sh
+./scripts/setup.sh
 ```
 
 ### Configuration files generation
@@ -64,7 +66,7 @@ This playbook will generate the `Vagrantfile` and the `inventory/hosts` file.
 **Note:** The `helper.sh` script can generate the list of hosts in the cluster. Add the generated lines to your `/etc/hosts` file to resolve the local nodes from your shell or browser.
 
 ```bash
-sh ./scripts/helper.sh -h
+./scripts/helper.sh -h
 ```
 
 ### Single command to deploy all services
