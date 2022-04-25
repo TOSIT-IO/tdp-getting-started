@@ -14,7 +14,7 @@ TDP_COLLECTION_COMMIT=86f2d3f42df18a5ac07cc25e847ddaf3082be6d4
 
 # tdp-collection-extras
 TDP_COLLECTION_EXTRAS_URL=https://github.com/TOSIT-IO/tdp-collection-extras
-TDP_ROLES_EXTRA_PATH=ansible_roles/collections/ansible_collections/tosit/tdp-extra
+TDP_ROLES_EXTRA_PATH=ansible_roles/collections/ansible_collections/tosit/tdp_extra
 TDP_COLLECTION_EXTRAS_COMMIT=1035ca7f3f67275140cd15478d043b543679ec30
 
 root_dir="$(dirname "$0")/.." # project root dir
