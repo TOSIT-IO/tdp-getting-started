@@ -3,11 +3,11 @@
   become: False
   tasks:
     - import_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
         tasks_from: ansible-hosts
 
     - import_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
         tasks_from: vagrantfile
 
     - name: Refresh inventory to load newly generated ansible inventory
