@@ -14,7 +14,7 @@
   become_user: postgres
   tasks:
     - include_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
         tasks_from: deploy-new-postgres-role
       with_items:
         - hive
@@ -46,7 +46,7 @@
 #   tasks:
 #     - name: Deploy ranger hdfs policies
 #       include_role:
-#         name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+#         name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
 #         tasks_from: deploy-ranger-hdfs-policy
 #       with_items:
 #         - "{{ ranger_hdfs_policies }}"
