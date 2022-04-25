@@ -3,28 +3,28 @@
   hosts: edge
   strategy: linear # Do not use Mitogen
   tasks:
-  - include_role:
-      name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-hadoop-user
-    vars:
-      ldap_admin_dn: cn=Manager,ou=tdp,o=tosit,c=io
-      ldap_admin_pwd: secret
-      ldap_group_base: ou=groups,c=io
-      ldap_user_base: ou=users,c=io
-      user: "{{ item.user }}"
-      password: "{{ item.password }}"
-      group: "{{ item.group }}"
-      uid: "{{ item.uid }}"
-      gid: "{{ item.gid }}"
-    with_items: "{{ users }}"
+    - include_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-hadoop-user
+      vars:
+        ldap_admin_dn: cn=Manager,ou=tdp,o=tosit,c=io
+        ldap_admin_pwd: secret
+        ldap_group_base: ou=groups,c=io
+        ldap_user_base: ou=users,c=io
+        user: "{{ item.user }}"
+        password: "{{ item.password }}"
+        group: "{{ item.group }}"
+        uid: "{{ item.uid }}"
+        gid: "{{ item.gid }}"
+      with_items: "{{ users }}"
 
-- import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_usersync_restart.yml 
+- import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_usersync_restart.yml
 
 - name: Create HDFS access policies in Ranger
   hosts: ranger_admin[0]
   become: yes
   tasks:
     - include_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
         tasks_from: deploy-ranger-hdfs-policy
       with_items:
         - "{{ user_hdfs_policies }}"
@@ -34,7 +34,7 @@
   become: yes
   tasks:
     - include_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-tdp-common-actions
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
         tasks_from: deploy-ranger-hive-policy
       with_items:
         - "{{ user_hive_policies }}"
@@ -43,7 +43,7 @@
   tasks:
     - name: Deploy users' ssh
       include_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp-extra/roles/ansible-ssh-deployment
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-ssh-deployment
       vars:
         owner: "{{ item.user }}"
       with_items:

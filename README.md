@@ -140,7 +140,7 @@ hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
   - From `edge-01.tdp`
 
   ```bash
-  su tdp_user
+  sudo su tdp_user
   kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
   echo "This is the first line." | hdfs dfs -put - /user/tdp_user/testFile
   echo "This is the second (appended) line." | hdfs dfs -appendToFile - /user/tdp_user/testFile
@@ -152,7 +152,7 @@ hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
   - From `master-01.tdp`
 
   ```bash
-  su tdp_user
+  sudo su tdp_user
   kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
   hdfs dfs -cat /user/tdp_user/testFile
   ```
