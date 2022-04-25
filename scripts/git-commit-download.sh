@@ -4,6 +4,14 @@
 # Bash script to download git archive
 ###
 
+root_dir="$(dirname "$0")/.." # project root dir
+target_dir="$root_dir/$1"
+target_repository_url="$2"
+target_commit="$3"
+archive_filename="$target_commit.zip"
+repository_name="$(basename $target_repository_url)"
+archive_download_uri="$target_repository_url/archive/$archive_filename"
+
 print_usage() {
   echo """
   Usage: git-commit-download.sh <target_directory> <github_repo_url> <target_commit>
@@ -17,19 +25,6 @@ print_usage() {
 }
 
 get_git_repository_commit() {
-
-  if [ "$#" -ne 3 ]; then
-  echo "Missing arguments. Exiting." >&2
-  exit 1
-  fi
-
-  root_dir="$(dirname "$0")/.." # project root dir
-  target_dir="$root_dir/$1"
-  target_repository_url="$2"
-  target_commit="$3"
-  archive_filename="$target_commit.zip"
-  repository_name="$(basename $target_repository_url)"
-  archive_download_uri="$target_repository_url/archive/$archive_filename"
 
   wget -O "/tmp/$archive_filename" "$archive_download_uri"
   unzip -o "/tmp/$archive_filename" -d /tmp
