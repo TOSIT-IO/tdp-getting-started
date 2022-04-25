@@ -24,7 +24,6 @@ print_usage() {
 }
 
 get_git_repository_commit() {
-
   wget -O "/tmp/$archive_filename" "$archive_download_uri"
   unzip -o "/tmp/$archive_filename" -d /tmp
   mkdir -p "$target_dir"
