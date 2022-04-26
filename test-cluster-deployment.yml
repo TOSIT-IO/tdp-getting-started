@@ -60,7 +60,7 @@
       tags:
         - hdfs
 
-- hosts: "{{ groups['hive_s2'][0] }}"
+- hosts: "{{ groups['edge'][0] }}"
   become: yes
   become_user: tdp_user
   tasks: 
