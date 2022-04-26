@@ -7,8 +7,7 @@ Launch a fully-featured virtual TDP Hadoop cluster with a single command _or_ cu
 - Ansible >= 2.9.6 (to execute the playbooks)
 - Vagrant >= 2.2.19 (to launch and manage the VMs)
 - VirtualBox >= 6.1.26
-- The Python package `jmespath` (an Ansible dependency for JSON querying)
-- GitHub account with SSH configured for cloning TDP repositories
+- The Python package `jmespath` (an Ansible dependency for JSON parsing/querying)
 
 ## Quick Start
 
