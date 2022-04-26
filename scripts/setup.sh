@@ -34,12 +34,6 @@ mkdir -p files
 # Copy the default tdp_vars
 [[ -d "$(realpath "$root_dir")/inventory/tdp_vars" ]] || cp -r "$EXPANDED_TDP_ROLES_PATH/tdp_vars_defaults" "$(realpath "$root_dir")/inventory/tdp_vars"
 
-# Read the TDP releases from file
-tdp_release_uris=$(grep -P '^[^#]' <"$(realpath "$root_dir")/scripts/tdp-release-uris.txt")
-
-# Fetch the TDP .tar.gz releases
-for tdp_release_uri in $tdp_release_uris; do
-    release_name=$(basename "$tdp_release_uri")
-    # Fetch the TDP .tar.gz releases
-    [[ -f "$(realpath "$root_dir")/files/$release_name" ]] || wget "$tdp_release_uri" -nc -nd -O "$(realpath "$root_dir")/files/$release_name"
-done
+# Download tdp release binaries
+tdp_releases="$(realpath "$root_dir")/scripts/tdp-release-uris.txt"
+wget -i "$tdp_releases" -P "$(realpath "$root_dir")/files"
