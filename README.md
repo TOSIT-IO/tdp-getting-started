@@ -349,10 +349,10 @@ curl -k -u : --negotiate -X POST https://edge-01.tdp:8998/sessions \
 # Get the session status (wait until it is "idle")
 curl -k -u : --negotiate -X GET https://edge-01.tdp:8998/sessions
 # Submit a snippet of code to the session
-curl -k -u : --negotiate -X POST https://edge-01.tdp:8998/sessions/1/statements \
+curl -k -u : --negotiate -X POST https://edge-01.tdp:8998/sessions/0/statements \
   -d '{"code": "1 + 1"}' -H 'Content-Type: application/json'
 # Get the statement result
-curl -sk -u : --negotiate -X GET https://edge-01.tdp:8998/sessions/1/statements/0
+curl -k -u : --negotiate -X GET https://edge-01.tdp:8998/sessions/0/statements/0
 ```
 
 #### Create Cluster Users
