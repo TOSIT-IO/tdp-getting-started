@@ -34,7 +34,7 @@ mkdir -p files
 # Copy the default tdp_vars from tdp-collection and tdp-collection-extras
 mkdir -p "$abs_root_dir/inventory/tdp_vars"
 [[ -d "$TDP_ROLES_PATH/tdp_vars_defaults" ]] && cp -rf "$TDP_ROLES_PATH/tdp_vars_defaults/"* "$abs_root_dir/inventory/tdp_vars"
-[[ -d "$TDP_ROLES_EXTRA_PATH/tdp_extra_vars_defaults" ]] && cp -rf "$TDP_ROLES_EXTRA_PATH/tdp_extra_vars_defaults/"* "$abs_root_dir/inventory/tdp_vars"
+[[ -d "$TDP_ROLES_EXTRA_PATH/tdp_vars_defaults" ]] && cp -rf "$TDP_ROLES_EXTRA_PATH/tdp_vars_defaults/"* "$abs_root_dir/inventory/tdp_vars"
 
 # Download tdp release binaries
 tdp_releases="$abs_root_dir/scripts/tdp-release-uris.txt"
