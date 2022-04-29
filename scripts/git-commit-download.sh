@@ -8,7 +8,7 @@ target_dir="$1"
 target_repository_url="$2"
 target_commit="$3"
 archive_filename="$target_commit.zip"
-repository_name="$(basename $target_repository_url)"
+repository_name="$(basename "$target_repository_url")"
 archive_download_uri="$target_repository_url/archive/$archive_filename"
 
 print_usage() {
@@ -30,8 +30,8 @@ get_git_repository_commit() {
   cp -r "/tmp/$repository_name-$target_commit/." "$target_dir"
 }
 
-while getopts 'h' flag; do
+if [ "$#" -eq 3 ]; then
+  get_git_repository_commit
+else
   print_usage && exit 1
-done
-
-get_git_repository_commit
+fi

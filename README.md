@@ -2,6 +2,14 @@
 
 Launch a fully-featured virtual TDP Hadoop cluster with a single command _or_ customize the infrastructure and components of your cluster with 1 command per component.
 
+- [Requirements](#requirements)
+- [Quick Start](#quick-start)
+- [Web UIs Links](#web-uis-links)
+- [Customised Deployment](#customised-deployment)
+  - [Environment Setup](#environment-setup)
+  - [Configuration files generation](#configuration-files-generation)
+  - [Services Deployment](#services-deployment)
+
 ## Requirements
 
 - Ansible >= 2.9.6 (to execute the playbooks)
@@ -28,7 +36,7 @@ ansible-playbook generate-node-deployment-config.yml
 ansible-playbook deploy-all.yml
 ```
 
-## Web UIs
+## Web UIs Links
 
 - [HDFS NN Master 01](https://master-01.tdp:9871/dfshealth.html)
 - [HDFS NN Master 02](https://master-02.tdp:9871/dfshealth.html)
@@ -42,9 +50,9 @@ ansible-playbook deploy-all.yml
 
 **Note:** All the WebUIs are Kerberized, you need to have a working Kerberos client on your host, configure the KDC in your `/etc/krb5.conf` file and obtain a valid ticket. You can also access the WebUIs through [Knox](#knox).
 
-## Customised deployment
+## Customised Deployment
 
-Each of the below sections includes a high-level explanation of each possible step of the deployment using this repository.
+Each of the below sections includes a high-level explanation of each possible step of TDP deployment.
 
 ### Environment Setup
 
@@ -74,7 +82,9 @@ This playbook will generate the `Vagrantfile` and the `inventory/hosts` file.
 ./scripts/helper.sh -h
 ```
 
-### Single command to deploy all services
+### Services Deployment
+
+#### Main playbook
 
 ```
 ansible-playbook deploy-all.yml
@@ -84,7 +94,7 @@ The first action in `deploy-all.yml` is to run the `vagrant-up-parallel.sh` scri
 
 _Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`._
 
-**SSH Key Generation and Deployment**
+#### SSH Key Generation and Deployment
 
 It is **optionally** possible to generate a new ssh key pair and deploy the public key to each host, though `vagrant ssh <ansible-host>` works just fine in the context of this getting-started cluster. Use the below command to generate SSH keys and deploy them throughout the cluster:
 
@@ -92,7 +102,7 @@ It is **optionally** possible to generate a new ssh key pair and deploy the publ
 ansible-playbook deploy-ssh-key.yml
 ```
 
-**Certificate Authority and Certificates**
+#### Certificate Authority and Certificates
 
 Creates a certificate authority at the `[ca]` Ansible group and distributes signed certificates and keys to each VM.
 
@@ -102,17 +112,17 @@ ansible-playbook deploy-ca.yml
 
 _The certificates will also be downloaded to the `files/certs` local project folder._
 
-**Kerberos**
+#### Kerberos
 
-Launches a KDC at the `[kdc]` Ansible group and installs Kerberos clients on each of the VMs.
+Launches a KDC on the `[kdc]` group hosts, launches an LDAP on the `[ldap]` group hosts and installs Kerberos clients on each of the VMs.
 
 ```
-ansible-playbook deploy-kerberos.yml
+ansible-playbook deploy-ldap-kerberos.yml
 ```
 
 _After this, you can log in as the Kerberos admin from any VM with the command `kinit admin/admin` and the password `admin`._
 
-**Zookeeper**
+#### Zookeeper
 
 Deploys Apache ZooKeeper to the `[zk]` Ansible group and starts a 3 node Zookeeper Quorum.
 
@@ -122,7 +132,7 @@ ansible-playbook deploy-zookeeper.yml
 
 _Run `echo stat | nc localhost 2181` from any node in the `[zk]` group to see its ZooKeeper status._
 
-**Launch HDFS, YARN & MapReduce**
+#### Launch HDFS, YARN & MapReduce
 
 Launches HDFS, YARN, and deploys MapReduce clients.
 
@@ -162,7 +172,7 @@ hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
   hdfs dfs -cat /user/tdp_user/testFile
   ```
 
-**PostgreSQL**
+#### PostgreSQL
 
 Deploys PostgreSQL instance to `[postgres]` Ansible group. Listens for requests from all IPs but only trusts those specified in the `/etc/hosts` file.
 
@@ -172,7 +182,7 @@ The DBA user `postgres` is created with the password `postgres`.
 ansible-playbook deploy-postgres.yml
 ```
 
-**Ranger**
+#### Ranger
 
 Creates a suitably configured PostgreSQL database to the `[postgresql]` Ansible group, then deploys Ranger to the `[ranger_admin]` Ansible group.
 
@@ -182,9 +192,9 @@ _Note that any changes to the `[ranger_admin]` hosts should also be reflected in
 ansible-playbook deploy-ranger.yml
 ```
 
-The Ranger UI can be accessed at the address https://<master-02.tdp ip>:6182/login.jsp and the user `admin` and password `RangerAdmin123` (assuming default `ranger_admin_password` parameter). You may need to import the `root.pem` certificate authority into your browser or accept the SSL exception.
+The Ranger UI can be accessed at the address `https://<master-02.tdp ip>:6182/login.jsp` and the user `admin` and password `RangerAdmin123` (assuming default `ranger_admin_password` parameter). You may need to import the `root.pem` certificate authority into your browser or accept the SSL exception.
 
-**Hive**
+#### Hive
 
 Deploys Hive to the `[hive_s2]` Ansible group. HDFS filesystem is created and the service is launched.
 
@@ -252,7 +262,7 @@ INSERT INTO TABLE table1 VALUES (1, 'one'), (2, 'two');
 SELECT * FROM table1;
 ```
 
-**Spark**
+#### Spark
 
 Deploys spark installations to the `[spark_hs]` and the `[spark_client]` Ansible group.
 
@@ -278,7 +288,7 @@ export SPARK_CONF_DIR=/etc/spark/conf
 
 _Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` directory, such as `pyspark`, `spark-shell`, `spark-sql`, `sparkR` etc._
 
-**HBase**
+#### HBase
 
 Deploys HBase masters, regionservers, rest and clients to the `[hbase_master]`, `[hbase_rs]`, `[hbase_rest]` and `[hbase_client]` Ansible groups respectively.
 
@@ -299,7 +309,7 @@ disable 'testTable'
 drop 'testTable'
 ```
 
-**Knox**
+#### Knox
 
 Deploys Knox Gateway on the `[knox]` Ansible group:
 
@@ -318,7 +328,34 @@ You can then access the WebUIs of the TDP services through Knox:
 
 _Note: You can login to Knox using the `tdp_user` that is created in the next step._
 
-**Create Cluster Users**
+#### Livy
+
+Deploys Livy Server on the `[livy_server]` group hosts:
+
+```bash
+ansible-playbook deploy-livy.yml
+```
+
+The Livy Server can be accessed at https://edge-01.tdp:8998 After deployment, one can create a Spark session and interact with it through cURL:
+
+```bash
+# From edge-01.tdp
+sudo su tdp_user
+kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
+
+# Create a session
+curl -k -u : --negotiate -X POST https://edge-01.tdp:8998/sessions \
+  -d '{"kind": "pyspark"}' -H 'Content-Type: application/json'
+# Get the session status (wait until it is "idle")
+curl -k -u : --negotiate -X GET https://edge-01.tdp:8998/sessions
+# Submit a snippet of code to the session
+curl -k -u : --negotiate -X POST https://edge-01.tdp:8998/sessions/0/statements \
+  -d '{"code": "1 + 1"}' -H 'Content-Type: application/json'
+# Get the statement result
+curl -k -u : --negotiate -X GET https://edge-01.tdp:8998/sessions/0/statements/0
+```
+
+#### Create Cluster Users
 
 The below command creates:
 
@@ -333,7 +370,7 @@ ansible-playbook deploy-users.yml
 
 _Additional users can be added to the Ansible playbook parameter `users` in the `deploy-users.yml` if required._
 
-**Autostart Cluster Services**
+#### Autostart Cluster Services
 
 As the getting started cluster is entirely virtual, when you switch off your computer the VMs will also turn off. To simplify getting your cluster up and running after booting up, the following command will launch a playbook that auto starts the necessary services to run the getting started cluster services:
 

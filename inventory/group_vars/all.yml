@@ -2,13 +2,13 @@
 # Cluster VMs' ip, hastname, domain, cpus and memory (generates VM deployment config)
 hosts:
   # |------ip-------|-hostname-|domain|cpus|memory|
-  - ['192.168.56.10', worker-01, tdp, 2, 2048]
-  - ['192.168.56.11', worker-02, tdp, 2, 2048]
-  - ['192.168.56.12', worker-03, tdp, 2, 2048]
-  - ['192.168.56.13', master-01, tdp, 3, 3072]
-  - ['192.168.56.14', master-02, tdp, 3, 3072]
-  - ['192.168.56.15', master-03, tdp, 3, 3072]
-  - ['192.168.56.16', edge-01, tdp, 2, 2048]
+  - ["192.168.56.10", worker-01, tdp, 2, 2048]
+  - ["192.168.56.11", worker-02, tdp, 2, 2048]
+  - ["192.168.56.12", worker-03, tdp, 2, 2048]
+  - ["192.168.56.13", master-01, tdp, 3, 3072]
+  - ["192.168.56.14", master-02, tdp, 3, 3072]
+  - ["192.168.56.15", master-03, tdp, 3, 3072]
+  - ["192.168.56.16", edge-01, tdp, 2, 2048]
 
 # TDP
 realm: REALM.TDP
@@ -67,7 +67,7 @@ ranger_usync_restart: always
 spark_hs_restart: always
 zk_restart: always
 
-# oozie
+# Oozie
 oozie_user: oozie
 oozie_release: oozie-5.3.0-TDP-0.1.0-SNAPSHOT
 oozie_dist_file: oozie-5.3.0-TDP-0.1.0-SNAPSHOT-distro.tar.gz
@@ -77,13 +77,25 @@ ca_cert_filename: root.pem
 
 POLICY_MGR_URL: "https://{{ groups['ranger_admin'][0] | tosit.tdp.access_fqdn(hostvars) }}:6182"
 
-# hdfs
+# Hadoop
+core_site:
+  hadoop.security.auth_to_local: |
+    RULE:[2:$1/$2@$0]([ndj]n/.*@{{ realm }})s/.*/hdfs/
+    RULE:[2:$1/$2@$0]([rn]m/.*@{{ realm }})s/.*/yarn/
+    RULE:[2:$1/$2@$0](jhs/.*@{{ realm }})s/.*/mapred/
+    RULE:[2:$1/$2@$0](hive/.*@{{ realm }})s/.*/hive/
+    RULE:[2:$1/$2@$0](livy/.*@{{ realm }})s/.*/livy/
+    DEFAULT
+  hadoop.proxyuser.livy.hosts: "*"
+  hadoop.proxyuser.livy.groups: "*"
+
+# HDFS
 hdfs_user: hdfs
 ranger_hdfs_install_properties:
   POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
   REPOSITORY_NAME: hdfs-tdp
 
-# hive
+# Hive
 ranger_hive_install_properties:
   POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
   REPOSITORY_NAME: hive-tdp
@@ -96,7 +108,7 @@ spark_defaults:
 hadoop_root_dir: /opt/tdp
 hadoop_root_conf_dir: /etc/hadoop
 
-# yarn
+# YARN
 ranger_yarn_install_properties:
   POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
   REPOSITORY_NAME: yarn-tdp
@@ -107,7 +119,7 @@ yarn_site:
   yarn.timeline-service.http-authentication.kerberos.principal: HTTP/_HOST@{{ realm }}
   yarn.timeline-service.http-authentication.kerberos.keytab: /etc/security/keytabs/spnego.service.keytab
 
-# Zookeeper
+# ZooKeeper
 hadoop_ha_zookeeper_quorum: "{{ groups['zk'] |  map('tosit.tdp.access_fqdn', hostvars) |  map('regex_replace', '^(.*)$', '\\1:2181') | join(',') | trim}}"
 
 # User management (users created in deploy-users.yml)
