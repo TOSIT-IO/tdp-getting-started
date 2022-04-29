@@ -17,7 +17,7 @@ TDP_COLLECTION_COMMIT=86f2d3f42df18a5ac07cc25e847ddaf3082be6d4
 # tdp-collection-extras
 TDP_COLLECTION_EXTRAS_URL=https://github.com/TOSIT-IO/tdp-collection-extras
 TDP_ROLES_EXTRA_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp_extra"
-TDP_COLLECTION_EXTRAS_COMMIT=1035ca7f3f67275140cd15478d043b543679ec30
+TDP_COLLECTION_EXTRAS_COMMIT=71632818b69e3f7a396d879fd28446e64e3efb41
 
 # Create directories
 mkdir -p logs
@@ -38,4 +38,4 @@ mkdir -p "$abs_root_dir/inventory/tdp_vars"
 
 # Download tdp release binaries
 tdp_releases="$abs_root_dir/scripts/tdp-release-uris.txt"
-wget -i "$tdp_releases" -P "$abs_root_dir/files"
+wget -nc -i "$tdp_releases" -P "$abs_root_dir/files"
