@@ -17,6 +17,7 @@ Launch a fully-featured virtual TDP Hadoop cluster with a single command _or_ cu
 - VirtualBox >= 6.1.26
 - The Python package `jmespath` (an Ansible dependency for JSON parsing/querying)
 - Unzip (to execute the setup scripts)
+- `jq` required to execute helper script
 
 ## Quick Start
 
