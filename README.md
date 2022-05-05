@@ -32,6 +32,8 @@ cd tdp-getting-started
 ./scripts/setup.sh
 # Generate Vagrantfile and ansible hosts file from inventory
 ansible-playbook generate-node-deployment-config.yml
+# Install centos/7 vagrant box
+vagrant box add centos/7 --provider virtualbox
 # Deploy TDP cluster
 ansible-playbook deploy-all.yml
 ```
