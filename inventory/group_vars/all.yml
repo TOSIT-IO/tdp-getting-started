@@ -100,6 +100,11 @@ ranger_hive_install_properties:
   POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
   REPOSITORY_NAME: hive-tdp
 
+# Hbase
+ranger_hbase_install_properties:
+  POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
+  REPOSITORY_NAME: hbase-tdp
+
 # Spark
 spark_defaults:
   spark.eventLog.dir: hdfs://mycluster/spark-logs
@@ -212,4 +217,32 @@ user_hive_policies:
           - { isAllowed: true, type: Read }
           - { isAllowed: true, type: Write }
           - { isAllowed: true, type: Refresh }
+        conditions: []
+
+# Depends on hbase service
+user_hbase_policies:
+  - name: tdp-user-hbase-policy
+    description: Hbase Client Check
+    service: hbase-tdp
+    repositoryType: hbase
+    isAuditEnabled: true
+    isEnabled: true
+    resources:
+      column:
+        isExcludes: false
+        values: ["*"]
+      column-family:
+        isExcludes: false
+        values: ["*"]
+      table:
+        isExcludes: false
+        values: ["testTable"]
+    policyItems:
+      - users: [tdp_user]
+        groups: []
+        delegateAdmin: true
+        accesses:
+          - { isAllowed: true, type: Read }
+          - { isAllowed: true, type: Write }
+          - { isAllowed: true, type: Create }
         conditions: []

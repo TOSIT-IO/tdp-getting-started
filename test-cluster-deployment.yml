@@ -115,6 +115,12 @@
     tags:
       - hbase
 
+  - name: Log previous action stdout to console
+    debug: 
+      msg: '{{ _result.stdout }}'
+    tags:
+      - hbase    
+
   - name: HBase 'list_namespace'
     become: yes
     become_user: tdp_user
@@ -126,14 +132,26 @@
     tags:
       - hbase
 
+  - name: Log previous action stdout to console
+    debug: 
+      msg: '{{ _result.stdout }}'
+    tags:
+      - hbase
+
   - name: HBase create testTable
     become: yes
     become_user: tdp_user
     shell: |
       kinit -kt /home/tdp_user/tdp_user.keytab tdp_user@REALM.TDP
-      echo "create 'testTable', 'cf' " | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
+      echo "create 'testTable', 'cf'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0
+    tags:
+      - hbase
+
+  - name: Log previous action stdout to console
+    debug: 
+      msg: '{{ _result.stdout }}'
     tags:
       - hbase
 
@@ -148,6 +166,12 @@
     tags:
       - hbase
 
+  - name: Log previous action stdout to console
+    debug: 
+      msg: '{{ _result.stdout }}'
+    tags:
+      - hbase
+
   - name: HBase disable testTable
     become: yes
     become_user: tdp_user
@@ -159,6 +183,12 @@
     tags:
       - hbase
 
+  - name: Log previous action stdout to console
+    debug: 
+      msg: '{{ _result.stdout }}'
+    tags:
+      - hbase
+
   - name: HBase drop testTable
     become: yes
     become_user: tdp_user
@@ -167,5 +197,11 @@
       echo "drop 'testTable'" | /opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell
     register: _result
     failed_when: _result.rc != 0
+    tags:
+      - hbase
+
+  - name: Log previous action stdout to console
+    debug: 
+      msg: '{{ _result.stdout }}'
     tags:
       - hbase
