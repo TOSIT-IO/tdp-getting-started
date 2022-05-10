@@ -29,8 +29,8 @@ The Ansible `host` file and the `Vagrantfile` will both be generated using the `
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env and clone latest tdp-ansible-roles
-./scripts/setup.sh
+# Setup local env with stable tdp-collections
+./scripts/setup.sh -r stable
 # Generate Vagrantfile and ansible hosts file from inventory
 ansible-playbook generate-node-deployment-config.yml
 # Install centos/7 vagrant box
