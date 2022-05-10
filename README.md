@@ -46,6 +46,7 @@ ansible-playbook deploy-all.yml
 - [HBase Master 01](https://master-01.tdp:16010/master-status)
 - [HBase Master 02](https://master-02.tdp:16010/master-status)
 - [Spark History Server](https://master-03.tdp:18081/)
+- [Spark3 History Server](https://master-03.tdp:18083/)
 - [Ranger Admin](https://master-03.tdp:6182/index.html)
 
 **Note:** All the WebUIs are Kerberized, you need to have a working Kerberos client on your host, configure the KDC in your `/etc/krb5.conf` file and obtain a valid ticket. You can also access the WebUIs through [Knox](#knox).
@@ -89,6 +90,8 @@ This playbook will generate the `Vagrantfile` and the `inventory/hosts` file.
 ```
 ansible-playbook deploy-all.yml
 ```
+
+This playbook deploys the following services: a CA, an LDAP, a KDC, PostgreSQL, ZooKeeper, Hadoop core (HDFS, YARN, MapReduce), Ranger, Hive, Spark (2 and 3), HBase and Knox.
 
 The first action in `deploy-all.yml` is to run the `vagrant-up-parallel.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
 
@@ -280,13 +283,23 @@ kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
 export SPARK_CONF_DIR=/etc/spark/conf
 
 # Run a spark application locally
-/opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master local[4]  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
+spark-submit --class org.apache.spark.examples.SparkPi --master local[4]  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 
 # Or spark-submit a spark application to yarn
-/opt/tdp/spark/bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```
 
 _Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` directory, such as `pyspark`, `spark-shell`, `spark-sql`, `sparkR` etc._
+
+#### Spark 3
+
+Deploys spark3 installations to the `[spark3_hs]` and the `[spark3_client]` Ansible group.
+
+```
+ansible-playbook deploy-spark3.yml
+```
+
+Spark 3 is installed alongside Spark 2 and can be used exactly the same way. The Spark 3 CLIs are: `spark3-submit`, `spark3-shell`, `spark3-sql`, `pyspark3`.
 
 #### HBase
 
@@ -324,6 +337,7 @@ You can then access the WebUIs of the TDP services through Knox:
 - [MapReduce Job History Server](https://edge-01.tdp:8443/gateway/tdpldap/jobhistory)
 - [HBase Master](https://edge-01.tdp:8443/gateway/tdpldap/hbase/webui/master/master-status?host=master-01.tdp&port=16010)
 - [Spark History Server](https://edge-01.tdp:8443/gateway/tdpldap/sparkhistory)
+- [Spark3 History Server](https://edge-01.tdp:8443/gateway/tdpldap/spark3history)
 - [Ranger Admin](https://edge-01.tdp:8443/gateway/tdpldap/ranger)
 
 _Note: You can login to Knox using the `tdp_user` that is created in the next step._

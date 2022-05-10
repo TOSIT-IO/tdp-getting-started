@@ -14,6 +14,7 @@ https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAP
 https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-hbase-plugin.tar.gz
 https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-usersync.tar.gz
 https://github.com/TOSIT-FR/spark/releases/download/spark-2.3.5-TDP-0.1.0-SNAPSHOT/spark-2.3.5-TDP-0.1.0-SNAPSHOT-bin-tdp.tgz
+https://github.com/TOSIT-FR/spark/releases/download/spark-3.2.2-TDP-0.1.0-SNAPSHOT/spark-3.2.2-TDP-0.1.0-SNAPSHOT-bin-tdp.tgz
 https://github.com/TOSIT-FR/tez/releases/download/tez-0.9.1-TDP-0.1.0-SNAPSHOT/tez-0.9.1-TDP-0.1.0-SNAPSHOT.tar.gz
 https://dlcdn.apache.org/lucene/solr/7.7.3/solr-7.7.3.tgz
 https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
