@@ -10,7 +10,7 @@
     - name: Fetch krb5.conf to local files dir from kdc
       fetch:
         src: /etc/krb5.conf
-        dest: files/
+        dest: ./files/
         flat: yes
 
 - hosts: all
