@@ -17,6 +17,7 @@ Launch a fully-featured virtual TDP Hadoop cluster with a single command _or_ cu
 - VirtualBox >= 6.1.26
 - The Python package `jmespath` (an Ansible dependency for JSON parsing/querying)
 - Unzip (to execute the setup scripts)
+- `jq` required to execute helper script
 
 ## Quick Start
 
@@ -32,6 +33,8 @@ cd tdp-getting-started
 ./scripts/setup.sh
 # Generate Vagrantfile and ansible hosts file from inventory
 ansible-playbook generate-node-deployment-config.yml
+# Install centos/7 vagrant box
+vagrant box add centos/7 --provider virtualbox
 # Deploy TDP cluster
 ansible-playbook deploy-all.yml
 ```
