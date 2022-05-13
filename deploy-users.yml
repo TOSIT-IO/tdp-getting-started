@@ -45,7 +45,7 @@
       with_items:
         - "{{ user_hive_policies }}"
 
-- name: Create Hbase access policies in Ranger
+- name: Create HBase access policies in Ranger
   hosts: ranger_admin[0]
   become: yes
   tasks:
