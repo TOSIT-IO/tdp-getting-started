@@ -283,7 +283,6 @@ _Execute the following command from any node in the `[spark_client]` Ansible gro
 ```bash
 su tdp_user
 kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
-export SPARK_CONF_DIR=/etc/spark/conf
 
 # Run a spark application locally
 spark-submit --class org.apache.spark.examples.SparkPi --master local[4]  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
