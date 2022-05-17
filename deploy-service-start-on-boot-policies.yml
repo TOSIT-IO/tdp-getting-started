@@ -52,6 +52,20 @@
         enabled: "{{ krb_start_on_boot }}"
       loop: "{{ groups['kdc'] }}"
 
+    - name: "Apply hbase master start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hbase-master
+        enabled: "{{ hbase_master_start_on_boot }}"
+      loop: "{{ groups['hbase_master'] }}"
+
+    - name: "Apply hbase regionserver start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: hbase-regionserver
+        enabled: "{{ hbase_rs_start_on_boot }}"
+      loop: "{{ groups['hbase_rs'] }}"
+
     - name: "Apply hadoop-yarn-resourcemanager service start on boot policy"
       delegate_to: "{{ item }}"
       service:
