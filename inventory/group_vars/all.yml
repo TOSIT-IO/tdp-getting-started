@@ -182,6 +182,26 @@ user_hdfs_policies:
         isRecursive: true
         values: ["/user/smoke_user"]
     service: hdfs-tdp
+  - name: tdp-user-hdfs-warehouse-policy
+    description: Hive Client Check
+    isAuditEnabled: true
+    isEnabled: true
+    policyItems:
+      - accesses:
+          - { isAllowed: true, type: read }
+          - { isAllowed: true, type: write }
+          - { isAllowed: true, type: execute }
+        conditions: []
+        delegateAdmin: true
+        groups: []
+        users: [tdp_user]
+    repositoryType: hdfs
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ["/warehouse/tablespace/managed/hive"]
+    service: hdfs-tdp
 
 # Depends on hive service
 user_hive_policies:
