@@ -46,6 +46,9 @@ while getopts 'r:h' options; do
   esac
 done
 
+# Init, fetch, update and checkout submodules
+git submodule update --init --recursive
+
 if [ "$RELEASE" == "latest" ]; then
   echo "Updating collections to the latest version..."
   $(cd "$TDP_ROLES_PATH" && git fetch origin && git reset --hard origin/master)
