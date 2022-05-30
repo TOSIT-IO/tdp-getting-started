@@ -26,7 +26,7 @@ The Ansible `host` file and the `Vagrantfile` will both be generated using the `
 
 ```bash
 # Clone project from version control
-git clone https://github.com/TOSIT-IO/tdp-getting-started.git
+git clone --recurse-submodules https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
 # Setup local env with stable tdp-collections
