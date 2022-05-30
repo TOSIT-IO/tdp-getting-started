@@ -10,12 +10,12 @@ rel_root_dir="$(dirname "$0")/.."
 abs_root_dir="$(realpath "$rel_root_dir")"
 
 # tdp-collection
-TDP_COLLECTION_URL=https://github.com/TOSIT-IO/tdp-collection
+# TDP_COLLECTION_URL=https://github.com/TOSIT-IO/tdp-collection
 TDP_ROLES_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp"
 TDP_COLLECTION_STABLE_COMMIT=fa68888b13f1aa68c8cc096049e0b333bd27d714
 
 # tdp-collection-extras
-TDP_COLLECTION_EXTRAS_URL=https://github.com/TOSIT-IO/tdp-collection-extras
+# TDP_COLLECTION_EXTRAS_URL=https://github.com/TOSIT-IO/tdp-collection-extras
 TDP_ROLES_EXTRA_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp_extra"
 TDP_COLLECTION_EXTRAS_STABLE_COMMIT=b24cfc7e75f2d599716ea212b1e8f2cab55953af
 
@@ -47,15 +47,14 @@ while getopts 'r:h' options; do
 done
 
 if [ "$RELEASE" == "latest" ]; then
-  echo "Cloning latest tdp-collections..."
-  [[ -d "$TDP_ROLES_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_PATH" "$TDP_COLLECTION_URL"
-  [[ -d "$TDP_ROLES_EXTRA_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_EXTRA_PATH" "$TDP_COLLECTION_EXTRAS_URL"
+  echo "Updating collections to the latest version..."
+  $(cd "$TDP_ROLES_PATH" && git fetch origin && git reset --hard origin/master)
+  $(cd "$TDP_ROLES_EXTRA_PATH" && git fetch origin && git reset --hard origin/master)
 
 elif [ "$RELEASE" == "stable" ]; then
-  echo "Cloning stable tdp-collections..."
-  [[ -d "$TDP_ROLES_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_PATH" "$TDP_COLLECTION_URL" "$TDP_COLLECTION_STABLE_COMMIT"
-  [[ -d "$TDP_ROLES_EXTRA_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_EXTRA_PATH" "$TDP_COLLECTION_EXTRAS_URL" "$TDP_COLLECTION_EXTRAS_STABLE_COMMIT"
-
+  echo "Updating collections to the stable version..."
+  $(cd "$TDP_ROLES_PATH" && git reset --hard "$TDP_COLLECTION_STABLE_COMMIT")
+  $(cd "$TDP_ROLES_EXTRA_PATH" && git reset --hard "$TDP_COLLECTION_EXTRAS_STABLE_COMMIT")
 fi
 
 # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-FR/ansible-tdp-roles/pull/57)
