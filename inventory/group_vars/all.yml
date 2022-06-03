@@ -23,13 +23,6 @@ kadmin_password: admin123
 kadmind_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}"
 kdc_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }} "
 
-# Rename for ansible-kerberos-client and ansible-kerberos-server
-realm_name: "{{ realm }}"
-master_db_pass: krb5-master-pass
-kadmin_user: "{{ kadmin_principal }}"
-kadmin_pass: "{{ kadmin_password }}"
-kdc_port: 88
-
 # Service start on boot
 hdfs_nn_start_on_boot: yes
 hdfs_dn_start_on_boot: yes
