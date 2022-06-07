@@ -1,0 +1,17 @@
+---
+- hosts: "{{ groups['edge'][0] }}"
+  become: yes
+  tasks:
+    - name: Transfer the script
+      become: yes
+      become_user: tdp_user
+      copy: src=./scripts/datasets.sh dest=/home/tdp_user mode=0777
+
+    - name: Add tdp-gs alias for tdp_user user
+      lineinfile:
+        path=/home/tdp_user/.bashrc
+        line="alias tdp-gs=~/datasets.sh"
+        owner=tdp_user
+        regexp='^alias tdp-gs=~/datasets.sh'
+        state=present
+        insertafter=EOF
