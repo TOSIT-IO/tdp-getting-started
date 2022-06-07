@@ -12,20 +12,51 @@ abs_root_dir="$(realpath "$rel_root_dir")"
 # tdp-collection
 TDP_COLLECTION_URL=https://github.com/TOSIT-IO/tdp-collection
 TDP_ROLES_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp"
-TDP_COLLECTION_COMMIT=86f2d3f42df18a5ac07cc25e847ddaf3082be6d4
+TDP_COLLECTION_STABLE_COMMIT=1d0fe63849d3bd40665acb1544853bb59420bbb5
 
 # tdp-collection-extras
 TDP_COLLECTION_EXTRAS_URL=https://github.com/TOSIT-IO/tdp-collection-extras
 TDP_ROLES_EXTRA_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp_extra"
-TDP_COLLECTION_EXTRAS_COMMIT=71632818b69e3f7a396d879fd28446e64e3efb41
+TDP_COLLECTION_EXTRAS_STABLE_COMMIT=e407bb40958d77b87287fe42dc48a969ad179c4f
 
 # Create directories
 mkdir -p logs
 mkdir -p files
 
-# Clone ansible-tdp-roles repository (doesn't fail if not known host)
-[[ -d "$TDP_ROLES_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_PATH" "$TDP_COLLECTION_URL" "$TDP_COLLECTION_COMMIT"
-[[ -d "$TDP_ROLES_EXTRA_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_EXTRA_PATH" "$TDP_COLLECTION_EXTRAS_URL" "$TDP_COLLECTION_EXTRAS_COMMIT"
+print_usage() {
+  echo """
+  Name:
+    TDP getting started environment setup script
+  Description:
+    Ensures the existence of directories and dependencies required by the TDP getting started project.
+  Usage:
+    setup.sh.sh [-h] [-r latest|stable]
+  Options:
+    -h Display usage
+    -r Specify the release of the downlaoded TDP collections. Takes options latest and stable (the default).
+  """
+}
+
+# Parse args for for target release and help flags
+while getopts 'r:h' options; do
+  case "$options" in
+  r) RELEASE="$OPTARG" ;;
+  h) print_usage && exit 0 ;;
+  *) print_usage && exit 1 ;;
+  esac
+done
+
+if [ "$RELEASE" == "latest" ]; then
+  echo "Cloning latest tdp-collections..."
+  [[ -d "$TDP_ROLES_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_PATH" "$TDP_COLLECTION_URL"
+  [[ -d "$TDP_ROLES_EXTRA_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_EXTRA_PATH" "$TDP_COLLECTION_EXTRAS_URL"
+
+elif [ "$RELEASE" == "stable" ]; then
+  echo "Cloning stable tdp-collections..."
+  [[ -d "$TDP_ROLES_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_PATH" "$TDP_COLLECTION_URL" "$TDP_COLLECTION_STABLE_COMMIT"
+  [[ -d "$TDP_ROLES_EXTRA_PATH" ]] || "$abs_root_dir/scripts/git-commit-download.sh" "$TDP_ROLES_EXTRA_PATH" "$TDP_COLLECTION_EXTRAS_URL" "$TDP_COLLECTION_EXTRAS_STABLE_COMMIT"
+
+fi
 
 # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-FR/ansible-tdp-roles/pull/57)
 [[ -d "$TDP_ROLES_PATH/playbooks/files" ]] || ln -s "$abs_root_dir/files" "$TDP_ROLES_PATH/playbooks"

@@ -17,6 +17,12 @@
         gid: "{{ item.gid }}"
       with_items: "{{ users }}"
 
+    - name: Fetch key for tdp_user
+      fetch:
+        src: /home/tdp_user/tdp_user.keytab
+        dest: ./files/keytabs/
+        flat: yes
+
 - import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_usersync_restart.yml
 
 - name: Create HDFS access policies in Ranger
@@ -38,6 +44,16 @@
         tasks_from: deploy-ranger-hive-policy
       with_items:
         - "{{ user_hive_policies }}"
+
+- name: Create HBase access policies in Ranger
+  hosts: ranger_admin[0]
+  become: yes
+  tasks:
+    - include_role:
+        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
+        tasks_from: deploy-ranger-hbase-policy
+      with_items:
+        - "{{ user_hbase_policies }}"
 
 - hosts: edge-01
   tasks:
