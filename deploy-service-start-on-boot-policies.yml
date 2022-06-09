@@ -107,9 +107,30 @@
         enabled: "{{ spark_hs_start_on_boot }}"
       loop: "{{ groups['spark_hs'] }}"
 
-    - name: "Apply systemd service start on boot policies"
+    - name: "Apply spark3-history-server service start on boot policy"
       delegate_to: "{{ item }}"
       service:
-        name: spark-history-server
-        enabled: "{{ spark_hs_start_on_boot }}"
-      loop: "{{ groups['spark_hs'] }}"
+        name: spark3-history-server
+        enabled: "{{ spark3_hs_start_on_boot }}"
+      loop: "{{ groups['spark3_hs'] }}"
+
+    - name: "Apply knox-gateway service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: knox-gateway
+        enabled: "{{ knox_start_on_boot }}"
+      loop: "{{ groups['knox'] }}"
+
+    - name: "Apply livy-server service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: livy-server-spark2
+        enabled: "{{ livy_start_on_boot }}"
+      loop: "{{ groups['livy_server'] }}"
+
+    - name: "Apply livyspark3-server service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: livy-server-spark3
+        enabled: "{{ livyspark3_start_on_boot }}"
+      loop: "{{ groups['livyspark3_server'] }}"
