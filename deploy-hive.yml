@@ -20,7 +20,7 @@
         - hive
 
 - name: Deploy Hive
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/hive.yml
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/hive.yml
 
 - hosts: yarn_nm,yarn_rm
   become: yes

@@ -12,7 +12,7 @@
       when: zk_exists.stat.exists == False
 
 - name: Deploy ZooKeeper
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/zookeeper.yml
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/zookeeper.yml
 
 - hosts: zk
   tasks:
