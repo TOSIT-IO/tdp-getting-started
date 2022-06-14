@@ -17,4 +17,4 @@
         tasks_from: deploy-ranger-db-requirements
 
 - name: Deploy Ranger Admin and Usersync
-  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger.yml
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/ranger.yml
