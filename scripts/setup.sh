@@ -12,12 +12,12 @@ abs_root_dir="$(realpath "$rel_root_dir")"
 # tdp-collection
 TDP_COLLECTION_URL=https://github.com/TOSIT-IO/tdp-collection
 TDP_ROLES_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp"
-TDP_COLLECTION_STABLE_COMMIT=1d0fe63849d3bd40665acb1544853bb59420bbb5
+TDP_COLLECTION_STABLE_COMMIT=0d30d1185b60a5c4ed32814522dd5703411b8a29
 
 # tdp-collection-extras
 TDP_COLLECTION_EXTRAS_URL=https://github.com/TOSIT-IO/tdp-collection-extras
 TDP_ROLES_EXTRA_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp_extra"
-TDP_COLLECTION_EXTRAS_STABLE_COMMIT=e407bb40958d77b87287fe42dc48a969ad179c4f
+TDP_COLLECTION_EXTRAS_STABLE_COMMIT=29c223ce3e80e0c9b5ebd8db7e614ecd23bfb054
 
 # Create directories
 mkdir -p logs
