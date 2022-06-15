@@ -1,0 +1,8 @@
+# Copyright 2022 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+# Author: Pierre Marty <pmarty@linagora.com>
+# Date: 2022-06-07
+
+---
+- name: Deploy NiFi
+  import_playbook: ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/nifi.yml
