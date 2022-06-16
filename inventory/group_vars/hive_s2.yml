@@ -10,31 +10,7 @@ hive_site:
   hive.zookeeper.quorum: "{{ hadoop_ha_zookeeper_quorum }}"
   javax.jdo.option.ConnectionUserName: hive
   javax.jdo.option.ConnectionPassword: hive
-  hive.server2.enable.doAs: no
   # Support hive concurrency
   hive.support.concurrency: yes
   hive.txn.manager: org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager
   hive.lock.manager: org.apache.hadoop.hive.ql.lockmgr.zookeeper.ZooKeeperHiveLockManager
-
-# Depends on hdfs service
-ranger_hdfs_policies:
-  - name: hive-user-hdfs-policy
-    description: Hive Client Check
-    isAuditEnabled: true
-    isEnabled: true
-    policyItems:
-      - accesses:
-          - { isAllowed: true, type: read }
-          - { isAllowed: true, type: write }
-          - { isAllowed: true, type: execute }
-        conditions: []
-        delegateAdmin: true
-        groups: []
-        users: ["{{ hive_user }}"]
-    repositoryType: hdfs
-    resources:
-      path:
-        isExcludes: false
-        isRecursive: true
-        values: ["hdfs:////warehouse", "hdfs:////user"]
-    service: hdfs-tdp
