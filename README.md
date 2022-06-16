@@ -18,6 +18,7 @@ Launch a fully-featured virtual TDP Hadoop cluster with a single command _or_ cu
 - The Python package `jmespath` (an Ansible dependency for JSON parsing/querying)
 - Unzip (to execute the setup scripts)
 - `jq` required to execute helper script
+- `realpath` utility
 
 ## Quick Start
 
@@ -53,6 +54,10 @@ ansible-playbook deploy-all.yml
 - [Ranger Admin](https://master-03.tdp:6182/index.html)
 
 **Note:** All the WebUIs are Kerberized, you need to have a working Kerberos client on your host, configure the KDC in your `/etc/krb5.conf` file and obtain a valid ticket. You can also access the WebUIs through [Knox](#knox).
+
+### Extras
+
+- [Nessie](https://edge-01.tdp:19433) (not Kerberized)
 
 ## Customised Deployment
 
