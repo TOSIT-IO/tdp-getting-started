@@ -14,5 +14,6 @@
 - import_playbook: deploy-spark3.yml
 - import_playbook: deploy-hbase.yml
 - import_playbook: deploy-knox.yml
+- import_playbook: deploy-kafka.yml
 - import_playbook: deploy-users.yml
 - import_playbook: deploy-service-start-on-boot-policies.yml

@@ -19,3 +19,5 @@ https://github.com/TOSIT-FR/tez/releases/download/tez-0.9.1-TDP-0.1.0-SNAPSHOT/t
 https://archive.apache.org/dist/lucene/solr/7.7.3/solr-7.7.3.tgz
 https://archive.apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz
 https://github.com/TOSIT-IO/incubator-livy/releases/download/v0.8.0-incubating-TDP-0.1.0/apache-livy-0.8.0-incubating-TDP-0.1.0-SNAPSHOT-bin.zip
+https://archive.apache.org/dist/zookeeper/zookeeper-3.5.9/apache-zookeeper-3.5.9-bin.tar.gz
+https://github.com/TOSIT-IO/kafka/releases/download/2.8.2-TDP-0.1.0/kafka_2.13-2.8.2-TDP-0.1.0-SNAPSHOT.tgz
