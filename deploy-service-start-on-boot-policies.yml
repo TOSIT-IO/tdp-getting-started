@@ -128,9 +128,9 @@
         enabled: "{{ livy_start_on_boot }}"
       loop: "{{ groups['livy_server'] }}"
 
-    - name: "Apply livyspark3-server service start on boot policy"
+    - name: "Apply livy-server-spark3 service start on boot policy"
       delegate_to: "{{ item }}"
       service:
         name: livy-server-spark3
-        enabled: "{{ livyspark3_start_on_boot }}"
-      loop: "{{ groups['livyspark3_server'] }}"
+        enabled: "{{ livy_spark3_start_on_boot }}"
+      loop: "{{ groups['livy_spark3_server'] }}"

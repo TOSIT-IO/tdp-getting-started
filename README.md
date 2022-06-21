@@ -373,10 +373,10 @@ curl -k -u : --negotiate -X GET https://edge-01.tdp:8998/sessions/0/statements/0
 
 #### Livy for Spark 3
 
-Another Livy server is deployed for Spark 3 on the `[livyspark3_server]` group hosts:
+Another Livy server is deployed for Spark 3 on the `[livy-spark3_server]` group hosts:
 
 ```bash
-ansible-playbook deploy-livy.yml
+ansible-playbook deploy-livy-spark3.yml
 ```
 
 The default port is different than the regular Livy server: `8999` instead of `8998`.
