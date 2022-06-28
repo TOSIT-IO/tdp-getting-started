@@ -134,3 +134,17 @@
         name: livy-server-spark3
         enabled: "{{ livy_spark3_start_on_boot }}"
       loop: "{{ groups['livy_spark3_server'] }}"
+
+    - name: "Apply zookeeper-kafka service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: zookeeper-kafka
+        enabled: "{{ zk_start_on_boot }}"
+      loop: "{{ groups['zk'] }}"
+
+    - name: "Apply kafka-broker service start on boot policy"
+      delegate_to: "{{ item }}"
+      service:
+        name: kafka-broker
+        enabled: "{{ kafka_start_on_boot }}"
+      loop: "{{ groups['kafka_broker'] }}"
