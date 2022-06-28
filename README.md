@@ -130,7 +130,7 @@ _After this, you can log in as the Kerberos admin from any VM with the command `
 
 #### Zookeeper
 
-Deploys Apache ZooKeeper to the `[zk]` Ansible group and starts a 3 node Zookeeper Quorum.
+Deploys Apache ZooKeeper to the `[zk]` Ansible group and starts a 3 node Zookeeper Quorum. Also deploys a second ZooKeeper cluster dedicated to Kafka on the same nodes.
 
 ```
 ansible-playbook deploy-zookeeper.yml
@@ -380,6 +380,36 @@ ansible-playbook deploy-livy-spark3.yml
 ```
 
 The default port is different than the regular Livy server: `8999` instead of `8998`.
+
+#### Kafka
+
+Deploys a Kafka cluster on the `[kafka_broker]` group hosts:
+
+```bash
+ansible-playbook deploy-kafka.yml
+```
+
+The Kafka CLIs are available on the edge node for all users and client properties files are in `/etc/kafka/conf/*.properties`. After deployment, one can interact with Kafka from `edge-01.tdp`:
+
+```sh
+# From edge-01.tdp
+sudo su tdp_user
+kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
+
+# Create a topic
+kafka-topics.sh --create --topic test-topic \
+  --command-config /etc/kafka/conf/client.properties
+# Write messages to the topic
+kafka-console-producer.sh --topic test-topic \
+  --producer.config /etc/kafka/conf/producer.properties
+>Hello there
+>I am writting messages to a Kafka topic
+>How cool is that?
+>^C # CTRL+C to leave the console producer
+# Read all messages from the topic
+kafka-console-consumer.sh --topic test-topic --from-beginning \
+  --consumer.config /etc/kafka/conf/consumer.properties
+```
 
 #### Create Cluster Users
 
