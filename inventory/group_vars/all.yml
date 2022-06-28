@@ -44,6 +44,7 @@ zk_start_on_boot: yes
 krb_start_on_boot: yes
 livy_start_on_boot: yes
 livy_spark3_start_on_boot: yes
+kafka_start_on_boot: yes
 
 # Service restart policies
 hdfs_nn_restart: always
