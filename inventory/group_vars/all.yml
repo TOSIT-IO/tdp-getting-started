@@ -102,6 +102,10 @@ ranger_hbase_install_properties:
   POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
   REPOSITORY_NAME: hbase-tdp
 
+# Hbase
+ranger_kafka_install_properties:
+  POLICY_MGR_URL: "{{ POLICY_MGR_URL }}"
+
 # Spark
 spark_defaults:
   spark.eventLog.dir: hdfs://mycluster/spark-logs
@@ -139,10 +143,16 @@ users:
 
 # Depends on hdfs service
 user_hdfs_policies:
-  - name: tdp_user-hdfs-home-policy
+  - name: tdp_user - path
     description: tdp_user access to /user/tdp_user
+    service: hdfs-tdp
     isAuditEnabled: true
     isEnabled: true
+    resources:
+      path:
+        isExcludes: false
+        isRecursive: true
+        values: ["/user/tdp_user"]
     policyItems:
       - accesses:
           - { isAllowed: true, type: read }
@@ -153,16 +163,16 @@ user_hdfs_policies:
         groups: []
         users: [tdp_user]
     repositoryType: hdfs
+  - name: smoke_user - path
+    description: smoke_user access to /user/smoke_user
+    service: hdfs-tdp
+    isAuditEnabled: true
+    isEnabled: true
     resources:
       path:
         isExcludes: false
         isRecursive: true
-        values: ["/user/tdp_user"]
-    service: hdfs-tdp
-  - name: smoke_user-hdfs-home-policy
-    description: smoke_user access to /user/smoke_user
-    isAuditEnabled: true
-    isEnabled: true
+        values: ["/user/smoke_user"]
     policyItems:
       - accesses:
           - { isAllowed: true, type: read }
@@ -173,17 +183,11 @@ user_hdfs_policies:
         groups: []
         users: [smoke_user]
     repositoryType: hdfs
-    resources:
-      path:
-        isExcludes: false
-        isRecursive: true
-        values: ["/user/smoke_user"]
-    service: hdfs-tdp
 
 # Depends on hive service
 user_hive_policies:
-  - name: tdp-user-hive-policy
-    description: Hive Client Check
+  - name: tdp_user - database
+    description: tdp_user access to tdp_user database
     service: hive-tdp
     repositoryType: hive
     isAuditEnabled: true
@@ -194,7 +198,7 @@ user_hive_policies:
         values: ["*"]
       database:
         isExcludes: false
-        values: [tdp_user_db]
+        values: [tdp_user]
       table:
         isExcludes: false
         values: ["*"]
@@ -205,21 +209,21 @@ user_hive_policies:
         accesses:
           - { isAllowed: true, type: select }
           - { isAllowed: true, type: update }
-          - { isAllowed: true, type: Create }
-          - { isAllowed: true, type: Drop }
-          - { isAllowed: true, type: Alter }
-          - { isAllowed: true, type: Index }
-          - { isAllowed: true, type: Lock }
-          - { isAllowed: true, type: All }
-          - { isAllowed: true, type: Read }
-          - { isAllowed: true, type: Write }
-          - { isAllowed: true, type: Refresh }
+          - { isAllowed: true, type: create }
+          - { isAllowed: true, type: drop }
+          - { isAllowed: true, type: alter }
+          - { isAllowed: true, type: index }
+          - { isAllowed: true, type: lock }
+          - { isAllowed: true, type: all }
+          - { isAllowed: true, type: read }
+          - { isAllowed: true, type: write }
+          - { isAllowed: true, type: refresh }
         conditions: []
 
 # Depends on hbase service
 user_hbase_policies:
-  - name: tdp-user-hbase-policy
-    description: Hbase Client Check
+  - name: tdp_user - table
+    description: tdp_user access to tdp_user_* tables
     service: hbase-tdp
     repositoryType: hbase
     isAuditEnabled: true
@@ -233,13 +237,39 @@ user_hbase_policies:
         values: ["*"]
       table:
         isExcludes: false
-        values: ["testTable"]
+        values: ["default:tdp_user_*"]
     policyItems:
       - users: [tdp_user]
         groups: []
         delegateAdmin: true
         accesses:
-          - { isAllowed: true, type: Read }
-          - { isAllowed: true, type: Write }
-          - { isAllowed: true, type: Create }
+          - { isAllowed: true, type: read }
+          - { isAllowed: true, type: write }
+          - { isAllowed: true, type: create }
+        conditions: []
+
+user_kafka_policies:
+  - name: tdp_user - topic
+    description: test_user access to tdp-user-* topics
+    service: kafka-tdp
+    repositoryType: kafka
+    isAuditEnabled: true
+    isEnabled: true
+    resources:
+      topic:
+        isExcludes: false
+        values: ["tdp-user-*"]
+    policyItems:
+      - users: [tdp_user]
+        groups: []
+        delegateAdmin: true
+        accesses:
+          - { isAllowed: true, type: create }
+          - { isAllowed: true, type: publish }
+          - { isAllowed: true, type: consume }
+          - { isAllowed: true, type: configure }
+          - { isAllowed: true, type: describe }
+          - { isAllowed: true, type: delete }
+          - { isAllowed: true, type: describe_configs }
+          - { isAllowed: true, type: alter_configs }
         conditions: []
