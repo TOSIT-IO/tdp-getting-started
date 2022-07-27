@@ -1,74 +1,152 @@
 #!/usr/bin/env bash
 
-###
-# Bash script to setup environment for deploying
-# virtual TDP cluster using the TDP-getting-started repo
-###
+set -euo pipefail
 
-# tdp-getting-started root dir
-rel_root_dir="$(dirname "$0")/.."
-abs_root_dir="$(realpath "$rel_root_dir")"
+readonly AVAILABLE_FEATURES=(extras)
+readonly PYTHON_BIN=${PYTHON_BIN:-python3}
+readonly PYTHON_VENV=${PYTHON_VENV:-venv}
+readonly TDP_COLLECTION_PATH="ansible_roles/collections/ansible_collections/tosit/tdp"
+readonly TDP_COLLECTION_EXTRAS_PATH="ansible_roles/collections/ansible_collections/tosit/tdp_extra"
 
-# tdp-collection
-# TDP_COLLECTION_URL=https://github.com/TOSIT-IO/tdp-collection
-TDP_ROLES_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp"
-TDP_COLLECTION_STABLE_COMMIT=87b5e78bf550de6e87874b48896e6b621fbb4851
+declare -a FEATURES
+HELP="false"
+RELEASE=stable
 
-# tdp-collection-extras
-# TDP_COLLECTION_EXTRAS_URL=https://github.com/TOSIT-IO/tdp-collection-extras
-TDP_ROLES_EXTRA_PATH="$abs_root_dir/ansible_roles/collections/ansible_collections/tosit/tdp_extra"
-TDP_COLLECTION_EXTRAS_STABLE_COMMIT=da19dd5b36c783375d8dead56efe1fb615ff689c
+print_help() {
+  cat <<EOF
+SYNOPSIS
+  TDP getting started environment setup script.
 
-# Create directories
-mkdir -p logs
-mkdir -p files
+DESCRIPTION
+  Ensures the existence of directories and dependencies required for TDP deployment.
 
-print_usage() {
-  echo """
-  Name:
-    TDP getting started environment setup script
-  Description:
-    Ensures the existence of directories and dependencies required by the TDP getting started project.
-  Usage:
-    setup.sh.sh [-h] [-r latest|stable]
-  Options:
-    -h Display usage
-    -r Specify the release of the downlaoded TDP collections. Takes options latest and stable (the default).
-  """
+USAGE
+  setup.sh [-e feature1 -e ...] [-h] [-r latest|stable]
+
+OPTIONS
+  -e Enable feature, can be set multiple times (Available features: ${AVAILABLE_FEATURES[@]})
+  -h Display help
+  -r Specify the release for TDP deployment. Takes options latest and stable (the default).
+EOF
 }
 
-# Parse args for for target release and help flags
-while getopts 'r:h' options; do
-  case "$options" in
-  r) RELEASE="$OPTARG" ;;
-  h) print_usage && exit 0 ;;
-  *) print_usage && exit 1 ;;
-  esac
-done
+parse_cmdline() {
+  local OPTIND
+  while getopts 'e:hr:' options; do
+    case "$options" in
+    e) FEATURES+=("$OPTARG") ;;
+    h) HELP="true" && return 0 ;;
+    r) RELEASE="$OPTARG" ;;
+    *) return 1 ;;
+    esac
+  done
+  shift $((OPTIND - 1))
+  return 0
+}
 
-# Init, fetch, update and checkout submodules
-git submodule update --init --recursive
+validate_features() {
+  local validate="true"
+  for feature in "${FEATURES[@]}"; do
+    local is_available="false"
+    for available_feature in "${AVAILABLE_FEATURES[@]}"; do
+      [[ "$feature" == "$available_feature" ]] && is_available="true"
+    done
+    if [[ "$is_available" == "false" ]]; then
+      echo "Feature ${feature} does not exist"
+      validate="false"
+    fi
+  done
+  if [[ "$validate" == "true" ]]; then
+    return 0
+  else
+    echo "Available features: ${AVAILABLE_FEATURES[@]}"
+    return 1
+  fi
+}
 
-if [ "$RELEASE" == "latest" ]; then
-  echo "Updating collections to the latest version..."
-  $(cd "$TDP_ROLES_PATH" && git fetch origin && git reset --hard origin/master)
-  $(cd "$TDP_ROLES_EXTRA_PATH" && git fetch origin && git reset --hard origin/master)
+create_directories() {
+  mkdir -p logs files
+}
 
-elif [ "$RELEASE" == "stable" ]; then
-  echo "Updating collections to the stable version..."
-  $(cd "$TDP_ROLES_PATH" && git reset --hard "$TDP_COLLECTION_STABLE_COMMIT")
-  $(cd "$TDP_ROLES_EXTRA_PATH" && git reset --hard "$TDP_COLLECTION_EXTRAS_STABLE_COMMIT")
-fi
+setup_python_venv() {
+  [[ -d "$PYTHON_VENV" ]] && return 0
+  echo "Setup python venv with '${PYTHON_BIN}' to '${PYTHON_VENV}'"
+  "$PYTHON_BIN" -m venv "$PYTHON_VENV"
+  (
+    source "${PYTHON_VENV}/bin/activate"
+    pip install -U pip
+    pip install -r requirements.txt
+  )
+  return 0
+}
 
-# Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-FR/ansible-tdp-roles/pull/57)
-[[ -d "$TDP_ROLES_PATH/playbooks/files" ]] || ln -s "$abs_root_dir/files" "$TDP_ROLES_PATH/playbooks"
-[[ -d "$TDP_ROLES_EXTRA_PATH/playbooks/files" ]] || ln -s "$abs_root_dir/files" "$TDP_ROLES_EXTRA_PATH/playbooks"
+git_submodule_setup() {
+  local path=$1
+  git submodule update --init --recursive "$path"
+  if [[ "$RELEASE" == "latest" ]]; then
+    local commit="origin/master"
+    (
+      cd "$path"
+      git fetch --prune
+      git checkout "$commit"
+      echo "Submodule '${path}' checkout to '${commit}'"
+    )
+  fi
+  return 0
+}
 
-# Copy the default tdp_vars from tdp-collection and tdp-collection-extras
-mkdir -p "$abs_root_dir/inventory/tdp_vars"
-[[ -d "$TDP_ROLES_PATH/tdp_vars_defaults" ]] && cp -rf "$TDP_ROLES_PATH/tdp_vars_defaults/"* "$abs_root_dir/inventory/tdp_vars"
-[[ -d "$TDP_ROLES_EXTRA_PATH/tdp_vars_defaults" ]] && cp -rf "$TDP_ROLES_EXTRA_PATH/tdp_vars_defaults/"* "$abs_root_dir/inventory/tdp_vars"
+setup_submodule_tdp() {
+  local submodule_path="$TDP_COLLECTION_PATH"
+  git_submodule_setup "$submodule_path"
 
-# Download tdp release binaries
-tdp_releases="$abs_root_dir/scripts/tdp-release-uris.txt"
-wget -nc -i "$tdp_releases" -P "$abs_root_dir/files"
+  # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
+  [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
+}
+
+setup_submodule_extras() {
+  local submodule_path="$TDP_COLLECTION_EXTRAS_PATH"
+  git_submodule_setup "$submodule_path"
+
+  # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
+  [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
+}
+
+setup_tdp_vars() {
+  local tdp_vars="inventory/tdp_vars"
+  rm -rf "$tdp_vars"
+  mkdir "$tdp_vars"
+  local tdp_vars_defaults_to_copy=(
+    "${TDP_COLLECTION_PATH}/tdp_vars_defaults"
+    "${TDP_COLLECTION_EXTRAS_PATH}/tdp_vars_defaults"
+  )
+  for tdp_vars_defaults in "${tdp_vars_defaults_to_copy[@]}"; do
+    [[ -d "$tdp_vars_defaults" ]] && cp -rf "${tdp_vars_defaults}/"* "$tdp_vars"
+  done
+  echo "tdp_vars_defaults copied to '${tdp_vars}'"
+  return 0
+}
+
+download_tdp_binaries() {
+  wget --no-clobber --input-file="scripts/tdp-release-uris.txt" --directory-prefix="files"
+}
+
+main() {
+  parse_cmdline "$@" || { print_help; exit 1; }
+  [[ "$HELP" == "true" ]] && { print_help; exit 0; }
+  validate_features
+  create_directories
+  setup_python_venv
+
+  setup_submodule_tdp
+
+  for feature in "${FEATURES[@]}"; do
+    case "$feature" in
+    extras) setup_submodule_extras ;;
+    esac
+  done
+
+  setup_tdp_vars
+  download_tdp_binaries
+}
+
+main "$@"
