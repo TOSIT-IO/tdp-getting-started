@@ -12,10 +12,9 @@ Launch a fully-featured virtual TDP Hadoop cluster with a single command _or_ cu
 
 ## Requirements
 
-- Ansible >= 2.9.6 (to execute the playbooks)
+- Python >= 3.6 with virtual env package (i.e. `python3-venv`)
 - Vagrant >= 2.2.19 (to launch and manage the VMs)
 - VirtualBox >= 6.1.26
-- The Python package `jmespath` (an Ansible dependency for JSON parsing/querying)
 - Unzip (to execute the setup scripts)
 - `jq` required to execute helper script
 
@@ -26,11 +25,13 @@ The Ansible `host` file and the `Vagrantfile` will both be generated using the `
 
 ```bash
 # Clone project from version control
-git clone --recurse-submodules https://github.com/TOSIT-IO/tdp-getting-started.git
+git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collections
-./scripts/setup.sh -r stable
+# Setup local env with stable tdp-collection and tdp-collection-extras
+./scripts/setup.sh -e extras
+# Activate Python virtual env
+source ./venv/bin/activate
 # Generate Vagrantfile and ansible hosts file from inventory
 ansible-playbook generate-node-deployment-config.yml
 # Install centos/7 vagrant box
@@ -60,12 +61,15 @@ Each of the below sections includes a high-level explanation of each possible st
 
 ### Environment Setup
 
-Execute the `setup.sh` script to create the project directories needed and clone the latest ansible TDP roles. It also downloads the TDP binaries from their GitHub releases (e.g., [Hadoop](https://github.com/TOSIT-IO/hadoop/releases/tag/hadoop-project-dist-3.1.1-TDP-0.1.0-SNAPSHOT)).
+Execute the `setup.sh` script to create the project directories needed and clone stable or latest Ansible TDP collections. It also downloads the TDP binaries from their GitHub releases (e.g., [Hadoop](https://github.com/TOSIT-IO/hadoop/releases/tag/hadoop-project-dist-3.1.1-TDP-0.1.0-SNAPSHOT)).
 
 **Note:** The list of TDP binaries needed for deployment is maintained in the `scripts/tdp-release-uris.txt` file.
 
 ```bash
+# Get stable tdp-collection
 ./scripts/setup.sh
+# Get latest tdp-collection and tdp-collection-extras
+./scripts/setup.sh -e extras -r latest
 ```
 
 ### Configuration files generation
