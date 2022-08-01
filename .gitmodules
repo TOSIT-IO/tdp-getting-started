@@ -4,3 +4,6 @@
 [submodule "ansible_roles/collections/ansible_collections/tosit/tdp_extra"]
 	path = ansible_roles/collections/ansible_collections/tosit/tdp_extra
 	url = https://github.com/TOSIT-IO/tdp-collection-extras
+[submodule "tdp-vagrant"]
+	path = tdp-vagrant
+	url = https://github.com/TOSIT-IO/tdp-vagrant.git

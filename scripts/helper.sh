@@ -22,10 +22,10 @@ print_hosts() {
   cd "$root_dir" || exit 1
 
   echo "# TDP Getting Started hosts"
-  ansible-inventory -i inventory --list --export |
+  ansible-inventory --list --export |
     jq -r '
       ._meta.hostvars | to_entries[] |
-      (.value.ansible_host + " " + .key + "." + .value.domain)
+      (.value.ip + " " + .key + "." + .value.domain)
     '
 }
 

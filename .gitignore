@@ -6,7 +6,7 @@ files/
 test.yml
 .vscode/
 RemoveTDP.yml
-inventory/hosts
+inventory/hosts.ini
 inventory/tdp_vars
 Vagrantfile
 venv
