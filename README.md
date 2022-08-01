@@ -1,41 +1,40 @@
 # Getting Started with TDP
 
-Launch a fully-featured virtual TDP Hadoop cluster with a single command _or_ customize the infrastructure and components of your cluster with 1 command per component.
+Use this repository to have a working directory where you run deploy commands with predefined virtual infrastructure with Vagrant or your own infrastructure.
+You can customize the infrastructure and components of your cluster with 1 command per component.
 
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
 - [Web UIs Links](#web-uis-links)
 - [Customised Deployment](#customised-deployment)
   - [Environment Setup](#environment-setup)
-  - [Configuration files generation](#configuration-files-generation)
+  - [Configure infrastructure](#configure-infrastructure)
   - [Services Deployment](#services-deployment)
 
 ## Requirements
 
 - Python >= 3.6 with virtual env package (i.e. `python3-venv`)
-- Vagrant >= 2.2.19 (to launch and manage the VMs)
-- VirtualBox >= 6.1.26
 - Unzip (to execute the setup scripts)
 - `jq` required to execute helper script
 
+If you use TDP Vagrant to deploy VMs see requirements in https://github.com/TOSIT-IO/tdp-vagrant.
+
 ## Quick Start
 
-The below steps will deploy a TDP cluster using the parameters in the `inventory` directory.
-The Ansible `host` file and the `Vagrantfile` will both be generated using the `hosts` variable in `inventory/all.yml`.
+The below steps will deploy a TDP cluster with Vagrant using the parameters in the `inventory` directory.
+The Ansible `host.ini` file will be generated using the `hosts` variable in `tdp-vagrant/vagrant.yml`.
 
 ```bash
 # Clone project from version control
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collection and tdp-collection-extras
-./scripts/setup.sh -e extras
+# Setup local env with stable tdp-collection, tdp-collection-extras, and vagrant
+./scripts/setup.sh -e extras -e vagrant
 # Activate Python virtual env
 source ./venv/bin/activate
-# Generate Vagrantfile and ansible hosts file from inventory
-ansible-playbook generate-node-deployment-config.yml
-# Install centos/7 vagrant box
-vagrant box add centos/7 --provider virtualbox
+# Launch VMs
+vagrant up
 # Deploy TDP cluster
 ansible-playbook deploy-all.yml
 ```
@@ -68,21 +67,30 @@ Execute the `setup.sh` script to create the project directories needed and clone
 ```bash
 # Get stable tdp-collection
 ./scripts/setup.sh
-# Get latest tdp-collection and tdp-collection-extras
-./scripts/setup.sh -e extras -r latest
+# Get latest tdp-collection, tdp-collection-extras, and vagrant
+./scripts/setup.sh -e extras -e vagrant -r latest
 ```
 
-### Configuration files generation
+### Configure infrastructure
 
+#### Use TDP Vagrant
+
+You can define `vagrant.yml` file to update the machine resources according to your machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes). The file `tdp-vagrant/vagrant.yml` contains default values.
+
+```bash
+cp tdp-vagrant/vagrant.yml .
+# Now you can edit ./vagrant.yml
 ```
-ansible-playbook generate-node-deployment-config.yml
+
+**Important:** Do not modify `tdp-vagrant/vagrant.yml` to make it easier to update git submodule. The Vagrantfile will read `vagrant.yml` in the current directory and fallback to `tdp-vagrant/vagrant.yml`.
+
+Start VMs with `vagrant` command.
+
+```bash
+vagrant up
 ```
 
-This playbook will generate the `Vagrantfile` and the `inventory/hosts` file.
-
-**Important:**
-
-- Update the machine resources assigned to the VMs in the `Vagrantfile` according to your machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes).
+For TDP Vagrant usage see https://github.com/TOSIT-IO/tdp-vagrant.
 
 **Note:** The `helper.sh` script can generate the list of hosts in the cluster. Add the generated lines to your `/etc/hosts` file to resolve the local nodes from your shell or browser.
 
@@ -99,10 +107,6 @@ ansible-playbook deploy-all.yml
 ```
 
 This playbook deploys the following services: a CA, an LDAP, a KDC, PostgreSQL, ZooKeeper, Hadoop core (HDFS, YARN, MapReduce), Ranger, Hive, Spark (2 and 3), HBase and Knox.
-
-The first action in `deploy-all.yml` is to run the `vagrant-up-parallel.sh` script which spawns and configures a set of 7 virtual machines at static IPs described in the `inventory/hosts` file.
-
-_Check the status of the created VMs with the command `vagrant status`, and ssh to them with the command `vagrant ssh <target-ansible-host>`._
 
 #### SSH Key Generation and Deployment
 
