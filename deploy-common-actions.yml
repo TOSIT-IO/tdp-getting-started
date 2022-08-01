@@ -1,10 +1,4 @@
 ---
-- hosts: localhost
-  become: False
-  tasks:
-    - name: Start VMs in parallel
-      command: "sh ./scripts/vagrant-up-parallel.sh {{num_vagrant_processes}}"
-
 - hosts: all
   become: yes
   tasks:
