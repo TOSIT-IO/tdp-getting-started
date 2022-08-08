@@ -23,3 +23,4 @@ https://github.com/TOSIT-IO/incubator-livy/releases/download/v0.8.0-incubating-T
 https://archive.apache.org/dist/zookeeper/zookeeper-3.5.9/apache-zookeeper-3.5.9-bin.tar.gz
 https://github.com/TOSIT-IO/kafka/releases/download/2.8.2-TDP-0.1.0/kafka_2.13-2.8.2-TDP-0.1.0-SNAPSHOT.tgz
 https://github.com/TOSIT-FR/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAPSHOT/ranger-2.0.1-TDP-0.1.0-SNAPSHOT-kafka-plugin.tar.gz
+https://github.com/TOSIT-IO/hbase-connectors/releases/download/hbase-spark-2.3.5-1.0.0-TDP-0.1.0-SNAPSHOT-tag/hbase-spark-2.3.5-1.0.0-TDP-0.1.0-SNAPSHOT.jar
