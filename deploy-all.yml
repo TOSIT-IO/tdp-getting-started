@@ -1,6 +1,4 @@
 ---
-- import_playbook: deploy-common-actions.yml
-- import_playbook: deploy-ca.yml
 - import_playbook: deploy-ldap-kerberos.yml
 - import_playbook: deploy-postgres.yml
 - import_playbook: deploy-exporter.yml
