@@ -9,6 +9,7 @@ You can customize the infrastructure and components of your cluster with 1 comma
 - [Customised Deployment](#customised-deployment)
   - [Environment Setup](#environment-setup)
   - [Configure infrastructure](#configure-infrastructure)
+  - [Configure prerequisites](#configure-prerequisites)
   - [Services Deployment](#services-deployment)
 
 ## Requirements
@@ -29,12 +30,14 @@ The Ansible `host.ini` file will be generated using the `hosts` variable in `tdp
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collection, tdp-collection-extras, and vagrant
-./scripts/setup.sh -e extras -e vagrant
+# Setup local env with stable tdp-collection, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
+./scripts/setup.sh -e extras -e prerequisites -e vagrant
 # Activate Python virtual env
 source ./venv/bin/activate
 # Launch VMs
 vagrant up
+# Configure TDP prerequisites
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
 # Deploy TDP cluster
 ansible-playbook deploy-all.yml
 ```
@@ -67,13 +70,15 @@ Execute the `setup.sh` script to create the project directories needed and clone
 ```bash
 # Get stable tdp-collection
 ./scripts/setup.sh
-# Get latest tdp-collection, tdp-collection-extras, and vagrant
-./scripts/setup.sh -e extras -e vagrant -r latest
+# Get latest tdp-collection, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
+./scripts/setup.sh -e extras -e prerequisites -e vagrant -r latest
 ```
 
 ### Configure infrastructure
 
 #### Use TDP Vagrant
+
+To use `tdp-vagrant` it is necessary to use the `-e vagrant` option when using `setup.sh`.
 
 You can define `vagrant.yml` file to update the machine resources according to your machine's RAM and core count (3Gb of RAM and 4 cores is ideal for the master nodes). The file `tdp-vagrant/vagrant.yml` contains default values.
 
@@ -98,6 +103,18 @@ For TDP Vagrant usage see https://github.com/TOSIT-IO/tdp-vagrant.
 ./scripts/helper.sh -h
 ```
 
+### Configure prerequisites
+
+To use `tdp-collection-prerequisites` it is necessary to use the `-e prerequisites` option when using `setup.sh`.
+
+```bash
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
+```
+
+This playbook deploys the following services: Chrony, a CA.
+
+For TDP prerequisites usage see https://github.com/TOSIT-IO/tdp-collection-prerequisites.
+
 ### Services Deployment
 
 #### Main playbook
@@ -106,7 +123,7 @@ For TDP Vagrant usage see https://github.com/TOSIT-IO/tdp-vagrant.
 ansible-playbook deploy-all.yml
 ```
 
-This playbook deploys the following services: a CA, an LDAP, a KDC, PostgreSQL, ZooKeeper, Hadoop core (HDFS, YARN, MapReduce), Ranger, Hive, Spark (2 and 3), HBase and Knox.
+This playbook deploys the following services: an LDAP, a KDC, PostgreSQL, ZooKeeper, Hadoop core (HDFS, YARN, MapReduce), Ranger, Hive, Spark (2 and 3), HBase and Knox.
 
 #### SSH Key Generation and Deployment
 
@@ -115,16 +132,6 @@ It is **optionally** possible to generate a new ssh key pair and deploy the publ
 ```
 ansible-playbook deploy-ssh-key.yml
 ```
-
-#### Certificate Authority and Certificates
-
-Creates a certificate authority at the `[ca]` Ansible group and distributes signed certificates and keys to each VM.
-
-```
-ansible-playbook deploy-ca.yml
-```
-
-_The certificates will also be downloaded to the `files/certs` local project folder._
 
 #### Kerberos
 

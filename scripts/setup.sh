@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly AVAILABLE_FEATURES=(extras vagrant)
+readonly AVAILABLE_FEATURES=(extras prerequisites vagrant)
 readonly PYTHON_BIN=${PYTHON_BIN:-python3}
 readonly PYTHON_VENV=${PYTHON_VENV:-venv}
 readonly TDP_COLLECTION_PATH="ansible_roles/collections/ansible_collections/tosit/tdp"
@@ -111,6 +111,12 @@ setup_submodule_extras() {
   [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
 }
 
+setup_submodule_prerequisites() {
+  local submodule_path="ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites"
+  git_submodule_setup "$submodule_path"
+  [[ -f "inventory/topologies/prerequisites" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/prerequisites
+}
+
 setup_submodule_vagrant() {
   git_submodule_setup "tdp-vagrant"
   [[ -f "Vagrantfile" ]] || ln -s tdp-vagrant/Vagrantfile Vagrantfile
@@ -147,8 +153,9 @@ main() {
 
   for feature in "${FEATURES[@]}"; do
     case "$feature" in
-    extras)  setup_submodule_extras ;;
-    vagrant) setup_submodule_vagrant ;;
+    extras)        setup_submodule_extras ;;
+    prerequisites) setup_submodule_prerequisites ;;
+    vagrant)       setup_submodule_vagrant ;;
     esac
   done
 
