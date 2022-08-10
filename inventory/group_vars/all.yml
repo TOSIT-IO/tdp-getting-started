@@ -2,6 +2,14 @@
 # TDP
 realm: REALM.TDP
 
+# If you need HTTP proxy to reach internet
+# http_proxy: "http://proxy:3128"
+# https_proxy: "{{ http_proxy }}"
+# no_proxy: ""
+
+# Override default NTP servers
+# ntp_servers: []
+
 # Ranger
 ranger_admin_password: RangerAdmin123
 

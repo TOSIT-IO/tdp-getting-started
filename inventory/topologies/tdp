@@ -13,9 +13,6 @@ master-01
 [ldap]
 master-01
 
-[ca]
-master-01
-
 [hdfs_nn]
 master-0[1:2]
 
