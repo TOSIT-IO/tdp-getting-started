@@ -1,7 +1,0 @@
----
-- hosts: all
-  become: yes
-  tasks:
-    - name: Common setup and configuration accross all ansible hosts
-      import_role:
-        name: ansible_roles/collections/ansible_collections/tosit/tdp_extra/roles/ansible-tdp-common-actions
