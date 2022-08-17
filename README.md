@@ -34,6 +34,9 @@ cd tdp-getting-started
 ./scripts/setup.sh -e extras -e prerequisites -e vagrant
 # Activate Python virtual env
 source ./venv/bin/activate
+# To enable mitogen
+export ANSIBLE_STRATEGY_PLUGINS="$(python -c 'import os,ansible_mitogen; print(os.path.dirname(ansible_mitogen.__file__))')/plugins/strategy"
+export ANSIBLE_STRATEGY="mitogen_linear"
 # Launch VMs
 vagrant up
 # Configure TDP prerequisites
