@@ -243,10 +243,10 @@ _Note that all necessary Ranger policies have been deployed automatically as par
 
 From the Beeline client, execute the following code blocks to interact with Hive:
 
-```bash
+```hql
 # Create the database
-CREATE DATABASE IF NOT EXISTS tdp_user_db;
-USE tdp_user_db;
+CREATE DATABASE IF NOT EXISTS tdp_user LOCATION '/user/tdp_user/warehouse/tdp_user.db';
+USE tdp_user;
 
 # Examine the database
 SHOW DATABASES;

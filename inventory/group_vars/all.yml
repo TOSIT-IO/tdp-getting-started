@@ -201,7 +201,7 @@ user_hive_policies:
         values: ["*"]
       database:
         isExcludes: false
-        values: [tdp_user]
+        values: [tdp_user*]
       table:
         isExcludes: false
         values: ["*"]
