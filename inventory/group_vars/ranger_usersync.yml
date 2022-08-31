@@ -1,4 +1,4 @@
-# Ranger UserSync
+---
 usersync_install_properties:
   SYNC_LDAP_BIND_DN: cn=Manager,ou=tdp,o=tosit,c=io
   SYNC_LDAP_BIND_PASSWORD: secret

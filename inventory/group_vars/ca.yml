@@ -1,6 +1,0 @@
-hosts_fqdns: "{{ groups['all'] |  map('tosit.tdp.access_fqdn', hostvars) | list }}"
-ranger_kafka_plugin_cn: "ranger-kafka-plugin.{{ domain }}"
-
-ca_name: tdp
-certs_fqdns: "{{ hosts_fqdns + [ranger_kafka_plugin_cn] }}"
-ca_key_filename: ca_key.pem
