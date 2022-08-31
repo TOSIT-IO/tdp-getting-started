@@ -76,6 +76,7 @@ ranger_usync_restart: always
 spark_hs_restart: always
 zk_restart: always
 
+ranger_admin_password: RangerAdmin123
 POLICY_MGR_URL: "https://{{ groups['ranger_admin'][0] | tosit.tdp.access_fqdn(hostvars) }}:6182"
 
 # Hadoop
