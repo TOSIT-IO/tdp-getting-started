@@ -1,9 +1,0 @@
----
-hive_user: hive
-hive_site:
-  javax.jdo.option.ConnectionURL: "{{ hive_ms_db_url }}/{{ hive_ms_db_name }}"
-  javax.jdo.option.ConnectionDriverName: org.postgresql.Driver
-  datanucleus.autoCreateSchema: false
-  hive.zookeeper.quorum: "{{ hadoop_ha_zookeeper_quorum }}"
-  javax.jdo.option.ConnectionUserName: hive
-  javax.jdo.option.ConnectionPassword: hive

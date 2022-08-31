@@ -101,6 +101,7 @@ setup_submodule_tdp() {
 
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
   [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
+  [[ -f "inventory/topologies/01_tdp" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/01_tdp
 }
 
 setup_submodule_extras() {
@@ -109,6 +110,7 @@ setup_submodule_extras() {
 
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
   [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
+  [[ -f "inventory/topologies/extras" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/extras
 }
 
 setup_submodule_prerequisites() {
