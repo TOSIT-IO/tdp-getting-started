@@ -1,3 +1,0 @@
----
-tez_release: tez-0.9.1-TDP-0.1.0-SNAPSHOT
-tez_dist_file: "{{ tez_release }}.tar.gz"

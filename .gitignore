@@ -9,6 +9,5 @@ RemoveTDP.yml
 inventory/hosts.ini
 inventory/tdp_vars
 inventory/topologies/*
-!inventory/topologies/tdp
 Vagrantfile
 venv
