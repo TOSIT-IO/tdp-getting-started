@@ -10,22 +10,6 @@ realm: REALM.TDP
 # Override default NTP servers
 # ntp_servers: []
 
-ldap_groups:
-  - group: tdp_user
-    gid: 1101
-  - group: smoke_user
-    gid: 1102
-
-ldap_users:
-  - user: tdp_user
-    password: tdp_user123
-    uid: 1101
-    gid: 1101
-  - user: smoke_user
-    password: smoke_user123
-    uid: 1102
-    gid: 1102
-
 # Kerberos
 kadmin_principal: admin/admin
 kadmin_password: admin123
@@ -104,7 +88,7 @@ spark_defaults:
   spark.history.fs.logDirectory: hdfs://mycluster/spark-logs
   spark-yarn-historyServer: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}:18081"
 
-# User management (users created in deploy-users.yml)
+# User management
 users:
   - user: tdp_user
     password: tdp_user123
@@ -117,55 +101,17 @@ users:
     uid: 1102
     gid: 1102
 
-# Depends on hdfs service
-user_hdfs_policies:
-  - name: tdp_user - path
-    description: tdp_user access to /user/tdp_user
-    service: hdfs-tdp
-    isAuditEnabled: true
-    isEnabled: true
-    resources:
-      path:
-        isExcludes: false
-        isRecursive: true
-        values: ["/user/tdp_user"]
-    policyItems:
-      - accesses:
-          - { isAllowed: true, type: read }
-          - { isAllowed: true, type: write }
-          - { isAllowed: true, type: execute }
-        conditions: []
-        delegateAdmin: true
-        groups: []
-        users: [tdp_user]
-    repositoryType: hdfs
-  - name: smoke_user - path
-    description: smoke_user access to /user/smoke_user
-    service: hdfs-tdp
-    isAuditEnabled: true
-    isEnabled: true
-    resources:
-      path:
-        isExcludes: false
-        isRecursive: true
-        values: ["/user/smoke_user"]
-    policyItems:
-      - accesses:
-          - { isAllowed: true, type: read }
-          - { isAllowed: true, type: write }
-          - { isAllowed: true, type: execute }
-        conditions: []
-        delegateAdmin: true
-        groups: []
-        users: [smoke_user]
-    repositoryType: hdfs
+ldap_groups: "{{ users }}"
+ldap_users: "{{ users }}"
 
-# Depends on hive service
-user_hive_policies:
+hdfs_user_homes: "{{ users }}"
+
+# Ranger policy management
+ranger_policies:
+  # Hive
   - name: tdp_user - database
     description: tdp_user access to tdp_user database
     service: hive-tdp
-    repositoryType: hive
     isAuditEnabled: true
     isEnabled: true
     resources:
@@ -196,12 +142,10 @@ user_hive_policies:
           - { isAllowed: true, type: refresh }
         conditions: []
 
-# Depends on hbase service
-user_hbase_policies:
+  # HBase
   - name: tdp_user - table
     description: tdp_user access to tdp_user_* tables
     service: hbase-tdp
-    repositoryType: hbase
     isAuditEnabled: true
     isEnabled: true
     resources:
@@ -224,11 +168,10 @@ user_hbase_policies:
           - { isAllowed: true, type: create }
         conditions: []
 
-user_kafka_policies:
+  # Kafka
   - name: tdp_user - topic
     description: test_user access to tdp-user-* topics
     service: kafka-tdp
-    repositoryType: kafka
     isAuditEnabled: true
     isEnabled: true
     resources:
