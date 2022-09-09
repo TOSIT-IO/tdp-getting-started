@@ -48,8 +48,10 @@ ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/p
 ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/livy-spark3.yml
 ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/zookeeper-kafka.yml
 ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/kafka.yml
-# Add tdp_user
-ansible-playbook deploy-users.yml
+# Configure HDFS user home directories
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
+# Configure Ranger policies
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
 ```
 
 ## Web UIs Links
@@ -426,20 +428,33 @@ kafka-console-consumer.sh --topic test-topic --from-beginning \
   --consumer.config /etc/kafka/conf/consumer.properties
 ```
 
-#### Create Cluster Users
+### Utils
 
-The below command creates:
+#### Configure HDFS user home directories
 
-- Unix users `tdp_user` and `tdp-admin` on each node of the cluster
-- A Kerberos principal named `<user>/<fqdn>@<realm>` with keytabs at `/home/<user>/.ssh/<user>.kerberos.keytab`
-- All users are added to the users' group
-- Users with `admin` in the name will also be added to the group `tdp-admin`
+Create, update, remove HDFS user home directories.
 
 ```
-ansible-playbook deploy-users.yml
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
 ```
 
-_Additional users can be added to the Ansible playbook parameter `users` in the `deploy-users.yml` if required._
+_Additional users can be added to the Ansible variable `hdfs_user_homes` if required._
+
+When adding users following the Ranger Usersync deployment, you will need to add or update Ranger policies including these new users. You must wait for Ranger Usersync to poll users from LDAP or you can restart the Ranger Usersync using the following playbook:
+
+```
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_usersync_restart.yml
+```
+
+#### Configure Ranger policies
+
+Create, update, remove Ranger policies.
+
+```
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
+```
+
+_Additional policies can be added to the Ansible variable `ranger_policies` if required._
 
 #### Autostart Cluster Services
 
