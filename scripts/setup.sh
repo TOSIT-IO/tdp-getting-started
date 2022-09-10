@@ -8,6 +8,7 @@ readonly PYTHON_VENV=${PYTHON_VENV:-venv}
 readonly TDP_COLLECTION_PATH="ansible_roles/collections/ansible_collections/tosit/tdp"
 readonly TDP_COLLECTION_EXTRAS_PATH="ansible_roles/collections/ansible_collections/tosit/tdp_extra"
 
+CLEAN="false"
 declare -a FEATURES
 HELP="false"
 RELEASE=stable
@@ -19,11 +20,14 @@ SYNOPSIS
 
 DESCRIPTION
   Ensures the existence of directories and dependencies required for TDP deployment.
+  If submodule are not present, they will be checkout. Use "-c" option to force submodule update.
+  If needed symlink and "tdp_vars" are not present, they will be created. Use "-c" option to remove and re-create them.
 
 USAGE
   setup.sh [-e feature1 -e ...] [-h] [-r latest|stable]
 
 OPTIONS
+  -c Run in clean mode (reset git submodule, symlink, tdp_vars, etc.)
   -e Enable feature, can be set multiple times (Available features: ${AVAILABLE_FEATURES[@]})
   -h Display help
   -r Specify the release for TDP deployment. Takes options latest and stable (the default).
@@ -32,8 +36,9 @@ EOF
 
 parse_cmdline() {
   local OPTIND
-  while getopts 'e:hr:' options; do
+  while getopts 'ce:hr:' options; do
     case "$options" in
+    c) CLEAN="true" ;;
     e) FEATURES+=("$OPTARG") ;;
     h) HELP="true" && return 0 ;;
     r) RELEASE="$OPTARG" ;;
@@ -82,6 +87,10 @@ setup_python_venv() {
 
 git_submodule_setup() {
   local path=$1
+  if [[ -d "$path" ]] && [[ "$CLEAN" == "false" ]]; then
+    echo "Submodule '${path}' present, nothing to do"
+    return 0
+  fi
   git submodule update --init --recursive "$path"
   if [[ "$RELEASE" == "latest" ]]; then
     local commit="origin/master"
@@ -95,13 +104,28 @@ git_submodule_setup() {
   return 0
 }
 
+create_symlink_if_needed() {
+  local target=$1
+  local link_name=$2
+  if [[ "$CLEAN" == "true" ]]; then
+    echo "Remove '${link_name}'"
+    rm -rf "$link_name"
+  fi
+  if [[ -e "$link_name" ]]; then
+    echo "File '${link_name}' exists, nothing to do"
+    return 0
+  fi
+  echo "Create symlink '${link_name}'"
+  ln -s "$target" "$link_name"
+}
+
 setup_submodule_tdp() {
   local submodule_path="$TDP_COLLECTION_PATH"
   git_submodule_setup "$submodule_path"
 
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
-  [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
-  [[ -f "inventory/topologies/01_tdp" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/01_tdp
+  create_symlink_if_needed "../../../../../../files" "${submodule_path}/playbooks/files"
+  create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/01_tdp"
 }
 
 setup_submodule_extras() {
@@ -109,25 +133,32 @@ setup_submodule_extras() {
   git_submodule_setup "$submodule_path"
 
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
-  [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
-  [[ -f "inventory/topologies/extras" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/extras
+  create_symlink_if_needed "../../../../../../files" "${submodule_path}/playbooks/files"
+  create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/extras"
 }
 
 setup_submodule_prerequisites() {
   local submodule_path="ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites"
   git_submodule_setup "$submodule_path"
-  [[ -f "inventory/topologies/prerequisites" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/prerequisites
+  create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/prerequisites"
 }
 
 setup_submodule_vagrant() {
   git_submodule_setup "tdp-vagrant"
-  [[ -f "Vagrantfile" ]] || ln -s tdp-vagrant/Vagrantfile Vagrantfile
-  [[ -f "inventory/hosts.ini" ]] || ln -s ../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory inventory/hosts.ini
+  create_symlink_if_needed "tdp-vagrant/Vagrantfile" "Vagrantfile"
+  create_symlink_if_needed "../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory" "inventory/hosts.ini"
 }
 
 setup_tdp_vars() {
   local tdp_vars="inventory/tdp_vars"
-  rm -rf "$tdp_vars"
+  if [[ "$CLEAN" == "true" ]]; then
+    echo "Remove ${tdp_vars}"
+    rm -rf "$tdp_vars"
+  fi
+  if [[ -e "$tdp_vars" ]]; then
+    echo "File ${tdp_vars} exists, nothing to do"
+    return 0
+  fi
   mkdir "$tdp_vars"
   local tdp_vars_defaults_to_copy=(
     "${TDP_COLLECTION_PATH}/tdp_vars_defaults"
