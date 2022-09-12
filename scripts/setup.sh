@@ -99,30 +99,37 @@ setup_submodule_tdp() {
   local submodule_path="$TDP_COLLECTION_PATH"
   git_submodule_setup "$submodule_path"
 
+  mkdir -p inventory/topologies
+
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
   [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
-  [[ -f "inventory/topologies/01_tdp" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/01_tdp
+  [[ -L "inventory/topologies/01_tdp" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/01_tdp
 }
 
 setup_submodule_extras() {
   local submodule_path="$TDP_COLLECTION_EXTRAS_PATH"
   git_submodule_setup "$submodule_path"
 
+  mkdir -p inventory/topologies
+
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
   [[ -d "${submodule_path}/playbooks/files" ]] || ln -s "../../../../../../files" "${submodule_path}/playbooks"
-  [[ -f "inventory/topologies/extras" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/extras
+  [[ -L "inventory/topologies/extras" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/extras
 }
 
 setup_submodule_prerequisites() {
   local submodule_path="ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites"
   git_submodule_setup "$submodule_path"
-  [[ -f "inventory/topologies/prerequisites" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/prerequisites
+
+  mkdir -p inventory/topologies
+
+  [[ -L "inventory/topologies/prerequisites" ]] || ln -s "../../${submodule_path}/topology.ini" inventory/topologies/prerequisites
 }
 
 setup_submodule_vagrant() {
   git_submodule_setup "tdp-vagrant"
   [[ -f "Vagrantfile" ]] || ln -s tdp-vagrant/Vagrantfile Vagrantfile
-  [[ -f "inventory/hosts.ini" ]] || ln -s ../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory inventory/hosts.ini
+  [[ -L "inventory/hosts.ini" ]] || ln -s ../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory inventory/hosts.ini
 }
 
 setup_tdp_vars() {
