@@ -70,7 +70,7 @@ validate_features() {
 }
 
 create_directories() {
-  mkdir -p logs files
+  mkdir -p logs files inventory/topologies
 }
 
 setup_python_venv() {
