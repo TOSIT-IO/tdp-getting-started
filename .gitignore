@@ -2,7 +2,7 @@ pythonenv/
 .vagrant/
 *.log
 .DS_Store
-files/
+files
 test.yml
 .vscode/
 RemoveTDP.yml
