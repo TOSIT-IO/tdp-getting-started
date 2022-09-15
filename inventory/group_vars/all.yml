@@ -20,6 +20,12 @@ ca_name: "tdp_ca"
 ca_file: "{{ certs_dir }}/tdp_ca.crt"
 
 # Service start on boot
+node_exporter_start_on_boot: yes
+zk_start_on_boot: yes
+ranger_admin_start_on_boot: yes
+ranger_usersync_start_on_boot: yes
+ranger_kms_start_on_boot: yes
+ranger_solr_start_on_boot: yes
 hdfs_nn_start_on_boot: yes
 hdfs_dn_start_on_boot: yes
 hdfs_jn_start_on_boot: yes
@@ -27,22 +33,23 @@ hdfs_zkfc_start_on_boot: yes
 yarn_nm_start_on_boot: yes
 yarn_rm_start_on_boot: yes
 yarn_ts_start_on_boot: yes
+mapred_jhs_start_on_boot: yes
+hiveserver2_start_on_boot: yes
+hivemetastore_start_on_boot: yes
 hbase_master_start_on_boot: yes
 hbase_rs_start_on_boot: yes
-hiveserver2_start_on_boot: yes
-knox_start_on_boot: yes
-oozie_start_on_boot: yes
-ranger_admin_start_on_boot: yes
-ranger_usync_start_on_boot: yes
+hbase_rest_start_on_boot: yes
+phoenix_queryserver_start_on_boot: yes
 spark_hs_start_on_boot: yes
-spark3_hs_start_on_boot: yes
-zk_start_on_boot: yes
-krb_start_on_boot: yes
+knox_start_on_boot: yes
 livy_start_on_boot: yes
-livy_spark3_start_on_boot: yes
 kafka_start_on_boot: yes
 
 # Service restart policies
+zk_restart: always
+ranger_admin_restart: always
+ranger_usync_restart: always
+ranger_kms_restart: always
 hdfs_nn_restart: always
 hdfs_dn_restart: always
 hdfs_jn_restart: always
@@ -50,15 +57,17 @@ hdfs_zkfc_restart: always
 yarn_nm_restart: always
 yarn_rm_restart: always
 yarn_ts_restart: always
+mapred_jhs_restart: always
+hiveserver2_restart: always
+hivemetastore_restart: always
 hbase_master_restart: always
 hbase_rs_restart: always
-hiveserver2_restart: always
-knox_restart: always
-oozie_restart: always
-ranger_admin_restart: always
-ranger_usync_restart: always
+hbase_rest_restart: always
+phoenix_queryserver_restart: always
 spark_hs_restart: always
-zk_restart: always
+knox_restart: always
+livy_restart: always
+kafka_restart: always
 
 ranger_admin_password: RangerAdmin123
 POLICY_MGR_URL: "https://{{ groups['ranger_admin'][0] | tosit.tdp.access_fqdn(hostvars) }}:6182"
