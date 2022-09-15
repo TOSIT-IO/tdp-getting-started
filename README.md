@@ -455,11 +455,3 @@ ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playboo
 ```
 
 _Additional policies can be added to the Ansible variable `ranger_policies` if required._
-
-#### Autostart Cluster Services
-
-As the getting started cluster is entirely virtual, when you switch off your computer the VMs will also turn off. To simplify getting your cluster up and running after booting up, the following command will launch a playbook that auto starts the necessary services to run the getting started cluster services:
-
-```yaml
-ansible-playbook deploy-service-start-on-boot-policies.yml
-```
