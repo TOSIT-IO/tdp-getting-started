@@ -10,3 +10,6 @@
 [submodule "ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites"]
 	path = ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites
 	url = https://github.com/TOSIT-IO/tdp-collection-prerequisites.git
+[submodule "tdp-lib"]
+	path = tdp-lib
+	url = https://github.com/TOSIT-IO/tdp-lib
