@@ -25,12 +25,14 @@ If you use TDP Vagrant to deploy VMs see requirements in https://github.com/TOSI
 The below steps will deploy a TDP cluster with Vagrant using the parameters in the `inventory` directory.
 The Ansible `host.ini` file will be generated using the `hosts` variable in `tdp-vagrant/vagrant.yml`.
 
+### Prerequisites
+
 ```bash
 # Clone project from version control
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collection, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
+# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-collection-extras, tdp-collection-prerequisites, and vagrant
 ./scripts/setup.sh -e extras -e prerequisites -e vagrant
 # Activate Python virtual env
 source ./venv/bin/activate
@@ -41,6 +43,24 @@ export ANSIBLE_STRATEGY="mitogen_linear"
 vagrant up
 # Configure TDP prerequisites
 ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
+```
+
+You have two ways to deploy a TDP cluster, using TDP lib CLI or using Ansible playbook.
+
+### Deploy with TDP lib CLI
+
+```bash
+# Deploy TDP cluster core and extras services
+tdp deploy
+# Configure HDFS user home directories
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
+# Configure Ranger policies
+ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
+```
+
+### Deploy with Ansible playbook
+
+```bash
 # Deploy TDP cluster core services
 ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/all.yml
 # Deploy extras services
@@ -128,6 +148,16 @@ This playbook deploys the following services: Chrony, a CA, a LDAP, a KDC, a Pos
 For TDP prerequisites usage see https://github.com/TOSIT-IO/tdp-collection-prerequisites.
 
 ### Core Services Deployment
+
+#### TDP lib command
+
+```bash
+tdp deploy
+```
+
+This command deploys all core and extra (if enable during setup) services.
+
+For TDP lib usage see https://github.com/TOSIT-IO/tdp-lib.
 
 #### Main playbook
 
