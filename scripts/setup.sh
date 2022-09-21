@@ -87,7 +87,8 @@ setup_python_venv() {
 
 git_submodule_setup() {
   local path=$1
-  if [[ -d "$path" ]] && [[ "$CLEAN" == "false" ]]; then
+  local status="$(git submodule status -- "$path")"
+  if [[ "$status" != -* ]] && [[ "$CLEAN" == "false" ]]; then
     echo "Submodule '${path}' present, nothing to do"
     return 0
   fi
