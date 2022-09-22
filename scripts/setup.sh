@@ -112,7 +112,7 @@ create_symlink_if_needed() {
     echo "Remove '${link_name}'"
     rm -rf "$link_name"
   fi
-  if [[ -e "$link_name" ]]; then
+  if [[ -e "$link_name" ]] || [[ -L "$link_name" ]]; then
     echo "File '${link_name}' exists, nothing to do"
     return 0
   fi
