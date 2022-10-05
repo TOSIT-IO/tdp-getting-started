@@ -1,0 +1,8 @@
+---
+auth_to_local:
+  livy:
+    - RULE:[2:$1/$2@$0](livy/.*@{{ realm }})s/.*/livy/
+
+core_site:
+  hadoop.proxyuser.livy.hosts: "*"
+  hadoop.proxyuser.livy.groups: "*"

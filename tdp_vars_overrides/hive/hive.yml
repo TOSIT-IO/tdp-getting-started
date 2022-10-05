@@ -8,3 +8,9 @@ db_type: postgres
 hive_site:
   javax.jdo.option.ConnectionURL: "{{ hive_ms_db_url }}/{{ hive_ms_db_name }}"
   javax.jdo.option.ConnectionDriverName: org.postgresql.Driver
+
+hiveserver2_start_on_boot: yes
+hivemetastore_start_on_boot: yes
+
+hiveserver2_restart: always
+hivemetastore_restart: always

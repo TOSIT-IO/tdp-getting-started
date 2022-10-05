@@ -1,0 +1,10 @@
+---
+yarn_nm_start_on_boot: yes
+yarn_rm_start_on_boot: yes
+yarn_ts_start_on_boot: yes
+mapred_jhs_start_on_boot: yes
+
+yarn_nm_restart: always
+yarn_rm_restart: always
+yarn_ts_restart: always
+mapred_jhs_restart: always

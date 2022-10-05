@@ -1,0 +1,10 @@
+---
+hbase_master_start_on_boot: yes
+hbase_rs_start_on_boot: yes
+hbase_rest_start_on_boot: yes
+phoenix_queryserver_start_on_boot: yes
+
+hbase_master_restart: always
+hbase_rs_restart: always
+hbase_rest_restart: always
+phoenix_queryserver_restart: always

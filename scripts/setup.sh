@@ -9,6 +9,7 @@ readonly TDP_COLLECTION_PATH="ansible_roles/collections/ansible_collections/tosi
 readonly TDP_COLLECTION_EXTRAS_PATH="ansible_roles/collections/ansible_collections/tosit/tdp_extra"
 readonly SQLITE_DB_PATH=${SQLITE_DB_PATH:-sqlite.db}
 readonly TDP_DATABASE_DSN=${TDP_DATABASE_DSN:-sqlite:///$SQLITE_DB_PATH}
+readonly TDP_VARS_OVERRIDES=${TDP_VARS_OVERRIDES:-tdp_vars_overrides}
 
 CLEAN="false"
 declare -a FEATURES
@@ -189,14 +190,18 @@ setup_python_venv() {
 
 init_tdp_lib() {
   local tdp_vars="inventory/tdp_vars"
+  local tdp_lib_cli_args=(init)
   if [[ "$CLEAN" == "true" ]]; then
     echo "Remove '${tdp_vars}' and '${SQLITE_DB_PATH}'"
     rm -rf "$tdp_vars" "$SQLITE_DB_PATH"
   fi
+  if [[ -n "$TDP_VARS_OVERRIDES" ]]; then
+    tdp_lib_cli_args+=(--overrides "$TDP_VARS_OVERRIDES")
+  fi
   echo "tdp-lib init"
   (
     source "${PYTHON_VENV}/bin/activate"
-    tdp init
+    tdp "${tdp_lib_cli_args[@]}"
   )
   return 0
 }
