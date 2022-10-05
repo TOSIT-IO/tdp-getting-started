@@ -1,0 +1,10 @@
+---
+hdfs_nn_start_on_boot: yes
+hdfs_dn_start_on_boot: yes
+hdfs_jn_start_on_boot: yes
+hdfs_zkfc_start_on_boot: yes
+
+hdfs_nn_restart: always
+hdfs_dn_restart: always
+hdfs_jn_restart: always
+hdfs_zkfc_restart: always

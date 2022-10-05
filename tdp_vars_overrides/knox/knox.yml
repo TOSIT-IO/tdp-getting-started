@@ -9,3 +9,7 @@ gateway_topology:
           main.ldapRealm.contextFactory.systemUsername: "cn=Manager,ou=tdp,o=tosit,c=io"
           main.ldapRealm.contextFactory.systemPassword: "secret"
           main.ldapRealm.userDnTemplate: "uid={0},ou=users,c=io"
+
+knox_start_on_boot: yes
+
+knox_restart: always

@@ -1,9 +1,0 @@
----
-ranger_jdbc_connector_package: postgresql-jdbc
-kms_install_properties:
-  DB_FLAVOR: postgres
-  SQL_CONNECTOR_JAR: /usr/share/java/postgresql-jdbc.jar
-  db_host: "{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
-  db_name: rangerkms
-  db_user: rangerkms
-  db_password: rangerkms
