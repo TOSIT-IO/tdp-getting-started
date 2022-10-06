@@ -1,14 +1,14 @@
-[submodule "ansible_roles/collections/ansible_collections/tosit/tdp"]
-	path = ansible_roles/collections/ansible_collections/tosit/tdp
+[submodule "ansible_collections/tosit/tdp"]
+	path = ansible_collections/tosit/tdp
 	url = https://github.com/TOSIT-IO/tdp-collection
-[submodule "ansible_roles/collections/ansible_collections/tosit/tdp_extra"]
-	path = ansible_roles/collections/ansible_collections/tosit/tdp_extra
+[submodule "ansible_collections/tosit/tdp_extra"]
+	path = ansible_collections/tosit/tdp_extra
 	url = https://github.com/TOSIT-IO/tdp-collection-extras
 [submodule "tdp-vagrant"]
 	path = tdp-vagrant
 	url = https://github.com/TOSIT-IO/tdp-vagrant.git
-[submodule "ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites"]
-	path = ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites
+[submodule "ansible_collections/tosit/tdp_prerequisites"]
+	path = ansible_collections/tosit/tdp_prerequisites
 	url = https://github.com/TOSIT-IO/tdp-collection-prerequisites.git
 [submodule "tdp-lib"]
 	path = tdp-lib
