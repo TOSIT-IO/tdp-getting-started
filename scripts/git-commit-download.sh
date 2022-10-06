@@ -10,7 +10,7 @@ print_usage() {
 
   Note: This script downloads and extracts a github hosted project. Adding the commit sha parameter downloads the project at that specific commit. Takes 2 mandatory args:
 
-    - target_directory e.g. ansible_roles/collections/ansible_collections/tosit/tdp
+    - target_directory e.g. ansible_collections/tosit/tdp
     - github_repo_url e.g. https://github.com/TOSIT-IO/tdp-collection
 
   A third optional arg to target a specific commit of the target project:

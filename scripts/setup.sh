@@ -5,8 +5,8 @@ set -euo pipefail
 readonly AVAILABLE_FEATURES=(extras prerequisites vagrant)
 readonly PYTHON_BIN=${PYTHON_BIN:-python3}
 readonly PYTHON_VENV=${PYTHON_VENV:-venv}
-readonly TDP_COLLECTION_PATH="ansible_roles/collections/ansible_collections/tosit/tdp"
-readonly TDP_COLLECTION_EXTRAS_PATH="ansible_roles/collections/ansible_collections/tosit/tdp_extra"
+readonly TDP_COLLECTION_PATH="ansible_collections/tosit/tdp"
+readonly TDP_COLLECTION_EXTRAS_PATH="ansible_collections/tosit/tdp_extra"
 readonly SQLITE_DB_PATH=${SQLITE_DB_PATH:-sqlite.db}
 readonly TDP_DATABASE_DSN=${TDP_DATABASE_DSN:-sqlite:///$SQLITE_DB_PATH}
 readonly TDP_VARS_OVERRIDES=${TDP_VARS_OVERRIDES:-tdp_vars_overrides}
@@ -116,7 +116,7 @@ setup_submodule_tdp() {
   git_submodule_setup "$submodule_path"
 
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
-  create_symlink_if_needed "../../../../../../files" "${submodule_path}/playbooks/files"
+  create_symlink_if_needed "../../../../files" "${submodule_path}/playbooks/files"
   create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/01_tdp"
 }
 
@@ -125,12 +125,12 @@ setup_submodule_extras() {
   git_submodule_setup "$submodule_path"
 
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
-  create_symlink_if_needed "../../../../../../files" "${submodule_path}/playbooks/files"
+  create_symlink_if_needed "../../../../files" "${submodule_path}/playbooks/files"
   create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/extras"
 }
 
 setup_submodule_prerequisites() {
-  local submodule_path="ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites"
+  local submodule_path="ansible_collections/tosit/tdp_prerequisites"
   git_submodule_setup "$submodule_path"
   create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/prerequisites"
 }

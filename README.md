@@ -42,7 +42,7 @@ export ANSIBLE_STRATEGY="mitogen_linear"
 # Launch VMs
 vagrant up
 # Configure TDP prerequisites
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
+ansible-playbook ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
 ```
 
 You have two ways to deploy a TDP cluster, using TDP lib CLI or using Ansible playbook.
@@ -53,25 +53,25 @@ You have two ways to deploy a TDP cluster, using TDP lib CLI or using Ansible pl
 # Deploy TDP cluster core and extras services
 tdp deploy
 # Configure HDFS user home directories
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
 # Configure Ranger policies
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
 ```
 
 ### Deploy with Ansible playbook
 
 ```bash
 # Deploy TDP cluster core services
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/all.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/all.yml
 # Deploy extras services
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/livy.yml
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/livy-spark3.yml
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/zookeeper-kafka.yml
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/kafka.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/livy.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/livy-spark3.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/zookeeper-kafka.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/kafka.yml
 # Configure HDFS user home directories
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
 # Configure Ranger policies
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
 ```
 
 ## Web UIs Links
@@ -140,7 +140,7 @@ For TDP Vagrant usage see https://github.com/TOSIT-IO/tdp-vagrant.
 To use `tdp-collection-prerequisites` it is necessary to use the `-e prerequisites` option when using `setup.sh`.
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
+ansible-playbook ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
 ```
 
 This playbook deploys the following services: Chrony, a CA, a LDAP, a KDC, a PostgreSQL.
@@ -162,7 +162,7 @@ For TDP lib usage see https://github.com/TOSIT-IO/tdp-lib.
 #### Main playbook
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/all.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/all.yml
 ```
 
 This playbook deploys the following services: Exporter, ZooKeeper, Hadoop core (HDFS, YARN, MapReduce), Ranger, Hive, Spark (2 and 3), HBase and Knox. **It does not deploy extras services (see [Extras Services Deployment](#extras-services-deployment) to deploy it).**
@@ -172,7 +172,7 @@ For TDP usage see https://github.com/TOSIT-IO/tdp-collection.
 #### Exporter
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/exporter.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/exporter.yml
 ```
 
 #### Zookeeper
@@ -180,7 +180,7 @@ ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playboo
 Deploys Apache ZooKeeper to the `[zk]` Ansible group and starts a 3 node Zookeeper Quorum.
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/zookeeper.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/zookeeper.yml
 ```
 
 _Run `echo stat | nc localhost 2181` from any node in the `[zk]` group to see its ZooKeeper status._
@@ -192,7 +192,7 @@ Deploys Ranger to the `[ranger_admin]` Ansible group.
 _Note that any changes to the `[ranger_admin]` hosts should also be reflected in the `[hadoop client group`]._
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/ranger.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/ranger.yml
 ```
 
 The Ranger UI can be accessed at the address `https://<master-02.tdp ip>:6182/login.jsp` and the user `admin` and password `RangerAdmin123` (assuming default `ranger_admin_password` parameter). You may need to import the `root.pem` certificate authority into your browser or accept the SSL exception.
@@ -202,7 +202,7 @@ The Ranger UI can be accessed at the address `https://<master-02.tdp ip>:6182/lo
 Launches HDFS, YARN, and deploys MapReduce clients.
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/hadoop.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/hadoop.yml
 ```
 
 The following code snippets demonstrate that:
@@ -242,7 +242,7 @@ hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
 Deploys Hive to the `[hive_s2]` Ansible group. HDFS filesystem is created and the service is launched.
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/hive.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/hive.yml
 ```
 
 _Execute the following code blocks to execute some hive queries using beeline:_
@@ -310,7 +310,7 @@ SELECT * FROM table1;
 Deploys spark installations to the `[spark_hs]` and the `[spark_client]` Ansible group.
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/spark.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/spark.yml
 ```
 
 _Execute the following command from any node in the `[spark_client]` Ansible group to `spark-submit` an example jar from the Spark installation:_
@@ -335,7 +335,7 @@ _Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` directo
 Deploys spark3 installations to the `[spark3_hs]` and the `[spark3_client]` Ansible group.
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/spark3.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/spark3.yml
 ```
 
 Spark 3 is installed alongside Spark 2 and can be used exactly the same way. The Spark 3 CLIs are: `spark3-submit`, `spark3-shell`, `spark3-sql`, `pyspark3`.
@@ -345,7 +345,7 @@ Spark 3 is installed alongside Spark 2 and can be used exactly the same way. The
 Deploys HBase masters, regionservers, rest and clients to the `[hbase_master]`, `[hbase_rs]`, `[hbase_rest]` and `[hbase_client]` Ansible groups respectively.
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/hbase.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/hbase.yml
 ```
 
 As `tdp_user` on an `[hbase_client]` host, obtain a Kerberos TGT with the command `kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP` and access the HBase shell with the command `/opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell`.
@@ -366,7 +366,7 @@ drop 'testTable'
 Deploys Knox Gateway on the `[knox]` Ansible group:
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/meta/knox.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/knox.yml
 ```
 
 You can then access the WebUIs of the TDP services through Knox:
@@ -388,7 +388,7 @@ _Note: You can login to Knox using the `tdp_user` that is created in the next st
 Deploys Livy Server on the `[livy_server]` group hosts:
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/livy.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/livy.yml
 ```
 
 The Livy Server can be accessed at https://edge-01.tdp:8998 After deployment, one can create a Spark session and interact with it through cURL:
@@ -415,7 +415,7 @@ curl -k -u : --negotiate -X GET https://edge-01.tdp:8998/sessions/0/statements/0
 Another Livy server is deployed for Spark 3 on the `[livy-spark3_server]` group hosts:
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/livy-spark3.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/livy-spark3.yml
 ```
 
 The default port is different than the regular Livy server: `8999` instead of `8998`.
@@ -425,7 +425,7 @@ The default port is different than the regular Livy server: `8999` instead of `8
 Deploys Apache ZooKeeper to the `[zk_kafka]` Ansible group and starts a 3 node Zookeeper Quorum dedicated to Kafka.
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/zookeeper-kafka.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/zookeeper-kafka.yml
 ```
 
 #### Kafka
@@ -433,7 +433,7 @@ ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/p
 Deploys a Kafka cluster on the `[kafka_broker]` group hosts:
 
 ```bash
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp_extra/playbooks/meta/kafka.yml
+ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/kafka.yml
 ```
 
 The Kafka CLIs are available on the edge node for all users and client properties files are in `/etc/kafka/conf/*.properties`. After deployment, one can interact with Kafka from `edge-01.tdp`:
@@ -465,7 +465,7 @@ kafka-console-consumer.sh --topic test-topic --from-beginning \
 Create, update, remove HDFS user home directories.
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
 ```
 
 _Additional users can be added to the Ansible variable `hdfs_user_homes` if required._
@@ -473,7 +473,7 @@ _Additional users can be added to the Ansible variable `hdfs_user_homes` if requ
 When adding users following the Ranger Usersync deployment, you will need to add or update Ranger policies including these new users. You must wait for Ranger Usersync to poll users from LDAP or you can restart the Ranger Usersync using the following playbook:
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/ranger_usersync_restart.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/ranger_usersync_restart.yml
 ```
 
 #### Configure Ranger policies
@@ -481,7 +481,7 @@ ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playboo
 Create, update, remove Ranger policies.
 
 ```
-ansible-playbook ansible_roles/collections/ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
 ```
 
 _Additional policies can be added to the Ansible variable `ranger_policies` if required._
