@@ -5,12 +5,17 @@ You can customize the infrastructure and components of your cluster with 1 comma
 
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Deploy with TDP lib CLI](#deploy-with-tdp-lib-cli)
+  - [Deploy with Ansible playbook](#deploy-with-ansible-playbook)
 - [Web UIs Links](#web-uis-links)
 - [Customised Deployment](#customised-deployment)
   - [Environment Setup](#environment-setup)
   - [Configure infrastructure](#configure-infrastructure)
   - [Configure prerequisites](#configure-prerequisites)
-  - [Services Deployment](#services-deployment)
+  - [Core Services Deployment](#core-services-deployment)
+  - [Extras Services Deployment](#extras-services-deployment)
+  - [Utils](#utils)
 
 ## Requirements
 
@@ -203,39 +208,21 @@ Launches HDFS, YARN, and deploys MapReduce clients.
 
 ```bash
 ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/hadoop.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/hdfs.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/yarn.yml
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
 ```
 
-The following code snippets demonstrate that:
-
-- From `master-01.tdp`
+`tdp_user` can access and write to its HDFS user directory:
 
 ```bash
-kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-hdfs dfs -mkdir -p /user/tdp_user
-hdfs dfs -chown -R tdp_user:tdp_user /user/tdp_user
+# From edge-01.tdp
+sudo su - tdp_user
+kinit -ki
+echo "This is the first line." | hdfs dfs -put - /user/tdp_user/test-file.txt
+echo "This is the second (appended) line." | hdfs dfs -appendToFile - /user/tdp_user/test-file.txt
+hdfs dfs -cat /user/tdp_user/test-file.txt
 ```
-
-- That `tdp_user` can access and write to its HDFS user directory:
-
-  - From `edge-01.tdp`
-
-  ```bash
-  sudo su tdp_user
-  kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
-  echo "This is the first line." | hdfs dfs -put - /user/tdp_user/testFile
-  echo "This is the second (appended) line." | hdfs dfs -appendToFile - /user/tdp_user/testFile
-  hdfs dfs -cat /user/tdp_user/testFile
-  ```
-
-- That writes using the `tdp_user` from `edge-01.tdp` can be read from `master-01.tdp`:
-
-  - From `master-01.tdp`
-
-  ```bash
-  sudo su tdp_user
-  kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
-  hdfs dfs -cat /user/tdp_user/testFile
-  ```
 
 #### Hive
 
@@ -245,40 +232,25 @@ Deploys Hive to the `[hive_s2]` Ansible group. HDFS filesystem is created and th
 ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/hive.yml
 ```
 
-_Execute the following code blocks to execute some hive queries using beeline:_
+To interact with Hive, use the `beeline` CLI:
 
-The following code snippets:
+```bash
+# From edge-01.tdp
+sudo su - tdp_user
+kinit -ki
+export hive_truststore_password='Truststore123!'
 
-- Create an HDFS user directory for `tdp_user` (this block is is the same as in the deploy HDFS example above):
-  - _From `master-01.tdp`:_
-  ```bash
-  sudo su
-  kinit -kt /etc/security/keytabs/nn.service.keytab nn/master-01.tdp@REALM.TDP
-  hdfs dfs -mkdir -p /user/tdp_user
-  hdfs dfs -chown -R tdp_user /user/tdp_user
-  ```
-- Authenticate as `tdp_user` from one of the `hive_s2` nodes and enter the Beeline client interface:
+# Connect to a random HiveServer2 using ZooKeeper
+beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
 
-  - _From `edge-01.tdp`:_
+# Or directly to a HiveServer2
+beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
 
-  ```bash
-  sudo su tdp_user
-  kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
-  export hive_truststore_password=Truststore123!
+# You can also use `beeline_auto` which is a preconfigured Beeline command to connect via ZooKeeper
+beeline_auto
+```
 
-  # Either via ZooKeeper
-  /opt/tdp/hive/bin/hive --config /etc/hive/conf --service beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
-
-  # Or directly to a HiveServer2
-  /opt/tdp/hive/bin/hive --config /etc/hive/conf --service beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
-
-  # You can also use `beeline_auto` which is a preconfigured Beeline command to connect via ZooKeeper
-  beeline_auto
-  ```
-
-_Note that all necessary Ranger policies have been deployed automatically as part of the `deploy-hive.yml` process._
-
-From the Beeline client, execute the following code blocks to interact with Hive:
+From the Beeline shell:
 
 ```hql
 # Create the database
@@ -313,13 +285,12 @@ Deploys spark installations to the `[spark_hs]` and the `[spark_client]` Ansible
 ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/spark.yml
 ```
 
-_Execute the following command from any node in the `[spark_client]` Ansible group to `spark-submit` an example jar from the Spark installation:_
-
-- _From `edge-01.tdp`:_
+To submit a Spark application:
 
 ```bash
-su tdp_user
-kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
+# From edge-01.tdp
+sudo su - tdp_user
+kinit -ki
 
 # Run a spark application locally
 spark-submit --class org.apache.spark.examples.SparkPi --master local[4]  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
@@ -328,7 +299,7 @@ spark-submit --class org.apache.spark.examples.SparkPi --master local[4]  /opt/t
 spark-submit --class org.apache.spark.examples.SparkPi --master yarn  /opt/tdp/spark/examples/jars/spark-examples_2.11-2.3.5-TDP-0.1.0-SNAPSHOT.jar 100
 ```
 
-_Note: Other spark interfaces are also found in the `/opt/tdp/spark/bin` directory, such as `pyspark`, `spark-shell`, `spark-sql`, `sparkR` etc._
+**Note:** Other Spark CLIs are available: `pyspark`, `spark-shell`, `spark-sql`.
 
 #### Spark 3
 
@@ -348,7 +319,7 @@ Deploys HBase masters, regionservers, rest and clients to the `[hbase_master]`, 
 ansible-playbook ansible_collections/tosit/tdp/playbooks/meta/hbase.yml
 ```
 
-As `tdp_user` on an `[hbase_client]` host, obtain a Kerberos TGT with the command `kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP` and access the HBase shell with the command `/opt/tdp/hbase/bin/hbase --config /etc/hbase/conf shell`.
+As `tdp_user` on `edge-01`, obtain a Kerberos TGT with the command `kinit -ki` and access the HBase shell with the command `hbase shell`.
 
 Commands such as the below can be used to test your HBase deployment:
 
@@ -395,8 +366,8 @@ The Livy Server can be accessed at https://edge-01.tdp:8998 After deployment, on
 
 ```bash
 # From edge-01.tdp
-sudo su tdp_user
-kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
+sudo su - tdp_user
+kinit -ki
 
 # Create a session
 curl -k -u : --negotiate -X POST https://edge-01.tdp:8998/sessions \
@@ -440,8 +411,8 @@ The Kafka CLIs are available on the edge node for all users and client propertie
 
 ```sh
 # From edge-01.tdp
-sudo su tdp_user
-kinit -kt ~/tdp_user.keytab tdp_user@REALM.TDP
+sudo su - tdp_user
+kinit -ki
 
 # Create a topic
 kafka-topics.sh --create --topic test-topic \
