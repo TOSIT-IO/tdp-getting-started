@@ -20,6 +20,8 @@ You can customize the infrastructure and components of your cluster with 1 comma
 
 If you use TDP Vagrant to deploy VMs see requirements in https://github.com/TOSIT-IO/tdp-vagrant.
 
+Python requirements like Ansible and Mitogen are listed in the file `requirements.txt`. The virtual environment is populated with these requirements. Therefore, you should not install them by yourself outside of the virtual environment. Only versions described in `requirements.txt` are supported.
+
 ## Quick Start
 
 The below steps will deploy a TDP cluster with Vagrant using the parameters in the `inventory` directory.
