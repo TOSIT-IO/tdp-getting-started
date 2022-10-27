@@ -5,7 +5,7 @@ hive_ms_db_name: hive
 hive_ms_db_user: hive
 hive_ms_db_password: hive
 db_type: postgres
-hive_site:
+metastore_site:
   javax.jdo.option.ConnectionURL: "{{ hive_ms_db_url }}/{{ hive_ms_db_name }}"
   javax.jdo.option.ConnectionDriverName: org.postgresql.Driver
 
