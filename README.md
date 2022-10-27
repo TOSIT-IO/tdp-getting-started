@@ -248,8 +248,8 @@ beeline -u "jdbc:hive2://master-01.tdp:2181,master-02.tdp:2181,master-03.tdp:218
 # Or directly to a HiveServer2
 beeline -u "jdbc:hive2://master-03.tdp:10001/;principal=hive/_HOST@REALM.TDP;transportMode=http;httpPath=cliservice;ssl=true;sslTrustStore=/etc/ssl/certs/truststore.jks;trustStorePassword=${hive_truststore_password}"
 
-# You can also use `beeline_auto` which is a preconfigured Beeline command to connect via ZooKeeper
-beeline_auto
+# You can also use `beeline` alone which will default to the ZooKeeper mode
+beeline
 ```
 
 From the Beeline shell:
