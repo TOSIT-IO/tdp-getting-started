@@ -328,10 +328,10 @@ Commands such as the below can be used to test your HBase deployment:
 ```
 list
 list_namespace
-create 'testTable', 'cf'
-put 'testTable', 'row1', 'cf:testColumn', 'testValue'
-disable 'testTable'
-drop 'testTable'
+create 'tdp_user_table', 'cf'
+put 'tdp_user_table', 'row1', 'cf:testColumn', 'testValue'
+disable 'tdp_user_table'
+drop 'tdp_user_table'
 ```
 
 #### Knox
