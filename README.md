@@ -93,6 +93,7 @@ ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.y
 - [Spark History Server](https://master-03.tdp:18081/)
 - [Spark3 History Server](https://master-03.tdp:18083/)
 - [Ranger Admin](https://master-03.tdp:6182/index.html)
+- [JupyterHub](https://master-03.tdp:8000/)
 
 **Note:** All the WebUIs are Kerberized, you need to have a working Kerberos client on your host, configure the KDC in your `/etc/krb5.conf` file and obtain a valid ticket. You can also access the WebUIs through [Knox](#knox).
 
