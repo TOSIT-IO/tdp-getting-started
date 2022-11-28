@@ -331,6 +331,7 @@ list
 list_namespace
 create 'tdp_user_table', 'cf'
 put 'tdp_user_table', 'row1', 'cf:testColumn', 'testValue'
+scan 'tdp_user_table'
 disable 'tdp_user_table'
 drop 'tdp_user_table'
 ```
