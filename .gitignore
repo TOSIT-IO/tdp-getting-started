@@ -11,3 +11,6 @@ inventory/tdp_vars
 inventory/topologies/*
 Vagrantfile
 venv
+.env
+sqlite.db
+vagrant.yml
