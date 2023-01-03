@@ -123,3 +123,22 @@ ranger_policies:
           - { isAllowed: true, type: describe_configs }
           - { isAllowed: true, type: alter_configs }
         conditions: []
+
+  # Knox
+  - name: tdp_user - tdpldap policy
+    description: tdp_user access to tdpldap policy
+    service: knox-tdp
+    isAuditEnabled: true
+    isEnabled: true
+    resources:
+      topology:
+        values: ["tdpldap"]
+      service:
+        values: ["*"]
+    policyItems:
+      - users: [tdp_user]
+        groups: []
+        delegateAdmin: true
+        accesses:
+          - { isAllowed: true, type: allow }
+        conditions: []
