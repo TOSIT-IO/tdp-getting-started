@@ -1,0 +1,6 @@
+# Copyright 2023 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+fluent_bit_configuration_includes:
+  hive_s2: /etc/hive/conf.s2/hive-s2-fluent-bit.conf

@@ -1,0 +1,6 @@
+# Copyright 2023 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+fluent_bit_configuration_includes:
+  mapred_jhs: /etc/hadoop/conf.ats/yarn-ats-fluent-bit.conf

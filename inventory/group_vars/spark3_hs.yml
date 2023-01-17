@@ -1,0 +1,6 @@
+# Copyright 2023 TOSIT.IO
+# SPDX-License-Identifier: Apache-2.0
+
+---
+fluent_bit_configuration_includes:
+  spark3_hs: /etc/spark3/conf.hs/spark3-hs-fluent-bit.conf
