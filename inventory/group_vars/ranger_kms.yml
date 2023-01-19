@@ -3,4 +3,4 @@
 
 ---
 fluent_bit_configuration_includes:
-  ranger_kms: /etc/ranger/conf.kms/ranger-kms-fluent-bit.conf
+  ranger_kms: /etc/kms/ranger-kms-fluent-bit.conf
