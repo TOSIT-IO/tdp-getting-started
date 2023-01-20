@@ -14,3 +14,4 @@ venv
 .env
 sqlite.db
 vagrant.yml
+.cache
