@@ -164,7 +164,7 @@ setup_submodule_tdp_lib() {
 export TDP_COLLECTION_PATH=${collection_path}
 export TDP_RUN_DIRECTORY=.
 export TDP_DATABASE_DSN=${TDP_DATABASE_DSN}
-export TDP_VARS=inventory/tdp_vars
+export TDP_VARS=./tdp_vars
 EOF
 }
 
@@ -189,7 +189,7 @@ setup_python_venv() {
 }
 
 init_tdp_lib() {
-  local tdp_vars="inventory/tdp_vars"
+  local tdp_vars="./tdp_vars"
   local tdp_lib_cli_args=(init)
   if [[ "$CLEAN" == "true" ]]; then
     echo "Remove '${tdp_vars}' and '${SQLITE_DB_PATH}'"
