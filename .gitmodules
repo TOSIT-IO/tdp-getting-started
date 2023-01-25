@@ -13,3 +13,6 @@
 [submodule "tdp-lib"]
 	path = tdp-lib
 	url = https://github.com/TOSIT-IO/tdp-lib
+[submodule "tdp-server"]
+	path = tdp-server
+	url = https://github.com/TOSIT-IO/tdp-server

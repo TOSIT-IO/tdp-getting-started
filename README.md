@@ -39,8 +39,8 @@ The Ansible `host.ini` file will be generated using the `hosts` variable in `tdp
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-collection-extras, tdp-collection-prerequisites, and vagrant
-./scripts/setup.sh -e extras -e prerequisites -e vagrant
+# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
+./scripts/setup.sh -e server -e extras -e prerequisites -e vagrant
 # Activate Python virtual env
 source ./venv/bin/activate
 # To enable mitogen
@@ -52,7 +52,28 @@ vagrant up
 ansible-playbook ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
 ```
 
-You have two ways to deploy a TDP cluster, using TDP lib CLI or using Ansible playbook.
+You have tree ways to deploy a TDP cluster, using TDP server API, using TDP lib CLI or using Ansible playbook.
+
+### Deploy with TDP server API
+
+```bash
+# Open a new terminal and activate python virtual env
+source ./venv/bin/activate
+# Start tdp-server
+uvicorn tdp_server.main:app --reload
+```
+
+```bash
+# Deploy TDP cluster core and extras services
+curl -X POST http://localhost:8000/api/v1/deploy/dag
+# You can see the log in the tdp-server output (the terminal where uvicorn is running)
+# Wait deployment
+while ! curl -s http://localhost:8000/api/v1/deploy/status | grep -q "no deployment on-going"; do sleep 10; done
+# Configure HDFS user home directories
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
+# Configure Ranger policies
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
+```
 
 ### Deploy with TDP lib CLI
 
