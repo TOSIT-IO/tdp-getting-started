@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-readonly AVAILABLE_FEATURES=(extras prerequisites vagrant)
+readonly AVAILABLE_FEATURES=(extras prerequisites vagrant server)
 readonly PYTHON_BIN=${PYTHON_BIN:-python3}
 readonly PYTHON_VENV=${PYTHON_VENV:-venv}
 readonly TDP_COLLECTION_PATH="ansible_collections/tosit/tdp"
@@ -161,11 +161,37 @@ setup_submodule_tdp_lib() {
     return 0
   fi
   cat <<EOF > "$env_path"
+# common
 export TDP_COLLECTION_PATH=${collection_path}
 export TDP_RUN_DIRECTORY=.
-export TDP_DATABASE_DSN=${TDP_DATABASE_DSN}
 export TDP_VARS=./tdp_vars
+
+# tdp-lib
+export TDP_DATABASE_DSN=${TDP_DATABASE_DSN}
 EOF
+
+  for feature in "${FEATURES[@]}"; do
+    case "$feature" in
+    server) cat <<EOF >> "$env_path"
+
+# tdp-server
+export PROJECT_NAME=tdp-server
+export BACKEND_CORS_ORIGINS=["http://localhost:8000"]
+export SERVER_NAME=localhost
+export SERVER_HOST=http://localhost:8000
+export OPENID_CONNECT_DISCOVERY_URL=http://localhost:8080/auth/realms/tdp_server/.well-known/openid-configuration
+export OPENID_CLIENT_ID=tdp_server
+export DATABASE_DSN=${TDP_DATABASE_DSN}
+export DO_NOT_USE_IN_PRODUCTION_DISABLE_TOKEN_CHECK=True
+EOF
+    ;;
+    esac
+  done
+  return 0
+}
+
+setup_submodule_tdp_server() {
+  git_submodule_setup "tdp-server"
 }
 
 setup_python_venv() {
@@ -183,6 +209,13 @@ setup_python_venv() {
   (
     source "${PYTHON_VENV}/bin/activate"
     pip install -r requirements.txt
+    for feature in "${FEATURES[@]}"; do
+      case "$feature" in
+      # tdp-server must be installed before tdp-lib
+      # with tdp-lib installed after, it will override the tdp-lib installed by tdp-server
+      server) pip install --editable tdp-server uvicorn==0.16.0 ;;
+      esac
+    done
     pip install --editable tdp-lib[visualization]
   )
   return 0
@@ -206,6 +239,16 @@ init_tdp_lib() {
   return 0
 }
 
+init_tdp_server() {
+  echo "tdp-server init"
+  (
+    source "${PYTHON_VENV}/bin/activate"
+    python tdp-server/tdp_server/initialize_database.py
+    python tdp-server/tdp_server/initialize_tdp_vars.py
+  )
+  return 0
+}
+
 download_tdp_binaries() {
   wget --no-clobber --input-file="scripts/tdp-release-uris.txt" --directory-prefix="files"
 }
@@ -223,12 +266,20 @@ main() {
     extras)        setup_submodule_extras ;;
     prerequisites) setup_submodule_prerequisites ;;
     vagrant)       setup_submodule_vagrant ;;
+    server)        setup_submodule_tdp_server ;;
     esac
   done
 
   setup_submodule_tdp_lib
   setup_python_venv
   init_tdp_lib
+
+  for feature in "${FEATURES[@]}"; do
+    case "$feature" in
+    server) init_tdp_server ;;
+    esac
+  done
+
   download_tdp_binaries
 }
 
