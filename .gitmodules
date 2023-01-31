@@ -16,3 +16,6 @@
 [submodule "tdp-server"]
 	path = tdp-server
 	url = https://github.com/TOSIT-IO/tdp-server
+[submodule "ansible_collections/tosit/tdp_observability"]
+	path = ansible_collections/tosit/tdp_observability
+	url = https://github.com/TOSIT-IO/tdp-observability
