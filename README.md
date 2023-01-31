@@ -96,6 +96,9 @@ ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/livy.yml
 ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/livy-spark3.yml
 ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/zookeeper-kafka.yml
 ansible-playbook ansible_collections/tosit/tdp_extra/playbooks/meta/kafka.yml
+# Deploy observability services
+ansible-playbook ansible_collections/tosit/tdp_observability/playbooks/meta/prometheus.yml
+ansible-playbook ansible_collections/tosit/tdp_observability/playbooks/meta/grafana.yml
 # Configure HDFS user home directories
 ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
 # Configure Ranger policies
