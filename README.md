@@ -40,7 +40,7 @@ git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
 # Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
-./scripts/setup.sh -e server -e extras -e prerequisites -e vagrant
+./scripts/setup.sh -e server -e extras -e observability -e prerequisites -e vagrant
 # Activate Python virtual env
 source ./venv/bin/activate
 # To enable mitogen
@@ -135,7 +135,7 @@ Execute the `setup.sh` script to create the project directories needed and clone
 # Get stable tdp-collection
 ./scripts/setup.sh
 # Get latest tdp-collection, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
-./scripts/setup.sh -e extras -e prerequisites -e vagrant -r latest
+./scripts/setup.sh -e extras -e observability -e prerequisites -e vagrant -r latest
 ```
 
 ### Configure infrastructure
