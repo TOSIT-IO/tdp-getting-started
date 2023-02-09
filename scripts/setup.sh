@@ -150,6 +150,7 @@ setup_submodule_tdp_lib() {
   for feature in "${FEATURES[@]}"; do
     case "$feature" in
     extras) collection_path="${collection_path}:${TDP_COLLECTION_EXTRAS_PATH}" ;;
+    observability) collection_path="${collection_path}:${TDP_COLLECTION_OBSERVABILITY_PATH}" ;;
     esac
   done
 
