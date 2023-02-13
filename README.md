@@ -6,6 +6,7 @@ You can customize the infrastructure and components of your cluster with 1 comma
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
   - [Prerequisites](#prerequisites)
+  - [Deploy with TDP server API](#deploy-with-tdp-server-api)
   - [Deploy with TDP lib CLI](#deploy-with-tdp-lib-cli)
   - [Deploy with Ansible playbook](#deploy-with-ansible-playbook)
 - [Web UIs Links](#web-uis-links)
@@ -41,8 +42,8 @@ git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 cd tdp-getting-started
 # Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
 ./scripts/setup.sh -e server -e extras -e observability -e prerequisites -e vagrant
-# Activate Python virtual env
-source ./venv/bin/activate
+# Activate Python virtual env and set environment variables
+source ./venv/bin/activate && source .env
 # To enable mitogen
 export ANSIBLE_STRATEGY_PLUGINS="$(python -c 'import os,ansible_mitogen; print(os.path.dirname(ansible_mitogen.__file__))')/plugins/strategy"
 export ANSIBLE_STRATEGY="mitogen_linear"
