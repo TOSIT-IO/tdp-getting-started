@@ -15,3 +15,7 @@ venv
 sqlite.db
 vagrant.yml
 .cache
+node_modules/
+.deploy.lock
+package-lock.json
+package.json

@@ -6,6 +6,7 @@ You can customize the infrastructure and components of your cluster with 1 comma
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
   - [Prerequisites](#prerequisites)
+  - [Deploy with TDP UI](#deploy-with-tdp-ui)
   - [Deploy with TDP server API](#deploy-with-tdp-server-api)
   - [Deploy with TDP lib CLI](#deploy-with-tdp-lib-cli)
   - [Deploy with Ansible playbook](#deploy-with-ansible-playbook)
@@ -26,6 +27,8 @@ You can customize the infrastructure and components of your cluster with 1 comma
 
 If you use TDP Vagrant to deploy VMs see requirements in https://github.com/TOSIT-IO/tdp-vagrant.
 
+If you use TDP UI to deploy TDP see requirements in https://github.com/TOSIT-IO/tdp-ui.
+
 Python requirements like Ansible and Mitogen are listed in the file `requirements.txt`. The virtual environment is populated with these requirements. Therefore, you should not install them by yourself outside of the virtual environment. Only versions described in `requirements.txt` are supported.
 
 ## Quick Start
@@ -40,8 +43,8 @@ The Ansible `host.ini` file will be generated using the `hosts` variable in `tdp
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
-./scripts/setup.sh -e server -e extras -e observability -e prerequisites -e vagrant
+# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-ui, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
+./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant
 # Activate Python virtual env and set environment variables
 source ./venv/bin/activate && source .env
 # To enable mitogen
@@ -53,7 +56,32 @@ vagrant up
 ansible-playbook ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
 ```
 
-You have tree ways to deploy a TDP cluster, using TDP server API, using TDP lib CLI or using Ansible playbook.
+You have four ways to deploy a TDP cluster, using TDP UI, using TDP server API, using TDP lib CLI, or using Ansible playbook.
+
+### Deploy with TDP UI
+
+```bash
+# Open a new terminal and activate python virtual env
+source ./venv/bin/activate
+# Start tdp-server
+uvicorn tdp_server.main:app --reload
+```
+
+```bash
+# Open a new terminal and start tdp-ui
+npm --prefix ./tdp-ui run dev
+```
+
+In the UI, click on "Deployments", "New deployment", "Deploy from the DAG", "Preview" (by default all services are deployed), "Deploy".
+
+You can see the deployment in the "Deployments" page. Wait deployment to complete.
+
+```bash
+# Configure HDFS user home directories
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/hdfs_user_homes.yml
+# Configure Ranger policies
+ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.yml
+```
 
 ### Deploy with TDP server API
 
