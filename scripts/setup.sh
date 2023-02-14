@@ -2,9 +2,10 @@
 
 set -euo pipefail
 
-readonly AVAILABLE_FEATURES=(extras prerequisites vagrant server observability)
+readonly AVAILABLE_FEATURES=(extras prerequisites vagrant server ui observability)
 readonly PYTHON_BIN=${PYTHON_BIN:-python3}
 readonly PYTHON_VENV=${PYTHON_VENV:-venv}
+readonly NPM_BIN=${NPM_BIN:-npm}
 readonly TDP_COLLECTION_PATH="ansible_collections/tosit/tdp"
 readonly TDP_COLLECTION_EXTRAS_PATH="ansible_collections/tosit/tdp_extra"
 readonly TDP_COLLECTION_OBSERVABILITY_PATH="ansible_collections/tosit/tdp_observability"
@@ -71,6 +72,13 @@ validate_features() {
     echo "Available features: ${AVAILABLE_FEATURES[@]}"
     return 1
   fi
+}
+
+# From https://stackoverflow.com/a/53839433
+join_arr() {
+  local IFS="$1"
+  shift
+  echo "$*"
 }
 
 create_directories() {
@@ -172,13 +180,26 @@ export TDP_VARS=./tdp_vars
 export TDP_DATABASE_DSN=${TDP_DATABASE_DSN}
 EOF
 
+  local backend_cors_origins
+  declare -a backend_cors_origins
+
+  for feature in "${FEATURES[@]}"; do
+    case "$feature" in
+    server) backend_cors_origins+=("\"http://localhost:8000\"") ;;
+    ui)     backend_cors_origins+=("\"http://localhost:3000\"") ;;
+    esac
+  done
+
+  # Generate a comma separated string
+  backend_cors_origins_comma=$(join_arr , "${backend_cors_origins[@]}")
+
   for feature in "${FEATURES[@]}"; do
     case "$feature" in
     server) cat <<EOF >> "$env_path"
 
 # tdp-server
 export PROJECT_NAME=tdp-server
-export BACKEND_CORS_ORIGINS=["http://localhost:8000"]
+export BACKEND_CORS_ORIGINS=[${backend_cors_origins_comma}]
 export SERVER_NAME=localhost
 export SERVER_HOST=http://localhost:8000
 export OPENID_CONNECT_DISCOVERY_URL=http://localhost:8080/auth/realms/tdp_server/.well-known/openid-configuration
@@ -194,6 +215,26 @@ EOF
 
 setup_submodule_tdp_server() {
   git_submodule_setup "tdp-server" "master"
+}
+
+setup_submodule_tdp_ui() {
+  git_submodule_setup "tdp-ui" "master"
+
+  local config_path="./tdp-ui/config.json"
+  if [[ "$CLEAN" == "true" ]]; then
+    echo "Remove ${config_path}"
+    rm -rf "$config_path"
+  fi
+  if [[ -e "${config_path}" ]]; then
+    echo "File ${config_path} exists, nothing to do"
+    return 0
+  fi
+  cat <<EOF > "$config_path"
+{
+  "apiBasePath": "http://localhost:8000",
+  "skipAuth": true
+}
+EOF
 }
 
 setup_submodule_observability() {
@@ -260,6 +301,12 @@ init_tdp_server() {
   return 0
 }
 
+init_tdp_ui() {
+  echo "tdp-ui init"
+  "${NPM_BIN}" install ./tdp-ui
+  return 0
+}
+
 download_tdp_binaries() {
   wget --no-clobber --input-file="scripts/tdp-release-uris.txt" --directory-prefix="files"
 }
@@ -278,6 +325,7 @@ main() {
     prerequisites) setup_submodule_prerequisites ;;
     vagrant)       setup_submodule_vagrant ;;
     server)        setup_submodule_tdp_server ;;
+    ui)            setup_submodule_tdp_ui ;;
     observability) setup_submodule_observability ;;
     esac
   done
@@ -289,6 +337,7 @@ main() {
   for feature in "${FEATURES[@]}"; do
     case "$feature" in
     server) init_tdp_server ;;
+    ui)     init_tdp_ui ;;
     esac
   done
 
