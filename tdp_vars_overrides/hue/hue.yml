@@ -1,0 +1,9 @@
+ldapauth:
+  base_dn: c=io
+  ldap_url: ldap://{{ groups['ldap'][0] | tosit.tdp.access_fqdn(hostvars) }}
+  bind_dn: cn=Manager,ou=tdp,o=tosit,c=io
+  bind_password: secret
+  search_bind_authentication: 'true'
+  users:
+    user_filter: objectclass=posixAccount
+    user_name_attr: uid
