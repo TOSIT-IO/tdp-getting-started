@@ -185,8 +185,8 @@ EOF
 
   for feature in "${FEATURES[@]}"; do
     case "$feature" in
-    server) backend_cors_origins+=("\"http://localhost:8000\"") ;;
-    ui)     backend_cors_origins+=("\"http://localhost:3000\"") ;;
+    server) backend_cors_origins+=("\\\"http://localhost:8000\\\"") ;;
+    ui)     backend_cors_origins+=("\\\"http://localhost:3000\\\"") ;;
     esac
   done
 
@@ -199,7 +199,7 @@ EOF
 
 # tdp-server
 export PROJECT_NAME=tdp-server
-export BACKEND_CORS_ORIGINS=[${backend_cors_origins_comma}]
+export BACKEND_CORS_ORIGINS="[${backend_cors_origins_comma}]"
 export SERVER_NAME=localhost
 export SERVER_HOST=http://localhost:8000
 export OPENID_CONNECT_DISCOVERY_URL=http://localhost:8080/auth/realms/tdp_server/.well-known/openid-configuration
