@@ -62,7 +62,7 @@ You have four ways to deploy a TDP cluster, using TDP UI, using TDP server API, 
 
 ```bash
 # Open a new terminal and activate python virtual env
-source ./venv/bin/activate
+source ./venv/bin/activate && source .env
 # Start tdp-server
 uvicorn tdp_server.main:app --reload
 ```
@@ -87,7 +87,7 @@ ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.y
 
 ```bash
 # Open a new terminal and activate python virtual env
-source ./venv/bin/activate
+source ./venv/bin/activate && source .env
 # Start tdp-server
 uvicorn tdp_server.main:app --reload
 ```
