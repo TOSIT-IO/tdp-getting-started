@@ -304,6 +304,8 @@ init_tdp_server() {
 init_tdp_ui() {
   echo "tdp-ui init"
   "${NPM_BIN}" install ./tdp-ui
+  echo "Generate the API client SDK"
+  "${NPM_BIN}" --prefix ./tdp-ui run generate
   return 0
 }
 
