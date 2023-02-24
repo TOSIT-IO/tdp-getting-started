@@ -43,8 +43,8 @@ The Ansible `host.ini` file will be generated using the `hosts` variable in `tdp
 git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-ui, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
-./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant
+# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-collection-extras, tdp-collection-prerequisites, and vagrant
+./scripts/setup.sh -e server -e extras -e observability -e prerequisites -e vagrant
 # Activate Python virtual env and set environment variables
 source ./venv/bin/activate && source .env
 # To enable mitogen
@@ -59,6 +59,21 @@ ansible-playbook ansible_collections/tosit/tdp_prerequisites/playbooks/all.yml
 You have four ways to deploy a TDP cluster, using TDP UI, using TDP server API, using TDP lib CLI, or using Ansible playbook.
 
 ### Deploy with TDP UI
+
+Set up your local environment with the optional tdp-ui component:
+
+```bash
+./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant
+```
+
+Install additional dependencies:
+
+```bash
+cd /tdp-ui 
+npm install 
+```
+
+Launch TDP UI:
 
 ```bash
 # Open a new terminal and activate python virtual env
