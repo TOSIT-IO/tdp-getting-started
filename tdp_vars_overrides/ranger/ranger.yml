@@ -16,14 +16,6 @@ kms_install_properties:
   db_user: rangerkms
   db_password: rangerkms
 
-usersync_install_properties:
-  SYNC_LDAP_BIND_DN: cn=Manager,ou=tdp,o=tosit,c=io
-  SYNC_LDAP_BIND_PASSWORD: secret
-  SYNC_LDAP_SEARCH_BASE: c=io
-  SYNC_LDAP_USER_SEARCH_BASE: ou=users,c=io
-  SYNC_LDAP_USER_OBJECT_CLASS: posixAccount
-  SYNC_LDAP_USER_NAME_ATTRIBUTE: uid
-
 ranger_admin_start_on_boot: yes
 ranger_usersync_start_on_boot: yes
 ranger_kms_start_on_boot: yes
