@@ -1,5 +1,5 @@
 ---
 jupyterhub_properties:
   jupyterhub:
-    db_url: postgresql://jupyterhub:jupyterhub@{{ groups['postgresql'] | first | tosit.tdp.access_fqdn(hostvars) }}:{{ postgresql_port }}/jupyterhub
+    db_url: postgresql://jupyterhub:jupyterhub@{{ groups['postgresql'] | first | tosit.tdp.access_fqdn(hostvars) }}:{{ postgresql_server_port }}/jupyterhub
     upgrade_db: true
