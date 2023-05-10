@@ -28,4 +28,5 @@ https://github.com/TOSIT-IO/ranger/releases/download/ranger-2.0.1-TDP-0.1.0-SNAP
 https://github.com/TOSIT-IO/hbase-connectors/releases/download/hbase-spark-2.3.5-1.0.0-TDP-0.1.0-SNAPSHOT-tag/hbase-spark-2.3.5-1.0.0-TDP-0.1.0-SNAPSHOT.jar
 https://github.com/TOSIT-IO/jupyterhub-pkg/releases/download/v2.3.1-TDP-0.1.0/jupyterhub-2.3.1-TDP-0.1.0.tar.gz
 https://github.com/TOSIT-IO/hue/releases/download/hue-release-4.10.0-TDP-0.1.0-python36/hue-release-4.10.0-TDP-0.1.0.tar.gz
+https://github.com/TOSIT-IO/hue/releases/download/hue-release-4.10.0-TDP-0.1.0-python36/hue-release-4.10.0-TDP-0.1.0-python36.tar.gz
 https://github.com/TOSIT-IO/hbase-operator-tools/releases/download/1.1.0-TDP-0.1.0-SNAPSHOT/hbase-hbck2-1.1.0-TDP-0.1.0-SNAPSHOT.jar
