@@ -310,7 +310,15 @@ init_tdp_ui() {
 }
 
 download_tdp_binaries() {
-  wget --no-clobber --input-file="scripts/tdp-release-uris.txt" --directory-prefix="files"
+  while IFS=";" read -r uri_file_name file_name
+  do
+    if [[ -n "$file_name" ]]
+    then
+      wget --no-clobber --output-document=files/${file_name} ${uri_file_name}
+    else
+      wget --no-clobber --directory-prefix="files" ${uri_file_name}
+    fi
+  done < <(tail -n +1 scripts/tdp-release-uris.txt)
 }
 
 main() {
