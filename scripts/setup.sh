@@ -318,7 +318,7 @@ download_tdp_binaries() {
     else
       wget --no-clobber --directory-prefix="files" ${uri_file_name}
     fi
-  done < <(tail -n +1 scripts/tdp-release-uris.txt)
+  done < scripts/tdp-release-uris.txt
 }
 
 main() {
