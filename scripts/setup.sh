@@ -310,7 +310,7 @@ init_tdp_ui() {
 }
 
 download_tdp_binaries() {
-  while IFS=";" read -r uri_file_name file_name
+  while IFS=";" read -r uri_file_name file_name || [ -n "$uri_file_name" ]
   do
     if [[ -n "$file_name" ]]
     then
