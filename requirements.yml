@@ -1,0 +1,14 @@
+# Versions utilisées dans Ansible 8.1.0
+# https://github.com/ansible-community/ansible-build-data/blob/main/8/ansible-8.1.0.yaml
+---
+collections:
+  - name: ansible.posix
+    version: 1.5.4
+  - name: community.crypto
+    version: 2.14.0
+  - name: community.general
+    version: 7.1.0
+  - name: community.grafana
+    version: 1.5.4
+  - name: community.postgresql
+    version: 2.4.2

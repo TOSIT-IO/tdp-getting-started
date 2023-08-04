@@ -9,6 +9,7 @@ readonly NPM_BIN=${NPM_BIN:-npm}
 readonly TDP_COLLECTION_PATH="ansible_collections/tosit/tdp"
 readonly TDP_COLLECTION_EXTRAS_PATH="ansible_collections/tosit/tdp_extra"
 readonly TDP_COLLECTION_OBSERVABILITY_PATH="ansible_collections/tosit/tdp_observability"
+readonly TDP_COLLECTION_DEPENDENCIES_PATH="ansible_dependencies"
 readonly SQLITE_DB_PATH=${SQLITE_DB_PATH:-sqlite.db}
 readonly TDP_DATABASE_DSN=${TDP_DATABASE_DSN:-sqlite:///$SQLITE_DB_PATH}
 readonly TDP_VARS_OVERRIDES=${TDP_VARS_OVERRIDES:-tdp_vars_overrides}
@@ -246,6 +247,11 @@ setup_submodule_observability() {
   create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/observability"
 }
 
+install_additional_ansible_collections() {
+  echo "Install Ansible collections from requirements.yml"
+  ansible-galaxy collection install -r requirements.yml -p ${TDP_COLLECTION_DEPENDENCIES_PATH}
+}
+
 setup_python_venv() {
   if [[ ! -d "$PYTHON_VENV" ]]; then
     echo "Create python venv with '${PYTHON_BIN}' to '${PYTHON_VENV}' and update pip to latest version"
@@ -340,6 +346,7 @@ main() {
     esac
   done
 
+  install_additional_ansible_collections
   setup_submodule_tdp_lib
   setup_python_venv
   init_tdp_lib

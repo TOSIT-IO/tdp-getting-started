@@ -19,3 +19,4 @@ node_modules/
 .deploy.lock
 package-lock.json
 package.json
+ansible_dependencies/
