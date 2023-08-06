@@ -1,5 +1,6 @@
-# Versions utilisées dans Ansible 8.1.0
-# https://github.com/ansible-community/ansible-build-data/blob/main/8/ansible-8.1.0.yaml
+# Copyright 2022 Adaltas
+# SPDX-License-Identifier: MIT
+
 ---
 collections:
   - name: ansible.posix
