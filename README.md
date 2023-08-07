@@ -128,6 +128,8 @@ ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.y
 ### Deploy with TDP lib CLI
 
 ```bash
+# Configure deployment plan
+tdp plan dag
 # Deploy TDP cluster core and extras services
 tdp deploy
 # Configure HDFS user home directories
