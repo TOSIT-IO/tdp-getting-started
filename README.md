@@ -32,11 +32,11 @@ The `-e` option is used to enable features, for example `-e extras` enable TDP e
 
 Common requirements are:
 
-- Python >= 3.6 with virtual env package (i.e. `python3-venv`)
+- Python >= 3.9 with virtual env package (i.e. `python3-venv`)
 - Unzip (to execute the setup scripts)
 - `jq` required to execute helper script
 
-Python requirements like Ansible and Mitogen are listed in the file `requirements.txt`. The virtual environment is populated with these requirements. Therefore, you should not install them by yourself outside of the virtual environment. Only versions described in `requirements.txt` are supported.
+Python requirements like Ansible are listed in the file `requirements.txt`. The virtual environment is populated with these requirements. Therefore, you should not install them by yourself outside of the virtual environment. Only versions described in `requirements.txt` are supported.
 
 Specific features requirements are:
 
@@ -71,9 +71,6 @@ cd tdp-getting-started
 ./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant
 # Activate Python virtual env and set environment variables
 source ./venv/bin/activate && source .env
-# To enable mitogen (optional)
-export ANSIBLE_STRATEGY_PLUGINS="$(python -c 'import os,ansible_mitogen; print(os.path.dirname(ansible_mitogen.__file__))')/plugins/strategy"
-export ANSIBLE_STRATEGY="mitogen_linear"
 # Launch VMs
 vagrant up
 # Configure TDP prerequisites
