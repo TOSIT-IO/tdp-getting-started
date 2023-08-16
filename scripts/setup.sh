@@ -260,6 +260,8 @@ setup_python_venv() {
   echo "Install python dependencies"
   (
     source "${PYTHON_VENV}/bin/activate"
+    # Exporting the Pip constraint settings
+    export PIP_CONSTRAINT=constraints.txt
     pip install -r requirements.txt
     for feature in "${FEATURES[@]}"; do
       case "$feature" in
