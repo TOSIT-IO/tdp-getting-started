@@ -1,26 +1,47 @@
+> :warning: **This is the development branch:** Some components might not work as expected.
+
 # Getting Started with TDP
 
 Use this repository to have a working directory where you run deploy commands with predefined virtual infrastructure with Vagrant or your own infrastructure.
 You can customize the infrastructure and components of your cluster with 1 command per component.
 
-- [Setup script](#setup-script)
-  - [Features and requirements](#features-and-requirements)
-  - [Release](#release)
-  - [Clean mode](#clean-mode)
-- [Quick Start](#quick-start)
-  - [Prerequisites](#prerequisites)
-  - [Deploy with TDP UI](#deploy-with-tdp-ui)
-  - [Deploy with TDP server API](#deploy-with-tdp-server-api)
-  - [Deploy with TDP lib CLI](#deploy-with-tdp-lib-cli)
-  - [Deploy with Ansible playbook](#deploy-with-ansible-playbook)
-- [Web UIs Links](#web-uis-links)
-- [Customised Deployment](#customised-deployment)
-  - [Environment Setup](#environment-setup)
-  - [Configure infrastructure](#configure-infrastructure)
-  - [Configure prerequisites](#configure-prerequisites)
-  - [Core Services Deployment](#core-services-deployment)
-  - [Extras Services Deployment](#extras-services-deployment)
-  - [Utils](#utils)
+- [Getting Started with TDP](#getting-started-with-tdp)
+  - [Setup script](#setup-script)
+    - [Features and requirements](#features-and-requirements)
+    - [Release](#release)
+    - [Clean mode](#clean-mode)
+  - [Quick Start](#quick-start)
+    - [Prerequisites](#prerequisites)
+    - [Deploy with TDP UI](#deploy-with-tdp-ui)
+    - [Deploy with TDP server API](#deploy-with-tdp-server-api)
+    - [Deploy with TDP lib CLI](#deploy-with-tdp-lib-cli)
+    - [Deploy with Ansible playbook](#deploy-with-ansible-playbook)
+  - [Web UIs Links](#web-uis-links)
+  - [Customised Deployment](#customised-deployment)
+    - [Environment Setup](#environment-setup)
+    - [Configure infrastructure](#configure-infrastructure)
+      - [Use TDP Vagrant](#use-tdp-vagrant)
+    - [Configure prerequisites](#configure-prerequisites)
+    - [Core Services Deployment](#core-services-deployment)
+      - [TDP lib command](#tdp-lib-command)
+      - [Main playbook](#main-playbook)
+      - [Exporter](#exporter)
+      - [Zookeeper](#zookeeper)
+      - [Ranger](#ranger)
+      - [Launch HDFS, YARN \& MapReduce](#launch-hdfs-yarn--mapreduce)
+      - [Hive](#hive)
+      - [Spark](#spark)
+      - [Spark 3](#spark-3)
+      - [HBase](#hbase)
+      - [Knox](#knox)
+    - [Extras Services Deployment](#extras-services-deployment)
+      - [Livy](#livy)
+      - [Livy for Spark 3](#livy-for-spark-3)
+      - [Zookeeper Kafka](#zookeeper-kafka)
+      - [Kafka](#kafka)
+    - [Utils](#utils)
+      - [Configure HDFS user home directories](#configure-hdfs-user-home-directories)
+      - [Configure Ranger policies](#configure-ranger-policies)
 
 ## Setup script
 
@@ -68,7 +89,7 @@ git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 cd tdp-getting-started
 # Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-ui, tdp-collection-extras, tdp-observability, tdp-collection-prerequisites, and vagrant
 # Modify the line below for your needs
-./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant
+./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant -r latest
 # Activate Python virtual env and set environment variables
 source ./venv/bin/activate && source .env
 # Launch VMs
