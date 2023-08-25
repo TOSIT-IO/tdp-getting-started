@@ -244,6 +244,14 @@ setup_submodule_observability() {
   # Quick fix for file lookup related to the Hadoop role refactor (https://github.com/TOSIT-IO/tdp-collection/pull/57)
   create_symlink_if_needed "../../../../files" "${submodule_path}/playbooks/files"
   create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/observability"
+
+  # Galaxy observability roles
+  ansible-galaxy role install -r "${submodule_path}/requirements.yml"
+}
+
+install_additional_ansible_collections() {
+  echo "Install Ansible collections from requirements.yml"
+  ansible-galaxy collection install -r requirements.yml
 }
 
 setup_python_venv() {
@@ -340,6 +348,7 @@ main() {
     esac
   done
 
+  install_additional_ansible_collections
   setup_submodule_tdp_lib
   setup_python_venv
   init_tdp_lib

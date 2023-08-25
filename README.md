@@ -1,3 +1,5 @@
+> :warning: **This is the development branch:** Some components might not work as expected.
+
 # Getting Started with TDP
 
 Use this repository to have a working directory where you run deploy commands with predefined virtual infrastructure with Vagrant or your own infrastructure.
@@ -32,11 +34,11 @@ The `-e` option is used to enable features, for example `-e extras` enable TDP e
 
 Common requirements are:
 
-- Python >= 3.6 with virtual env package (i.e. `python3-venv`)
+- Python >= 3.9 with virtual env package (i.e. `python3-venv`)
 - Unzip (to execute the setup scripts)
 - `jq` required to execute helper script
 
-Python requirements like Ansible and Mitogen are listed in the file `requirements.txt`. The virtual environment is populated with these requirements. Therefore, you should not install them by yourself outside of the virtual environment. Only versions described in `requirements.txt` are supported.
+Python requirements like Ansible are listed in the file `requirements.txt`. The virtual environment is populated with these requirements. Therefore, you should not install them by yourself outside of the virtual environment. Only versions described in `requirements.txt` are supported.
 
 Specific features requirements are:
 
@@ -68,12 +70,9 @@ git clone https://github.com/TOSIT-IO/tdp-getting-started.git
 cd tdp-getting-started
 # Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-ui, tdp-collection-extras, tdp-observability, tdp-collection-prerequisites, and vagrant
 # Modify the line below for your needs
-./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant
+./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant -r latest
 # Activate Python virtual env and set environment variables
 source ./venv/bin/activate && source .env
-# To enable mitogen (optional)
-export ANSIBLE_STRATEGY_PLUGINS="$(python -c 'import os,ansible_mitogen; print(os.path.dirname(ansible_mitogen.__file__))')/plugins/strategy"
-export ANSIBLE_STRATEGY="mitogen_linear"
 # Launch VMs
 vagrant up
 # Configure TDP prerequisites
@@ -131,6 +130,8 @@ ansible-playbook ansible_collections/tosit/tdp/playbooks/utils/ranger_policies.y
 ### Deploy with TDP lib CLI
 
 ```bash
+# Configure deployment plan
+tdp plan dag
 # Deploy TDP cluster core and extras services
 tdp deploy
 # Configure HDFS user home directories
