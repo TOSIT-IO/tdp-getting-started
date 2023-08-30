@@ -251,6 +251,7 @@ setup_submodule_observability() {
 
 install_additional_ansible_collections() {
   echo "Install Ansible collections from requirements.yml"
+  source "${PYTHON_VENV}/bin/activate"
   ansible-galaxy collection install -r requirements.yml
 }
 
@@ -348,9 +349,9 @@ main() {
     esac
   done
 
-  install_additional_ansible_collections
   setup_submodule_tdp_lib
   setup_python_venv
+  install_additional_ansible_collections
   init_tdp_lib
 
   for feature in "${FEATURES[@]}"; do
