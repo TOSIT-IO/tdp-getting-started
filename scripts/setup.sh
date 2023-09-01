@@ -251,8 +251,11 @@ setup_submodule_observability() {
 
 install_additional_ansible_collections() {
   echo "Install Ansible collections from requirements.yml"
-  source "${PYTHON_VENV}/bin/activate"
-  ansible-galaxy collection install -r requirements.yml
+  (
+    source "${PYTHON_VENV}/bin/activate"
+    ansible-galaxy collection install -r requirements.yml
+  )
+  return 0
 }
 
 setup_python_venv() {
