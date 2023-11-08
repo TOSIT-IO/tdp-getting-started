@@ -246,7 +246,7 @@ setup_submodule_observability() {
   create_symlink_if_needed "../../${submodule_path}/topology.ini" "inventory/topologies/observability"
 
   # Galaxy observability roles
-  ansible-galaxy role install -r "${submodule_path}/requirements.yml"
+  # ansible-galaxy role install -r "${submodule_path}/requirements.yml"
 }
 
 install_additional_ansible_collections() {
