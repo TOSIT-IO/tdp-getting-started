@@ -1,21 +1,32 @@
-.python-version
-pythonenv/
+# Vagrant
+Vagrantfile
 .vagrant/
+
+# TDP
+inventory/hosts.ini
+inventory/topologies/
+files/
+ansible_dependencies/
+.cache/
+tdp_vars/
+
+# TDP lib
+venv/
+pythonenv/
+.env
+sqlite.db
+
+# TDP server
+.deploy.lock
+
+# TDP UI
+package.json
+package-lock.json
+node_modules/
+
+# Other
 logs/
 *.log
 .DS_Store
-files/
 .vscode/
-inventory/hosts.ini
-tdp_vars/
-inventory/topologies/
-Vagrantfile
-venv/
-.env
-sqlite.db
-.cache/
-node_modules/
-.deploy.lock
-package-lock.json
-package.json
-ansible_dependencies/
+.python-version
