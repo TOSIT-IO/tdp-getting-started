@@ -326,7 +326,7 @@ download_tdp_binaries() {
   do
     if [[ -n "$file_name" ]]
     then
-      wget --no-clobber --output-document=files/${file_name} ${uri_file_name}
+      wget --no-clobber --output-document=files/${file_name} ${uri_file_name} || true
     else
       wget --no-clobber --directory-prefix="files" ${uri_file_name}
     fi
