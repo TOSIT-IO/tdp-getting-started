@@ -32,7 +32,7 @@ The `-e` option is used to enable features, for example `-e extras` enable TDP e
 
 Common requirements are:
 
-- Python >= 3.6 with virtual env package (i.e. `python3-venv`)
+- Python = 3.6 with virtual env package (i.e. `python3-venv`)
 - Unzip (to execute the setup scripts)
 - `jq` required to execute helper script
 
