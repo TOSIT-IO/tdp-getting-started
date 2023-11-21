@@ -65,12 +65,12 @@ If Vagrant is enabled, the Ansible `host.ini` file will be generated using the `
 
 ```bash
 # Clone project from version control
-git clone https://github.com/TOSIT-IO/tdp-getting-started.git
+git clone -b dev https://github.com/TOSIT-IO/tdp-getting-started.git
 # Move into project dir
 cd tdp-getting-started
-# Setup local env with stable tdp-collection (mandatory), tdp-lib (mandatory), tdp-server, tdp-ui, tdp-collection-extras, tdp-observability, tdp-collection-prerequisites, and vagrant
+# Setup local env with latest tdp-collection (mandatory), tdp-lib (mandatory), tdp-server (wip), tdp-ui (wip), tdp-collection-extras, tdp-observability, tdp-collection-prerequisites, and vagrant.
 # Modify the line below for your needs
-./scripts/setup.sh -e server -e ui -e extras -e observability -e prerequisites -e vagrant -r latest
+./scripts/setup.sh -e extras -e observability -e prerequisites -e vagrant -r latest
 # Activate Python virtual env and set environment variables
 source ./venv/bin/activate && source .env
 # Launch VMs
