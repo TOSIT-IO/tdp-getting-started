@@ -3,7 +3,7 @@ ranger_jdbc_connector_package: postgresql-jdbc
 install_properties:
   DB_FLAVOR: postgres
   SQL_CONNECTOR_JAR: /usr/share/java/postgresql-jdbc.jar
-  db_host: "{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
+  db_host: "{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:{{ postgresql_server_port }}"
   db_name: ranger
   db_user: rangeradmin
   db_password: rangeradmin
@@ -11,7 +11,7 @@ install_properties:
 kms_install_properties:
   DB_FLAVOR: postgres
   SQL_CONNECTOR_JAR: /usr/share/java/postgresql-jdbc.jar
-  db_host: "{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:5432"
+  db_host: "{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:{{ postgresql_server_port }}"
   db_name: rangerkms
   db_user: rangerkms
   db_password: rangerkms
