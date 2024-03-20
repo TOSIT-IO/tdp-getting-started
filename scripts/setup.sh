@@ -322,11 +322,25 @@ init_tdp_ui() {
 }
 
 download_tdp_binaries() {
-  while IFS=";" read -r uri_file_name file_name
-  do
-    local target_file=${file_name:-$(basename ${uri_file_name})}
-    wget --continue --output-document="files/${target_file}" ${uri_file_name}
-  done < scripts/tdp-release-uris.txt
+
+  local collection=$1
+
+  downloads_file="scripts/tdp-release-uris.json"
+
+  collection_query=".\"$collection\" | keys[]"
+  archives=$(jq -r "$collection_query" "$downloads_file")
+
+  for archive in $archives; do
+
+      download_query=".\"$collection\".\"$archive\".link"
+      download_url=$(jq -r "$download_query" "$downloads_file")
+
+      file_query=".\"$collection\".\"$archive\".name"
+      dest_file=$(jq -r "$file_query" "$downloads_file")
+
+      echo "downloading : $dest_file"
+      wget -O "$dest_file" "$download_url"
+  done
 }
 
 main() {
@@ -360,7 +374,15 @@ main() {
     esac
   done
 
-  download_tdp_binaries
+  download_tdp_binaries tdp-collection
+
+  for feature in "${FEATURES[@]}"; do
+    case "$feature" in
+    extras)        download_tdp_binaries tdp-extras;;
+    observability) download_tdp_binaries tdp-observability;;
+    esac
+  done
+
 }
 
 main "$@"
