@@ -339,7 +339,7 @@ download_tdp_binaries() {
       dest_file=$(jq -r "$file_query" "$downloads_file")
 
       echo "downloading : $dest_file"
-      wget -O "$dest_file" "$download_url"
+      wget --continue --output-document="files/${dest_file}" "$download_url"
   done
 }
 
