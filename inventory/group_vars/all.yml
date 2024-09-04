@@ -16,6 +16,7 @@ kadmin_password: admin123
 kadmind_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }}"
 kdc_server: "{{ groups['kdc'][0] | tosit.tdp.access_fqdn(hostvars) }} "
 
+certs_dir: "/etc/ssl/certs"
 ca_name: "tdp_ca"
 ca_file: "{{ certs_dir }}/tdp_ca.crt"
 
