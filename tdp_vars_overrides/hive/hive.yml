@@ -1,13 +1,6 @@
 ---
 hive_jdbc_connector_package: postgresql-jdbc
 hive_ms_db_url: "jdbc:postgresql://{{ groups['postgresql'][0] | tosit.tdp.access_fqdn(hostvars) }}:{{ postgresql_server_port }}"
-hive_ms_db_name: hive
-hive_ms_db_user: hive
-hive_ms_db_password: hive
-db_type: postgres
-metastore_site:
-  javax.jdo.option.ConnectionURL: "{{ hive_ms_db_url }}/{{ hive_ms_db_name }}"
-  javax.jdo.option.ConnectionDriverName: org.postgresql.Driver
 
 hiveserver2_start_on_boot: yes
 hivemetastore_start_on_boot: yes
