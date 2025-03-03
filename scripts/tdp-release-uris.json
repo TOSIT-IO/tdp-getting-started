@@ -119,12 +119,12 @@
       "link": "https://dl.grafana.com/oss/release/grafana-10.4.1.linux-amd64.tar.gz"
     },
     "loki": {
-      "name": "loki-linux-amd64.zip;loki-2.7.2-linux-amd64.zip",
-      "link": "https://github.com/grafana/loki/releases/download/v2.7.2/loki-linux-amd64.zip;loki-2.7.2-linux-amd64.zip"
+      "name": "loki-linux-amd64.zip",
+      "link": "https://github.com/grafana/loki/releases/download/v2.7.2/loki-linux-amd64.zip"
     },
     "promtail": {
-      "name": "promtail-linux-amd64.zip;promtail-2.7.2-linux-amd64.zip",
-      "link": "https://github.com/grafana/loki/releases/download/v2.7.2/promtail-linux-amd64.zip;promtail-2.7.2-linux-amd64.zip"
+      "name": "promtail-linux-amd64.zip",
+      "link": "https://github.com/grafana/loki/releases/download/v2.7.2/promtail-linux-amd64.zip"
     }
   },
   "tdp-extras": {
@@ -141,8 +141,8 @@
       "link": "https://github.com/TOSIT-IO/jupyterhub-pkg/releases/download/v2.3.1-TDP-0.1.0/jupyterhub-2.3.1-TDP-0.1.0.tar.gz"
     },
     "livy": {
-      "name": "apache-livy-0.8.0-incubating-TDP-0.1.0-SNAPSHOT-bin.zip",
-      "link": "https://github.com/TOSIT-IO/incubator-livy/releases/download/v0.8.0-incubating-TDP-0.1.0/apache-livy-0.8.0-incubating-TDP-0.1.0-SNAPSHOT-bin.zip"
+      "name": "apache-livy-0.8.0-incubating-1.0_2.12-bin.zip",
+      "link": "https://github.com/TOSIT-IO/incubator-livy/releases/download/0.8.0-incubating-1.0/apache-livy-0.8.0-incubating-1.0_2.12-bin.zip"
     },
     "hue": {
       "name": "hue-release-4.11.0-TDP-0.1.0-python38.tar.gz",
