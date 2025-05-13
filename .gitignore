@@ -1,6 +1,8 @@
 # Vagrant
 Vagrantfile
 .vagrant/
+#incus
+data
 
 # TDP
 inventory/hosts.ini

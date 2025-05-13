@@ -1,0 +1,46 @@
+---
+# incus project
+project: tdp
+# linuxcontainer box to use
+image: rockylinux/8/cloud
+# user with passwordless sudo (for ansible)
+admin_user: incus
+network:
+  # skip network creation if false
+  manage: true
+  name: tdpbr0
+  domain: tdp
+  cidr: 10.10.10.1/24
+storage:
+  # skip network creation if false
+  manage: true
+  name: tdp
+  dir: "./data/pool"
+# directory to write ansible hosts file and ssh key
+ansible:
+  enabled: true 
+  inventory: "./inventory/hosts.ini"
+ssh:
+  enabled: true
+  path: "./files/tdp-rsa"
+hosts:
+  # role is used for default name ($role-[0-$quantity])
+  # and default group
+  - role: edge
+    cpus: 2
+    memory: 4096
+    # number of instance to create
+    quantity: 1
+  - role: master
+    cpus: 2
+    # override groups to add master1
+    groups:
+      - master
+      - master%d
+    quantity: 3
+    memory: 6144
+  - role: worker
+    cpus: 2
+    memory: 8192
+    quantity: 3
+    root_size: 50GB
