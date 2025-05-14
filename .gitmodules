@@ -1,24 +1,9 @@
-[submodule "ansible_collections/tosit/tdp"]
-	path = ansible_collections/tosit/tdp
-	url = https://github.com/TOSIT-IO/tdp-collection
-[submodule "ansible_collections/tosit/tdp_extra"]
-	path = ansible_collections/tosit/tdp_extra
-	url = https://github.com/TOSIT-IO/tdp-collection-extras
-[submodule "tdp-vagrant"]
-	path = tdp-vagrant
-	url = https://github.com/TOSIT-IO/tdp-vagrant.git
-[submodule "ansible_collections/tosit/tdp_prerequisites"]
-	path = ansible_collections/tosit/tdp_prerequisites
-	url = https://github.com/TOSIT-IO/tdp-collection-prerequisites.git
 [submodule "tdp-lib"]
 	path = tdp-lib
 	url = https://github.com/TOSIT-IO/tdp-lib
 [submodule "tdp-server"]
 	path = tdp-server
 	url = https://github.com/TOSIT-IO/tdp-server
-[submodule "ansible_collections/tosit/tdp_observability"]
-	path = ansible_collections/tosit/tdp_observability
-	url = https://github.com/TOSIT-IO/tdp-observability
 [submodule "tdp-ui"]
 	path = tdp-ui
 	url = https://github.com/TOSIT-IO/tdp-ui

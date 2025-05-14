@@ -9,6 +9,7 @@ inventory/hosts.ini
 inventory/topologies/
 files/
 ansible_dependencies/
+ansible_collections/
 .cache/
 tdp_vars/
 
