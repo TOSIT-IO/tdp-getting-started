@@ -108,7 +108,7 @@
     },
     "loki": {
       "name": "loki-linux-amd64.zip",
-      "link": "https://github.com/grafana/loki/releases/download/v3.5.4/loki-3.5.4-linux-amd64.zip"
+      "link": "https://github.com/grafana/loki/releases/download/v3.5.4/loki-linux-amd64.zip"
     }
   },
   "tdp-extras": {
