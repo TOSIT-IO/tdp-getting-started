@@ -80,10 +80,6 @@
       "name": "solr-8.11.3.tgz",
       "link": "https://archive.apache.org/dist/lucene/solr/8.11.3/solr-8.11.3.tgz"
     },
-    "spark2": {
-      "name": "spark-2.3.4-1.0-bin-tdp.tgz",
-      "link": "https://github.com/TOSIT-IO/spark/releases/download/2.3.4-1.0/spark-2.3.4-1.0-bin-tdp.tgz"
-    },
     "spark3": {
       "name": "spark-3.5.6-1.0-bin-tdp.tgz",
       "link": "https://github.com/TOSIT-IO/spark/releases/download/3.5.6-1.0/spark-3.5.6-1.0-bin-tdp.tgz"
