@@ -1,92 +1,92 @@
 {
   "tdp-collection": {
     "hbase": {
-      "name": "hbase-2.1.10-1.1-bin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/hbase/releases/download/2.1.10-1.1/hbase-2.1.10-1.1-bin.tar.gz"
+      "name": "hbase-2.6.1-0.0-bin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/hbase/releases/download/2.6.1-0.0/hbase-2.6.1-0.0-bin.tar.gz"
     },
     "phoenix_queryserver_daemon": {
-      "name": "phoenix-queryserver-6.0.0-0.1-bin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/phoenix-queryserver/releases/download/6.0.0-0.1/phoenix-queryserver-6.0.0-0.1-bin.tar.gz"
+      "name": "phoenix-queryserver-6.0.0-2.0-bin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/phoenix-queryserver/releases/download/6.0.0-2.0/phoenix-queryserver-6.0.0-2.0-bin.tar.gz"
     },
     "phoenix": {
-      "name": "phoenix-hbase-2.1-5.1.3-1.0-bin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/phoenix/releases/download/5.1.3-1.0/phoenix-hbase-2.1-5.1.3-1.0-bin.tar.gz"
+      "name": "phoenix-hbase-2.6-5.2.1-0.0-bin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/phoenix/releases/download/5.2.1-0.0/phoenix-hbase-2.6-5.2.1-0.0-bin.tar.gz"
     },
     "hbase-spark": {
       "name": "hbase-spark-2.3.4-1.0.0-0.0.jar",
       "link": "https://github.com/TOSIT-IO/hbase-connectors/releases/download/2.3.4-1.0.0-0.0/hbase-spark-2.3.4-1.0.0-0.0.jar"
     },
     "hbck2": {
-      "name": "hbase-hbck2-1.1.0-0.0.jar",
-      "link": "https://github.com/TOSIT-IO/hbase-operator-tools/releases/download/1.1.0-0.0/hbase-hbck2-1.1.0-0.0.jar"
+      "name": "hbase-hbck2-1.3.0-0.0.jar",
+      "link": "https://github.com/TOSIT-IO/hbase-operator-tools/releases/download/1.3.0-0.0/hbase-hbck2-1.3.0-0.0.jar"
     },
     "hadoop": {
-      "name": "hadoop-3.1.1-0.2.tar.gz",
-      "link": "https://github.com/TOSIT-IO/hadoop/releases/download/3.1.1-0.2/hadoop-3.1.1-0.2.tar.gz"
+      "name": "hadoop-3.3.6-1.0.tar.gz",
+      "link": "https://github.com/TOSIT-IO/hadoop/releases/download/3.3.6-1.0/hadoop-3.3.6-1.0.tar.gz"
     },
     "hive": {
-      "name": "apache-hive-3.1.3-2.1-bin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/hive/releases/download/3.1.3-2.1/apache-hive-3.1.3-2.1-bin.tar.gz"
+      "name": "apache-hive-4.0.0-1.0-bin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/hive/releases/download/4.0.0-1.0/apache-hive-4.0.0-1.0-bin.tar.gz"
     },
     "jmx": {
       "name": "jmx_prometheus_javaagent-0.20.0.jar",
       "link": "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.20.0/jmx_prometheus_javaagent-0.20.0.jar"
     },
     "tez": {
-      "name": "tez-0.9.2-1.0.tar.gz",
-      "link": "https://github.com/TOSIT-IO/tez/releases/download/0.9.2-1.0/tez-0.9.2-1.0.tar.gz"
+      "name": "tez-0.10.4-0.0.tar.gz",
+      "link": "https://github.com/TOSIT-IO/tez/releases/download/0.10.4-0.0/tez-0.10.4-0.0.tar.gz"
     },
     "knox": {
-      "name": "knox-1.6.1-0.1.tar.gz",
-      "link": "https://github.com/TOSIT-IO/knox/releases/download/1.6.1-0.1/knox-1.6.1-0.1.tar.gz"
+      "name": "knox-2.0.0-0.0.tar.gz",
+      "link": "https://github.com/TOSIT-IO/knox/releases/download/2.0.0-0.0/knox-2.0.0-0.0.tar.gz"
     },
     "knox-shell": {
-      "name": "knoxshell-1.6.1-0.1.tar.gz",
-      "link": "https://github.com/TOSIT-IO/knox/releases/download/1.6.1-0.1/knoxshell-1.6.1-0.1.tar.gz"
+      "name": "knoxshell-2.0.0-0.0.tar.gz",
+      "link": "https://github.com/TOSIT-IO/knox/releases/download/2.0.0-0.0/knoxshell-2.0.0-0.0.tar.gz"
     },
     "ranger-admin": {
-      "name": "ranger-2.0.0-1.0-admin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-admin.tar.gz"
+      "name": "ranger-2.6.0-1.0-admin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-admin.tar.gz"
     },
     "ranger-hdfs": {
-      "name": "ranger-2.0.0-1.0-hdfs-plugin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-hdfs-plugin.tar.gz"
+      "name": "ranger-2.6.0-1.0-hdfs-plugin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-hdfs-plugin.tar.gz"
     },
     "ranger-hive": {
-      "name": "ranger-2.0.0-1.0-hive-plugin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-hive-plugin.tar.gz"
+      "name": "ranger-2.6.0-1.0-hive-plugin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-hive-plugin.tar.gz"
     },
     "ranger-knox": {
-      "name": "ranger-2.0.0-1.0-knox-plugin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-knox-plugin.tar.gz"
+      "name": "ranger-2.6.0-1.0-knox-plugin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-knox-plugin.tar.gz"
     },
     "ranger-yarn": {
-      "name": "ranger-2.0.0-1.0-yarn-plugin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-yarn-plugin.tar.gz"
+      "name": "ranger-2.6.0-1.0-yarn-plugin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-yarn-plugin.tar.gz"
     },
     "ranger-hbase": {
-      "name": "ranger-2.0.0-1.0-hbase-plugin.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-hbase-plugin.tar.gz"
+      "name": "ranger-2.6.0-1.0-hbase-plugin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-hbase-plugin.tar.gz"
     },
     "ranger-ugsync": {
-      "name": "ranger-2.0.0-1.0-usersync.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-usersync.tar.gz"
+      "name": "ranger-2.6.0-1.0-usersync.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-usersync.tar.gz"
     },
     "ranger-kms": {
-      "name": "ranger-2.0.0-1.0-kms.tar.gz",
-      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.0.0-1.0/ranger-2.0.0-1.0-kms.tar.gz"
+      "name": "ranger-2.6.0-1.0-kms.tar.gz",
+      "link": "https://github.com/TOSIT-IO/ranger/releases/download/2.6.0-1.0/ranger-2.6.0-1.0-kms.tar.gz"
     },
     "solr": {
-      "name": "solr-7.7.3.tgz",
-      "link": "https://archive.apache.org/dist/lucene/solr/7.7.3/solr-7.7.3.tgz"
+      "name": "solr-8.11.3.tgz",
+      "link": "https://archive.apache.org/dist/lucene/solr/8.11.3/solr-8.11.3.tgz"
     },
     "spark2": {
       "name": "spark-2.3.4-1.0-bin-tdp.tgz",
       "link": "https://github.com/TOSIT-IO/spark/releases/download/2.3.4-1.0/spark-2.3.4-1.0-bin-tdp.tgz"
     },
     "spark3": {
-      "name": "spark-3.2.4-1.0-bin-tdp.tgz",
-      "link": "https://github.com/TOSIT-IO/spark/releases/download/3.2.4-1.0/spark-3.2.4-1.0-bin-tdp.tgz"
+      "name": "spark-3.5.6-1.0-bin-tdp.tgz",
+      "link": "https://github.com/TOSIT-IO/spark/releases/download/3.5.6-1.0/spark-3.5.6-1.0-bin-tdp.tgz"
     },
     "yarn": {
       "name": "spark-2.3.4-1.0-bin-tdp.tgz",
@@ -96,31 +96,39 @@
       "name": "zookeeper-3.4.14.tar.gz",
       "link": "https://archive.apache.org/dist/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz"
     },
-    "zookeeper-3.5": {
-      "name": "apache-zookeeper-3.5.9-bin.tar.gz",
-      "link": "https://archive.apache.org/dist/zookeeper/zookeeper-3.5.9/apache-zookeeper-3.5.9-bin.tar.gz"
+    "zookeeper-3.8.4": {
+      "name": "apache-zookeeper-3.8.4-0.0-bin.tar.gz",
+      "link": "https://github.com/TOSIT-IO/zookeeper/releases/download/3.8.4-0.0/apache-zookeeper-3.8.4-0.0-bin.tar.gz"
+    },
+    "iceberg-spark-runtime": {
+      "name": "iceberg-spark-runtime-3.5_2.12-1.4.3-0.0.jar",
+      "link": "https://github.com/TOSIT-IO/iceberg/releases/download/1.4.3-0.0/iceberg-spark-runtime-3.5_2.12-1.4.3-0.0.jar"
+    },
+    "iceberg-mr": {
+      "name": "iceberg-mr-1.4.3-0.0.jar",
+      "link": "https://github.com/TOSIT-IO/iceberg/releases/download/1.4.3-0.0/iceberg-mr-1.4.3-0.0.jar"
     }
   },
   "tdp-observability": {
     "node-exporter": {
-      "name": "node_exporter-1.3.1.linux-amd64.tar.gz",
-      "link": "https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz"
+      "name": "node_exporter-1.9.1.linux-amd64.tar.gz",
+      "link": "https://github.com/prometheus/node_exporter/releases/download/v1.9.1/node_exporter-1.9.1.linux-amd64.tar.gz"
     },
     "postgres-exporter": {
       "name": "postgres_exporter-0.12.0.linux-amd64.tar.gz",
       "link": "https://github.com/prometheus-community/postgres_exporter/releases/download/v0.12.0/postgres_exporter-0.12.0.linux-amd64.tar.gz"
     },
     "prometheus": {
-      "name": "prometheus-2.37.6.linux-amd64.tar.gz",
-      "link": "https://github.com/prometheus/prometheus/releases/download/v2.37.6/prometheus-2.37.6.linux-amd64.tar.gz"
+      "name": "prometheus-3.5.0.linux-amd64.tar.gz",
+      "link": "https://github.com/prometheus/prometheus/releases/download/v3.5.0/prometheus-3.5.0.linux-amd64.tar.gz"
     },
     "grafana": {
-      "name": "grafana-10.4.1.linux-amd64.tar.gz",
-      "link": "https://dl.grafana.com/oss/release/grafana-10.4.1.linux-amd64.tar.gz"
+      "name": "grafana-12.1.1.linux-amd64.tar.gz",
+      "link": "https://dl.grafana.com/oss/release/grafana-12.1.1.linux-amd64.tar.gz"
     },
     "loki": {
       "name": "loki-linux-amd64.zip",
-      "link": "https://github.com/grafana/loki/releases/download/v2.7.2/loki-linux-amd64.zip"
+      "link": "https://github.com/grafana/loki/releases/download/v3.5.4/loki-3.5.4-linux-amd64.zip"
     },
     "promtail": {
       "name": "promtail-linux-amd64.zip",
@@ -141,8 +149,8 @@
       "link": "https://github.com/TOSIT-IO/jupyterhub-pkg/releases/download/v2.3.1-TDP-0.1.0/jupyterhub-2.3.1-TDP-0.1.0.tar.gz"
     },
     "livy": {
-      "name": "apache-livy-0.8.0-incubating-1.0_2.12-bin.zip",
-      "link": "https://github.com/TOSIT-IO/incubator-livy/releases/download/0.8.0-incubating-1.0/apache-livy-0.8.0-incubating-1.0_2.12-bin.zip"
+      "name": "apache-livy-0.9.0-0.0_2.12-bin.zip",
+      "link": "https://github.com/TOSIT-IO/incubator-livy/releases/download/0.9.0-0.0/apache-livy-0.9.0-0.0_2.12-bin.zip"
     },
     "hue": {
       "name": "hue-release-4.11.0-TDP-0.1.0-python38.tar.gz",
