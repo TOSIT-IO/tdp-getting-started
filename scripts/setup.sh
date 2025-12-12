@@ -293,7 +293,7 @@ init_tdp_lib() {
     rm -rf "$tdp_vars" "$SQLITE_DB_PATH"
   fi
   if [[ -n "$TDP_VARS_OVERRIDES" ]]; then
-    tdp_lib_cli_args+=(--overrides "$TDP_VARS_OVERRIDES")
+    tdp_lib_cli_args+=(--conf "$TDP_VARS_OVERRIDES")
   fi
   echo "tdp-lib init"
   (
